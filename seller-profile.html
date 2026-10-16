@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>البائعون | ألفاو</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="seller-page">
+
+  <header class="site-header inner-header">
+    <a href="index.html" class="site-logo">ألفاو</a>
+
+    <nav class="site-nav" aria-label="القائمة الرئيسية">
+      <a href="index.html">الرئيسية</a>
+      <a href="browse.html">القطع الأثرية</a>
+      <a href="browse.html?view=auctions">المزادات</a>
+      <a href="browse.html?verification=verified">التوثيق</a>
+      <a href="seller-profile.html" aria-current="page">البائعون</a>
+    </nav>
+
+    <span class="language-switcher">العربية</span>
+  </header>
+
+  <main class="sellers-directory">
+
+    <section class="sellers-intro">
+      <p class="section-label">مجتمع ألفاو</p>
+      <h1>تعرّف على <span>بائعينا</span></h1>
+      <p>
+        اكتشف هواة اقتناء التراث والمختصين بالمقتنيات
+        التاريخية، وتعرّف على ملفاتهم ومجموعاتهم.
+      </p>
+    </section>
+
+    <section class="sellers-collection">
+
+      <div class="sellers-toolbar">
+        <div>
+          <p class="section-label">اكتشف المجتمع</p>
+          <h2>البائعون</h2>
+        </div>
+
+        <label class="visually-hidden" for="seller-search">
+          البحث عن بائع
+        </label>
+
+        <input
+          type="search"
+          id="seller-search"
+          placeholder="ابحث عن بائع أو تخصص..."
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="sellers-grid" id="sellers-grid">
+
+        <!-- SELLER 1 -->
+
+        <article class="seller-directory-card">
+          <div class="seller-directory-avatar">أخ</div>
+          <span class="seller-directory-verified">✓ بائع موثّق</span>
+
+          <h3>أحمد الخالد</h3>
+          <p class="seller-directory-location">الرياض</p>
+          <p class="seller-directory-specialty">
+            العملات العربية القديمة والمسكوكات
+          </p>
+
+          <div class="seller-directory-meta">
+            <span>★ 4.9 / 5</span>
+            <span>12 قطعة</span>
+          </div>
+
+          <a href="seller-detail.html?id=ahmed"
+             class="seller-directory-button">
+            عرض الملف الشخصي ←
+          </a>
+        </article>
+
+        <!-- SELLER 2 -->
+
+        <article class="seller-directory-card">
+          <div class="seller-directory-avatar">نع</div>
+          <span class="seller-directory-verified">✓ بائع موثّق</span>
+
+          <h3>نورة العتيبي</h3>
+          <p class="seller-directory-location">جدة</p>
+          <p class="seller-directory-specialty">
+            المخطوطات والوثائق التاريخية
+          </p>
+
+          <div class="seller-directory-meta">
+            <span>★ 4.8 / 5</span>
+            <span>8 قطع</span>
+          </div>
+
+          <a href="seller-detail.html?id=noura"
+             class="seller-directory-button">
+            عرض الملف الشخصي ←
+          </a>
+        </article>
+
+        <!-- SELLER 3 -->
+
+        <article class="seller-directory-card">
+          <div class="seller-directory-avatar">مق</div>
+          <span class="seller-directory-verified">✓ بائع موثّق</span>
+
+          <h3>محمد القحطاني</h3>
+          <p class="seller-directory-location">الدمام</p>
+          <p class="seller-directory-specialty">
+            الفخار والمقتنيات التراثية
+          </p>
+
+          <div class="seller-directory-meta">
+            <span>★ 4.7 / 5</span>
+            <span>15 قطعة</span>
+          </div>
+
+          <a href="seller-detail.html?id=mohammed"
+             class="seller-directory-button">
+            عرض الملف الشخصي ←
+          </a>
+        </article>
+
+        <!-- SELLER 4 -->
+
+        <article class="seller-directory-card">
+          <div class="seller-directory-avatar">سح</div>
+          <span class="seller-directory-verified">✓ بائع موثّق</span>
+
+          <h3>سارة الحربي</h3>
+          <p class="seller-directory-location">المدينة المنورة</p>
+          <p class="seller-directory-specialty">
+            الحُلي والمجوهرات التاريخية
+          </p>
+
+          <div class="seller-directory-meta">
+            <span>★ 5.0 / 5</span>
+            <span>6 قطع</span>
+          </div>
+
+          <a href="seller-detail.html?id=sara"
+             class="seller-directory-button">
+            عرض الملف الشخصي ←
+          </a>
+        </article>
+
+      </div>
+
+      <p id="sellers-empty" class="sellers-empty" hidden>
+        لا توجد نتائج تطابق البحث.
+      </p>
+
+      <p class="sellers-demo-note">
+        جميع بيانات البائعين وتقييماتهم في هذا النموذج افتراضية.
+      </p>
+
+    </section>
+
+  </main>
+
+  <footer class="alfaw-footer">
+    <h2>ألفاو</h2>
+    <p>من إرث الماضي، نصنع صلة بالمستقبل.</p>
+    <p class="copyright">
+      © 2026 ألفاو — مشروع جامعي تجريبي
+    </p>
+  </footer>
+
+</body>
+</html>

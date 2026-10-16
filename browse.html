@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="استكشف القطع الأثرية والمقتنيات التاريخية على منصة ألفاو.">
+
+  <title>القطع الأثرية | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="browse-page">
+
+  <!-- =====================================
+       HEADER
+  ===================================== -->
+
+  <header class="site-header inner-header">
+
+    <a href="index.html" class="site-logo">
+      ألفاو
+    </a>
+
+    <nav class="site-nav" aria-label="القائمة الرئيسية">
+
+      <a href="index.html">
+        الرئيسية
+      </a>
+
+      <a href="browse.html" aria-current="page">
+        القطع الأثرية
+      </a>
+
+      <a href="browse.html?view=auctions">
+        المزادات
+      </a>
+
+      <a href="browse.html?verification=verified">
+        التوثيق
+      </a>
+
+      <a href="seller-profile.html">
+        البائعون
+      </a>
+
+    </nav>
+
+    <span class="language-switcher">
+      العربية
+    </span>
+
+  </header>
+
+  <main class="browse-main">
+
+    <!-- =====================================
+         INTRO
+    ===================================== -->
+
+    <section class="browse-hero">
+
+      <p class="section-label">
+        مقتنيات ألفاو التاريخية
+      </p>
+
+      <h1>
+        اكتشف كنوز
+        <span>التاريخ</span>
+      </h1>
+
+      <p class="browse-description">
+        استكشف مجموعة من القطع التاريخية
+        والمقتنيات التراثية، وتعرّف على
+        قصصها وأسعارها الابتدائية
+        وحالة توثيقها.
+      </p>
+
+    </section>
+
+    <!-- =====================================
+         SEARCH
+    ===================================== -->
+
+    <section class="browse-search-section">
+
+      <form
+        class="artifact-search"
+        id="artifact-search"
+      >
+
+        <label
+          for="artifact-search-input"
+          class="visually-hidden"
+        >
+          البحث عن قطعة أثرية
+        </label>
+
+        <input
+          type="search"
+          id="artifact-search-input"
+          placeholder="ابحث عن قطعة أثرية..."
+          autocomplete="off"
+        >
+
+        <button type="submit">
+          بحث
+        </button>
+
+      </form>
+
+    </section>
+
+    <!-- =====================================
+         FILTERS + RESULTS
+    ===================================== -->
+
+    <section class="browse-content">
+
+      <aside class="browse-filters">
+
+        <h2>
+          تصفية النتائج
+        </h2>
+
+        <div class="filter-group">
+
+          <label for="category-filter">
+            نوع القطعة
+          </label>
+
+          <select id="category-filter">
+
+            <option value="all">
+              جميع الفئات
+            </option>
+
+            <option value="coins">
+              العملات القديمة
+            </option>
+
+            <option value="manuscripts">
+              المخطوطات
+            </option>
+
+            <option value="heritage">
+              المقتنيات التراثية
+            </option>
+
+            <option value="jewelry">
+              الحُلي والمجوهرات
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="filter-group">
+
+          <label for="verification-filter">
+            حالة التوثيق
+          </label>
+
+          <select id="verification-filter">
+
+            <option value="all">
+              جميع الحالات
+            </option>
+
+            <option value="verified">
+              موثّقة
+            </option>
+
+            <option value="pending">
+              بانتظار التحقق
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="filter-group">
+
+          <label for="price-filter">
+            نطاق السعر
+          </label>
+
+          <select id="price-filter">
+
+            <option value="all">
+              جميع الأسعار
+            </option>
+
+            <option value="under5000">
+              أقل من 5,000 ريال
+            </option>
+
+            <option value="5000to15000">
+              من 5,000 إلى 15,000 ريال
+            </option>
+
+            <option value="over15000">
+              أكثر من 15,000 ريال
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="filter-group">
+
+          <label for="sort-filter">
+            ترتيب النتائج
+          </label>
+
+          <select id="sort-filter">
+
+            <option value="default">
+              القطع المميزة
+            </option>
+
+            <option value="price-low">
+              السعر: من الأقل للأعلى
+            </option>
+
+            <option value="price-high">
+              السعر: من الأعلى للأقل
+            </option>
+
+            <option value="name">
+              الاسم: أبجديًا
+            </option>
+
+          </select>
+
+        </div>
+
+        <button
+          type="button"
+          class="clear-filters"
+          id="clear-filters"
+        >
+          مسح الفلاتر
+        </button>
+
+      </aside>
+
+      <!-- =====================================
+           ARTIFACTS
+      ===================================== -->
+
+      <section class="browse-results">
+
+        <div class="results-heading">
+
+          <div>
+
+            <p class="section-label">
+              المجموعة التاريخية
+            </p>
+
+            <h2>
+              القطع المتاحة
+            </h2>
+
+          </div>
+
+          <p id="artifact-count" aria-live="polite">
+            6 قطع أثرية
+          </p>
+
+        </div>
+
+        <div class="browse-grid" id="browse-grid">
+
+          <!-- ARTIFACT 1 -->
+
+          <article
+            class="browse-artifact-card"
+            data-name="عملة عربية قديمة"
+            data-category="coins"
+            data-verification="verified"
+            data-price="4500"
+          >
+
+            <div class="browse-artifact-image">
+
+              <img
+                src="coin.jpg"
+                alt="عملة عربية قديمة"
+              >
+
+              <span class="verified-badge">
+                موثّقة
+              </span>
+
+            </div>
+
+            <div class="browse-card-content">
+
+              <p class="artifact-category">
+                العملات القديمة
+              </p>
+
+              <h3>
+                عملة عربية قديمة
+              </h3>
+
+              <p class="artifact-description">
+                عملة تاريخية نادرة تحمل
+                تفاصيل تعكس تاريخ
+                التبادل التجاري في
+                الجزيرة العربية.
+              </p>
+
+              <p class="price-label">
+                السعر الابتدائي
+              </p>
+
+              <p class="artifact-price">
+                4,500 ريال
+              </p>
+
+              <div class="artifact-card-footer">
+
+                <a href="seller-profile.html">
+                  عرض البائع
+                </a>
+
+                <span>
+                  عرض تجريبي
+                </span>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- ARTIFACT 2 -->
+
+          <article
+            class="browse-artifact-card"
+            data-name="مخطوطة تاريخية"
+            data-category="manuscripts"
+            data-verification="verified"
+            data-price="12000"
+          >
+
+            <div class="browse-artifact-image">
+
+              <img
+                src="manuscript.jpg"
+                alt="مخطوطة تاريخية"
+              >
+
+              <span class="verified-badge">
+                موثّقة
+              </span>
+
+            </div>
+
+            <div class="browse-card-content">
+
+              <p class="artifact-category">
+                المخطوطات
+              </p>
+
+              <h3>
+                مخطوطة تاريخية
+              </h3>
+
+              <p class="artifact-description">
+                مخطوطة قديمة مكتوبة
+                بخط اليد تعكس جانبًا
+                من التراث الثقافي
+                والمعرفي.
+              </p>
+
+              <p class="price-label">
+                السعر الابتدائي
+              </p>
+
+              <p class="artifact-price">
+                12,000 ريال
+              </p>
+
+              <div class="artifact-card-footer">
+
+                <a href="seller-profile.html">
+                  عرض البائع
+                </a>
+
+                <span>
+                  عرض تجريبي
+                </span>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- ARTIFACT 3 -->
+
+          <article
+            class="browse-artifact-card"
+            data-name="قطعة فخارية تراثية"
+            data-category="heritage"
+            data-verification="pending"
+            data-price="18000"
+          >
+
+            <div class="browse-artifact-image">
+
+              <img
+                src="pottery.jpg"
+                alt="قطعة فخارية تراثية"
+              >
+
+              <span class="pending-badge">
+                بانتظار التحقق
+              </span>
+
+            </div>
+
+            <div class="browse-card-content">
+
+              <p class="artifact-category">
+                المقتنيات التراثية
+              </p>
+
+              <h3>
+                قطعة فخارية تراثية
+              </h3>
+
+              <p class="artifact-description">
+                قطعة فخارية مزخرفة
+                مستوحاة من الفنون
+                والحرف التقليدية
+                في الجزيرة العربية.
+              </p>
+
+              <p class="price-label">
+                السعر الابتدائي
+              </p>
+
+              <p class="artifact-price">
+                18,000 ريال
+              </p>
+
+              <div class="artifact-card-footer">
+
+                <a href="seller-profile.html">
+                  عرض البائع
+                </a>
+
+                <span>
+                  عرض تجريبي
+                </span>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- ARTIFACT 4 -->
+
+          <article
+            class="browse-artifact-card"
+            data-name="حلي ذهبية تاريخية"
+            data-category="jewelry"
+            data-verification="verified"
+            data-price="22000"
+          >
+
+            <div class="browse-artifact-image">
+
+              <img
+                src="jewelry.jpg"
+                alt="حُلي ذهبية تاريخية"
+              >
+
+              <span class="verified-badge">
+                موثّقة
+              </span>
+
+            </div>
+
+            <div class="browse-card-content">
+
+              <p class="artifact-category">
+                الحُلي والمجوهرات
+              </p>
+
+              <h3>
+                حُلي ذهبية تاريخية
+              </h3>
+
+              <p class="artifact-description">
+                حُلي ذات تصميم تاريخي
+                وتفاصيل مستوحاة من
+                فنون الصياغة التقليدية.
+              </p>
+
+              <p class="price-label">
+                السعر الابتدائي
+              </p>
+
+              <p class="artifact-price">
+                22,000 ريال
+              </p>
+
+              <div class="artifact-card-footer">
+
+                <a href="seller-profile.html">
+                  عرض البائع
+                </a>
+
+                <span>
+                  عرض تجريبي
+                </span>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- ARTIFACT 5 -->
+
+          <article
+            class="browse-artifact-card"
+            data-name="عملة فضية إسلامية"
+            data-category="coins"
+            data-verification="verified"
+            data-price="6500"
+          >
+
+            <div class="browse-artifact-image">
+
+              <img
+                src="silver-coin.jpg"
+                alt="عملة فضية إسلامية"
+              >
+
+              <span class="verified-badge">
+                موثّقة
+              </span>
+
+            </div>
+
+            <div class="browse-card-content">
+
+              <p class="artifact-category">
+                العملات القديمة
+              </p>
+
+              <h3>
+                عملة فضية إسلامية
+              </h3>
+
+              <p class="artifact-description">
+                عملة تاريخية فضية
+                تمثل جانبًا من تاريخ
+                المسكوكات الإسلامية.
+              </p>
+
+              <p class="price-label">
+                السعر الابتدائي
+              </p>
+
+              <p class="artifact-price">
+                6,500 ريال
+              </p>
+
+              <div class="artifact-card-footer">
+
+                <a href="seller-profile.html">
+                  عرض البائع
+                </a>
+
+                <span>
+                  عرض تجريبي
+                </span>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- ARTIFACT 6 -->
+
+          <article
+            class="browse-artifact-card"
+            data-name="خنجر عربي تراثي"
+            data-category="heritage"
+            data-verification="pending"
+            data-price="9500"
+          >
+
+            <div class="browse-artifact-image">
+
+              <img
+                src="dagger.jpg"
+                alt="خنجر عربي تراثي"
+              >
+
+              <span class="pending-badge">
+                بانتظار التحقق
+              </span>
+
+            </div>
+
+            <div class="browse-card-content">
+
+              <p class="artifact-category">
+                المقتنيات التراثية
+              </p>
+
+              <h3>
+                خنجر عربي تراثي
+              </h3>
+
+              <p class="artifact-description">
+                مقتنى تراثي للعرض
+                يعكس أساليب صناعة
+                المعادن والزخرفة
+                التقليدية.
+              </p>
+
+              <p class="price-label">
+                السعر الابتدائي
+              </p>
+
+              <p class="artifact-price">
+                9,500 ريال
+              </p>
+
+              <div class="artifact-card-footer">
+
+                <a href="seller-profile.html">
+                  عرض البائع
+                </a>
+
+                <span>
+                  عرض تجريبي
+                </span>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+        <p
+          class="no-artifacts"
+          id="no-artifacts"
+          hidden
+        >
+          لا توجد قطع أثرية تطابق خيارات البحث.
+        </p>
+
+      </section>
+
+    </section>
+
+  </main>
+
+  <!-- =====================================
+       FOOTER
+  ===================================== -->
+
+  <footer class="alfaw-footer">
+
+    <h2>
+      ألفاو
+    </h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">
+        الرئيسية
+      </a>
+
+      <a href="browse.html">
+        القطع الأثرية
+      </a>
+
+      <a href="browse.html?view=auctions">
+        المزادات
+      </a>
+
+      <a href="browse.html?verification=verified">
+        التوثيق
+      </a>
+
+      <a href="seller-profile.html">
+        البائعون
+      </a>
+
+    </div>
+
+    <p class="copyright">
+      © 2026 ألفاو — مشروع جامعي تجريبي
+    </p>
+
+  </footer>
+
+</body>
+</html>
