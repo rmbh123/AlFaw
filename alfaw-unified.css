@@ -818,3 +818,18 @@ body:not(.home-page) :is(.alfaw-footer) {
   .auctions-page .alfaw-guide-card,
   .auctions-page .alfaw-guide-dot { transition: none !important; }
 }
+
+
+/* AlFaw logo – replaces the decorative navbar star */
+.site-logo-mark .alfaw-logo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+.site-logo-mark:has(.alfaw-logo-image) {
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+}
