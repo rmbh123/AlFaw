@@ -900,3 +900,19 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
   border: 2px solid #c9a35f !important;
   box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
 }
+
+
+/* Keep browse filters visible while scrolling below the sticky navigation. */
+@media (min-width: 1024px) {
+  .browse-page .browse-content > .browse-filters {
+    position: sticky;
+    top: 104px;
+    align-self: start;
+    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    z-index: 5;
+  }
+}
