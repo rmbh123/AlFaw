@@ -891,3 +891,11 @@ body.home-page .cinema-scroll .hero-tags > span {
 @media (max-width: 550px) {
   body.home-page .cinema-scroll .hero-tags > span { font-size: 12px; }
 }
+
+/* Final gold appearance for the three homepage heritage tags */
+body.home-page .cinema-scroll .intro-copy .hero-tags > span {
+  background: #b89b73 !important;
+  background-image: none !important;
+  color: #2b170c !important;
+  border-color: #d4b987;
+}
