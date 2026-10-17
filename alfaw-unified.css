@@ -916,3 +916,53 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
     z-index: 5;
   }
 }
+
+/* Seller page: premium heritage panels consistent with AlFaw. */
+.sellers-page .sellers-trust-section,
+.sellers-page .sellers-join-section {
+  width: min(1160px, calc(100% - 36px));
+  max-width: 1160px;
+  margin: 28px auto;
+  padding: 0;
+  background: transparent;
+}
+.sellers-page .sellers-trust-inner,
+.sellers-page .sellers-join-content {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: 0;
+  padding: clamp(27px, 4vw, 52px);
+  border: 1px solid rgba(194, 156, 99, .48);
+  border-radius: 24px;
+  background: linear-gradient(145deg, #372215, #25150d 84%);
+  box-shadow: 0 14px 38px rgba(0,0,0,.16);
+  overflow: hidden;
+}
+.sellers-page .sellers-trust-inner { grid-template-columns: minmax(0,1fr) 190px; gap: 28px; }
+.sellers-page .sellers-trust-content,
+.sellers-page .sellers-join-content { text-align: right; }
+.sellers-page .sellers-trust-content { min-width: 0; max-width: 750px; }
+.sellers-page .sellers-trust-content .section-label,
+.sellers-page .sellers-join-content .section-label { color: #d6b581; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.sellers-page .sellers-trust-content h2,
+.sellers-page .sellers-join-content h2 { font-family: var(--font-heritage); font-synthesis: weight; font-size: clamp(27px, 3vw, 39px); color: #f1e1c7; line-height: 1.55; margin: 0 0 15px; }
+.sellers-page .sellers-trust-content h2 span { color: #d8b981; }
+.sellers-page .sellers-trust-content > p:not(.section-label),
+.sellers-page .sellers-join-content > p:not(.section-label) { font-family: var(--font-body); font-size: clamp(14px,1.3vw,17px); line-height: 1.95; color: #e0ceb5; margin: 0 0 12px; max-width: 70ch; }
+.sellers-page .sellers-trust-link,
+.sellers-page .sellers-join-button { display: inline-flex; width: fit-content; justify-content: center; align-items: center; gap: 8px; margin-top: 16px; padding: 12px 23px; border: 1px solid #c5a674; border-radius: 30px; background: #c5a674; color: #29180e; font-family: var(--font-body); font-size: 15px; font-weight: 700; text-decoration: none; transition: background .2s ease, transform .2s ease; }
+.sellers-page .sellers-trust-link:hover,
+.sellers-page .sellers-join-button:hover { background: #e4c695; transform: translateY(-2px); color: #29180e; }
+.sellers-page .sellers-trust-decoration { position: relative; display: grid; place-items: center; min-width: 0; }
+.sellers-page .sellers-trust-circle { width: 172px; height: 172px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; border: 1px solid #b89b73; border-radius: 50%; background: radial-gradient(circle,#563820,#2a180e 75%); color: #e9d5b5; font-family: var(--font-heritage); box-shadow: 0 0 0 9px rgba(184,155,115,.1); }
+.sellers-page .sellers-trust-circle span { color: #d6b581; font-size: 24px; }
+.sellers-page .sellers-trust-circle strong { font-size: 29px; }
+.sellers-page .sellers-trust-circle small { font-family: var(--font-body); font-size: 12px; }
+.sellers-page .sellers-join-content { display: block; }
+@media (max-width: 740px) {
+  .sellers-page .sellers-trust-section,.sellers-page .sellers-join-section { width: calc(100% - 26px); margin: 17px auto; }
+  .sellers-page .sellers-trust-inner { grid-template-columns: 1fr; }
+  .sellers-page .sellers-trust-decoration { display: none; }
+  .sellers-page .sellers-trust-inner,.sellers-page .sellers-join-content { padding: 27px 22px; border-radius: 18px; }
+}
