@@ -193,3 +193,10 @@
   window.addEventListener('resize', schedule, { passive: true });
   schedule();
 })();
+
+/* Backward compatibility: remove old cached seller-directory eyebrow labels. */
+if (document.body.classList.contains('sellers-page')) {
+  document.querySelectorAll('.sellers-section-heading .section-label').forEach(label => {
+    if (label.textContent.includes('تعرّف على البائعين')) label.remove();
+  });
+}
