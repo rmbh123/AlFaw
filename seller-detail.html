@@ -1,0 +1,798 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="تعرّف على تفاصيل البائعين في ألفاو وتقييماتهم ومقتنياتهم التاريخية ومزاداتهم.">
+
+  <title>تفاصيل البائع | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="seller-detail-page">
+
+  
+<!-- HEADER -->
+
+<header class="site-header">
+
+  <a href="index.html" class="site-logo">
+    ألفاو
+  </a>
+
+  <nav class="site-nav"
+       aria-label="القائمة الرئيسية">
+
+    <a href="index.html" aria-current="page">
+      الرئيسية
+    </a>
+
+    <a href="browse.html">
+      القطع الأثرية
+    </a>
+
+    <a href="auctions.html">
+      المزادات
+    </a>
+
+    <a href="verification.html">
+      التوثيق
+    </a>
+
+    <a href="seller-profile.html">
+      البائعون
+    </a>
+
+    <a href="login.html">
+      دخول
+    </a>
+
+    <a href="bidding-guide.html">دليل المزايدة</a>
+  </nav>
+
+</header>
+
+
+  <main class="seller-detail-main">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="seller-detail-breadcrumb"
+         aria-label="مسار التنقل">
+
+      <a href="index.html">الرئيسية</a>
+      <span aria-hidden="true">/</span>
+
+      <a href="seller-profile.html">البائعون</a>
+      <span aria-hidden="true">/</span>
+
+      <span id="seller-breadcrumb-name">
+        تفاصيل البائع
+      </span>
+
+    </nav>
+
+    <!-- SELLER COVER -->
+
+    <section class="seller-detail-cover"
+             aria-label="هوية البائع">
+
+      <div class="seller-detail-cover-pattern"
+           aria-hidden="true">
+        ◈
+      </div>
+
+      <div class="seller-detail-cover-word"
+           aria-hidden="true">
+        ألفاو
+      </div>
+
+    </section>
+
+    <!-- SELLER PROFILE SUMMARY -->
+
+    <section class="seller-detail-profile"
+             aria-labelledby="seller-detail-name">
+
+      <div class="seller-detail-profile-top">
+
+        <div class="seller-detail-avatar"
+             id="seller-detail-avatar"
+             aria-hidden="true">
+          أ
+        </div>
+
+        <div class="seller-detail-identity">
+
+          <p class="section-label">
+            عضو في مجتمع البائعين
+          </p>
+
+          <h1 id="seller-detail-name">
+            أحمد العتيبي
+          </h1>
+
+          <p id="seller-detail-location">
+            الرياض، المملكة العربية السعودية
+          </p>
+
+          <span id="seller-detail-specialty"
+                class="seller-detail-specialty">
+            العملات التاريخية
+          </span>
+
+        </div>
+
+        <a href="#seller-artifacts"
+           class="seller-detail-view-items">
+          استعراض مقتنيات البائع ←
+        </a>
+
+      </div>
+
+      <p id="seller-detail-biography"
+         class="seller-detail-biography">
+        مهتم بالمقتنيات والعملات التاريخية،
+        ويعرض مجموعة من القطع التراثية
+        ومعلوماتها وتفاصيلها على منصة ألفاو.
+      </p>
+
+      <!-- SELLER STATISTICS -->
+
+      <div class="seller-detail-statistics">
+
+        <div class="seller-detail-stat">
+
+          <span class="seller-stat-icon"
+                aria-hidden="true">✦</span>
+
+          <strong id="seller-detail-trust-score">
+            لا توجد تقييمات
+          </strong>
+
+          <span>Trust Score</span>
+
+        </div>
+
+        <div class="seller-detail-stat">
+
+          <span class="seller-stat-icon"
+                aria-hidden="true">☆</span>
+
+          <strong id="seller-detail-review-count">
+            0
+          </strong>
+
+          <span>عدد التقييمات</span>
+
+        </div>
+
+        <div class="seller-detail-stat">
+
+          <span class="seller-stat-icon"
+                aria-hidden="true">◈</span>
+
+          <strong id="seller-detail-artifact-count">
+            2
+          </strong>
+
+          <span>القطع المعروضة</span>
+
+        </div>
+
+        <div class="seller-detail-stat">
+
+          <span class="seller-stat-icon"
+                aria-hidden="true">◇</span>
+
+          <strong id="seller-detail-auction-count">
+            1
+          </strong>
+
+          <span>المزادات</span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PROFILE NAVIGATION -->
+
+    <nav class="seller-detail-tabs"
+         aria-label="أقسام ملف البائع">
+
+      <a href="#seller-about">
+        عن البائع
+      </a>
+
+      <a href="#seller-artifacts">
+        المقتنيات
+      </a>
+
+      <a href="#seller-auctions">
+        المزادات
+      </a>
+
+      <a href="#seller-reviews">
+        التقييمات
+      </a>
+
+    </nav>
+
+    <!-- ABOUT SELLER -->
+
+    <section class="seller-about-section"
+             id="seller-about"
+             aria-labelledby="seller-about-title">
+
+      <div class="seller-section-heading">
+
+        <p class="section-label">
+          تعرّف على البائع
+        </p>
+
+        <h2 id="seller-about-title">
+          عن البائع
+        </h2>
+
+      </div>
+
+      <div class="seller-about-layout">
+
+        <div class="seller-about-content">
+
+          <h3>نبذة عن البائع</h3>
+
+          <p id="seller-about-description">
+            يهتم البائع بعرض المقتنيات
+            التاريخية وتوفير المعلومات
+            المتاحة عنها، بما يساعد
+            المهتمين بالتراث على استكشافها.
+          </p>
+
+          <h3>مجال الاهتمام</h3>
+
+          <p id="seller-about-specialty">
+            العملات التاريخية والمقتنيات التراثية.
+          </p>
+
+        </div>
+
+        <aside class="seller-about-info">
+
+          <h3>معلومات العضوية</h3>
+
+          <div class="seller-about-info-row">
+
+            <span>المدينة</span>
+
+            <strong id="seller-about-city">
+              الرياض
+            </strong>
+
+          </div>
+
+          <div class="seller-about-info-row">
+
+            <span>تاريخ الانضمام</span>
+
+            <strong id="seller-about-joined">
+              سبتمبر 2026
+            </strong>
+
+          </div>
+
+          <div class="seller-about-info-row">
+
+            <span>التخصص</span>
+
+            <strong id="seller-about-category">
+              العملات التاريخية
+            </strong>
+
+          </div>
+
+        </aside>
+
+      </div>
+
+    </section>
+
+    <!-- SELLER ARTIFACTS -->
+
+    <section class="seller-artifacts-section"
+             id="seller-artifacts"
+             aria-labelledby="seller-artifacts-title">
+
+      <div class="seller-section-heading">
+
+        <div>
+
+          <p class="section-label">
+            مجموعة البائع
+          </p>
+
+          <h2 id="seller-artifacts-title">
+            المقتنيات المعروضة
+          </h2>
+
+          <p>
+            استكشف القطع التاريخية
+            المرتبطة بهذا البائع.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="seller-artifacts-grid"
+           id="seller-artifacts-grid">
+
+        <!-- ARTIFACT 1 -->
+
+        <article class="seller-artifact-card">
+
+          <div class="seller-artifact-image">
+
+            <img src="coin.jpg"
+                 alt="عملة تاريخية"
+                 loading="lazy">
+
+            <span class="seller-artifact-status unverified">
+              غير موثق
+            </span>
+
+          </div>
+
+          <div class="seller-artifact-content">
+
+            <span class="seller-artifact-category">
+              العملات التاريخية
+            </span>
+
+            <h3>عملة تاريخية</h3>
+
+            <p>
+              قطعة نقدية تاريخية
+              ضمن مقتنيات البائع.
+            </p>
+
+            <div class="seller-artifact-price">
+
+              <span>السعر الابتدائي</span>
+              <strong>8,000 ر.س</strong>
+
+            </div>
+
+            <a href="artifact-detail.html?id=artifact-001">
+              تفاصيل القطعة ←
+            </a>
+
+          </div>
+
+        </article>
+
+        <!-- ARTIFACT 2 -->
+
+        <article class="seller-artifact-card">
+
+          <div class="seller-artifact-image">
+
+            <img src="silver-coin.jpg"
+                 alt="عملة فضية تاريخية"
+                 loading="lazy">
+
+            <span class="seller-artifact-status unverified">
+              غير موثق
+            </span>
+
+          </div>
+
+          <div class="seller-artifact-content">
+
+            <span class="seller-artifact-category">
+              العملات التاريخية
+            </span>
+
+            <h3>عملة فضية تاريخية</h3>
+
+            <p>
+              مقتنى نقدي تاريخي
+              معروض ضمن مجموعة البائع.
+            </p>
+
+            <div class="seller-artifact-price">
+
+              <span>السعر الابتدائي</span>
+              <strong>9,000 ر.س</strong>
+
+            </div>
+
+            <a href="artifact-detail.html?id=artifact-006">
+              تفاصيل القطعة ←
+            </a>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <div class="seller-artifacts-empty"
+           id="seller-artifacts-empty"
+           hidden>
+
+        <h3>لا توجد مقتنيات معروضة</h3>
+
+        <p>
+          لم يضف هذا البائع أي قطع
+          للعرض حتى الآن.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- SELLER AUCTIONS -->
+
+    <section class="seller-auctions-section"
+             id="seller-auctions"
+             aria-labelledby="seller-auctions-title">
+
+      <div class="seller-section-heading">
+
+        <div>
+
+          <p class="section-label">
+            نشاط المزادات
+          </p>
+
+          <h2 id="seller-auctions-title">
+            مزادات البائع
+          </h2>
+
+          <p>
+            تعرّف على المزادات المرتبطة
+            بمقتنيات البائع.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="seller-auctions-grid"
+           id="seller-auctions-grid">
+
+        <article class="seller-auction-card">
+
+          <div class="seller-auction-image">
+
+            <img src="silver-coin.jpg"
+                 alt="عملة فضية تاريخية"
+                 loading="lazy">
+
+            <span class="seller-auction-status upcoming">
+              قادم
+            </span>
+
+          </div>
+
+          <div class="seller-auction-content">
+
+            <span class="seller-auction-reference">
+              auction-002
+            </span>
+
+            <h3>عملة فضية تاريخية</h3>
+
+            <p>
+              مزاد على قطعة نقدية تاريخية
+              ضمن مقتنيات البائع.
+            </p>
+
+            <div class="seller-auction-info">
+
+              <div>
+                <span>السعر الابتدائي</span>
+                <strong>9,000 ر.س</strong>
+              </div>
+
+              <div>
+                <span>حالة المزاد</span>
+                <strong>قادم</strong>
+              </div>
+
+            </div>
+
+            <a href="auction-detail.html?id=auction-002">
+              تفاصيل المزاد ←
+            </a>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <div class="seller-auctions-empty"
+           id="seller-auctions-empty"
+           hidden>
+
+        <h3>لا توجد مزادات</h3>
+
+        <p>
+          لا توجد مزادات مرتبطة
+          بهذا البائع حاليًا.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- TRUST SCORE -->
+
+    <section class="seller-trust-section"
+             aria-labelledby="seller-trust-title">
+
+      <div class="seller-trust-layout">
+
+        <div class="seller-trust-content">
+
+          <p class="section-label">
+            تقييمات المشترين
+          </p>
+
+          <h2 id="seller-trust-title">
+            الثقة تُبنى بالتجربة
+          </h2>
+
+          <p>
+            يعتمد Trust Score على تقييمات
+            المشترين الذين فازوا بمزادات
+            مكتملة، ويساعد على تقديم صورة
+            أوضح عن تجارب التعامل مع البائع.
+          </p>
+
+          <p>
+            لا يظهر مؤشر رقمي للبائع
+            إلا عند توفر تقييمات مؤهلة
+            يمكن احتسابها.
+          </p>
+
+        </div>
+
+        <div class="seller-trust-indicator">
+
+          <div class="seller-trust-circle">
+
+            <strong id="seller-trust-percentage">
+              —
+            </strong>
+
+            <span>Trust Score</span>
+
+          </div>
+
+          <p id="seller-trust-description">
+            لا توجد تقييمات كافية
+            لاحتساب المؤشر.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- REVIEWS -->
+
+    <section class="seller-reviews-section"
+             id="seller-reviews"
+             aria-labelledby="seller-reviews-title">
+
+      <div class="seller-section-heading">
+
+        <div>
+
+          <p class="section-label">
+            آراء المشترين
+          </p>
+
+          <h2 id="seller-reviews-title">
+            تقييمات البائع
+          </h2>
+
+          <p>
+            التقييمات الصادرة عن
+            المشترين المؤهلين بعد
+            انتهاء المزادات.
+          </p>
+
+        </div>
+
+        <span class="seller-review-total"
+              id="seller-review-total">
+          0 تقييمات
+        </span>
+
+      </div>
+
+      <div class="seller-rating-summary">
+
+        <div class="seller-rating-overall">
+
+          <strong id="seller-average-rating">
+            —
+          </strong>
+
+          <span class="seller-rating-stars"
+                id="seller-rating-stars"
+                aria-label="متوسط تقييم البائع">
+            ☆☆☆☆☆
+          </span>
+
+          <p id="seller-rating-caption">
+            لا توجد تقييمات بعد.
+          </p>
+
+        </div>
+
+        <div class="seller-rating-bars"
+             id="seller-rating-bars">
+
+          <div class="seller-rating-bar-row">
+
+            <span>5 نجوم</span>
+
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill"
+                   id="seller-rating-bar-5"
+                   style="width: 0%"></div>
+            </div>
+
+            <strong id="seller-rating-count-5">0</strong>
+
+          </div>
+
+          <div class="seller-rating-bar-row">
+
+            <span>4 نجوم</span>
+
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill"
+                   id="seller-rating-bar-4"
+                   style="width: 0%"></div>
+            </div>
+
+            <strong id="seller-rating-count-4">0</strong>
+
+          </div>
+
+          <div class="seller-rating-bar-row">
+
+            <span>3 نجوم</span>
+
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill"
+                   id="seller-rating-bar-3"
+                   style="width: 0%"></div>
+            </div>
+
+            <strong id="seller-rating-count-3">0</strong>
+
+          </div>
+
+          <div class="seller-rating-bar-row">
+
+            <span>نجمتان</span>
+
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill"
+                   id="seller-rating-bar-2"
+                   style="width: 0%"></div>
+            </div>
+
+            <strong id="seller-rating-count-2">0</strong>
+
+          </div>
+
+          <div class="seller-rating-bar-row">
+
+            <span>نجمة واحدة</span>
+
+            <div class="rating-bar-track">
+              <div class="rating-bar-fill"
+                   id="seller-rating-bar-1"
+                   style="width: 0%"></div>
+            </div>
+
+            <strong id="seller-rating-count-1">0</strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- REVIEW LIST -->
+
+      <div class="seller-reviews-list"
+           id="seller-reviews-list">
+
+        <div class="seller-review-empty">
+
+          <span aria-hidden="true">☆</span>
+
+          <h3>لا توجد تقييمات حتى الآن</h3>
+
+          <p>
+            ستظهر هنا تقييمات المشترين
+            بعد اكتمال المزادات وتسجيل
+            تجاربهم مع البائع.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- FOOTER NAVIGATION -->
+
+    <section class="seller-detail-bottom-actions">
+
+      <a href="seller-profile.html"
+         class="seller-back-button">
+        العودة إلى جميع البائعين
+        <span aria-hidden="true">←</span>
+      </a>
+
+      <a href="browse.html"
+         class="seller-browse-button">
+        استكشف القطع الأثرية
+      </a>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="alfaw-footer">
+
+    <h2>ألفاو</h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+   <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+
+      <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+
+  </footer>
+
+</body>
+</html>

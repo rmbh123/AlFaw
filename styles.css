@@ -3571,3 +3571,40 @@ img {
     font-size: 11px;
   }
 }
+
+/* Sprint 1 design polish: accessible, reduced-motion and responsive */
+.alfaw-sprint-note{position:relative;z-index:20;background:#f5ebd8;color:#3e281a;border-bottom:1px solid #c8ac80;text-align:center;padding:8px 14px;font:600 12px/1.7 system-ui,sans-serif;letter-spacing:0}
+.alfaw-toast{position:fixed;bottom:22px;inset-inline-start:22px;z-index:9999;display:flex;align-items:center;flex-wrap:wrap;gap:12px;max-width:min(440px,calc(100vw - 40px));background:#f6ead6;color:#2e1b10;border:1px solid #af9162;border-radius:14px;padding:15px 18px;box-shadow:0 16px 35px #0004;font:600 14px/1.7 system-ui,sans-serif}
+.alfaw-toast a{color:#5b381d;text-decoration:underline}.alfaw-toast button{background:transparent;color:#5b381d;border:1px solid #9b7c55;border-radius:9px;padding:5px 10px;cursor:pointer}
+.alfaw-documents{display:grid;gap:8px;margin:18px 0;padding:15px;border:1px solid #bba180;border-radius:12px}.alfaw-documents a{text-decoration:underline;overflow-wrap:anywhere}
+.alfaw-card-meta{font-size:12px;line-height:1.8;opacity:.82}
+.auction-card,.browse-artifact-card,.seller-card{min-width:0}
+.auction-card img,.browse-artifact-card img{max-width:100%}
+.auction-card:focus-within,.browse-artifact-card:focus-within{outline:2px solid #d3ae67;outline-offset:3px}
+.auction-card:hover{transform:translateY(-4px)}
+.auction-badge{font-size:12px}
+.bidding-guide-page{background:#170c08;color:#f8e6c8;min-height:100vh}
+.bidding-guide-main{max-width:1040px;margin:50px auto;padding:0 22px 95px}
+.bidding-guide-main h1{font-family:inherit;font-size:clamp(30px,4vw,54px);margin-bottom:16px}
+.bidding-guide-main h2{font-size:24px;margin-bottom:12px}.bidding-guide-main p,.bidding-guide-main li{line-height:2}
+.bidding-guide-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:35px 0}
+.bidding-guide-step,.bidding-guide-rules{background:#302014;border:1px solid #947148;border-radius:18px;padding:24px}
+.bidding-guide-step strong{display:inline-grid;place-items:center;background:#b69766;color:#1e120c;width:34px;height:34px;border-radius:50%;margin-bottom:10px}
+.bidding-guide-rules ul{padding-inline-start:25px}
+.bidding-guide-main a{color:#ebc790;text-underline-offset:4px}
+@media(max-width:650px){.bidding-guide-steps{grid-template-columns:1fr}.alfaw-sprint-note{font-size:11px}.site-header .site-nav{flex-wrap:wrap;justify-content:center;gap:4px 12px}.site-header .site-nav a{font-size:12px}.alfaw-toast{bottom:10px;inset-inline-start:10px}}
+@media (hover:hover) and (pointer:fine){.auction-card,.browse-artifact-card{transition:transform 200ms cubic-bezier(.2,.8,.2,1),box-shadow 200ms ease-out}}
+@media(prefers-reduced-motion:reduce){.auction-card,.browse-artifact-card,.seller-card{transition:none!important;animation:none!important}.auction-card:hover,.browse-artifact-card:hover,.seller-card:hover{transform:none!important}html{scroll-behavior:auto!important}}
+
+.alfaw-admin-details{margin-top:20px;padding:18px 22px;border-radius:14px;border:1px solid #bda47c;background:#f7ebd8;color:#3c281b}
+.alfaw-admin-details h3{font-size:19px;margin-bottom:10px}.alfaw-admin-details p{margin:5px 0;font-size:14px}
+.alfaw-admin-view{cursor:pointer;border:1px solid #c5a46c;background:#50331e;color:#f6e4c9;border-radius:8px;padding:7px 13px;min-height:38px}
+
+[hidden]{display:none!important}
+.alfaw-pagination{display:flex;justify-content:center;align-items:center;gap:16px;padding:20px 10px;margin:18px auto 25px;color:#efdfc7}
+.alfaw-pagination button{cursor:pointer;border:1px solid #b59769;color:inherit;background:#4a311f;border-radius:9px;min-height:44px;min-width:80px;padding:9px 12px}
+.alfaw-pagination button:disabled{opacity:.5;cursor:not-allowed}
+
+.alfaw-trust{font-size:12px;line-height:1.8;color:#bda076;margin-block:10px!important}
+.alfaw-receipt{display:flex;gap:9px;align-items:start;line-height:1.8;margin:15px 0;cursor:pointer}
+.alfaw-receipt input{margin-top:6px;accent-color:#b39154;min-width:18px;min-height:18px}
