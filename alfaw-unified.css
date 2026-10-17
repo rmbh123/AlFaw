@@ -882,8 +882,8 @@ body.home-page .cinema-scroll .hero-tags > span {
 body.home-page .cinema-scroll .hero-tags > span {
   font-size: 18px;
   color: #2b170c;
-  background: #ead9bd;
-  border-color: #b89b73;
+  background: #c5a674;
+  border-color: #d7bd90;
 }
 @media (max-width: 800px) {
   body.home-page .cinema-scroll .hero-tags > span { font-size: 15px; }
