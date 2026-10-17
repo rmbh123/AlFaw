@@ -877,3 +877,17 @@ body.home-page .cinema-scroll .hero-tags > span {
   body.home-page .cinema-scroll .intro-copy > p { font-size: 14px; }
   body.home-page .cinema-scroll .hero-tags > span { font-size: 11px; }
 }
+
+/* Home heritage tag labels: slightly larger dark-brown text on warm cream cards */
+body.home-page .cinema-scroll .hero-tags > span {
+  font-size: 18px;
+  color: #2b170c;
+  background: #ead9bd;
+  border-color: #b89b73;
+}
+@media (max-width: 800px) {
+  body.home-page .cinema-scroll .hero-tags > span { font-size: 15px; }
+}
+@media (max-width: 550px) {
+  body.home-page .cinema-scroll .hero-tags > span { font-size: 12px; }
+}
