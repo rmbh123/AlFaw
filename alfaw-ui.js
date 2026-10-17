@@ -266,3 +266,131 @@ if (document.body.classList.contains('sellers-page')) {
     observer.observe(el,{subtree:true,characterData:true,childList:true});
   });
 })();
+
+
+/* Six cinematic experiences for AlFaw — isolated and reversible. */
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile = matchMedia('(max-width: 767px)');
+  const okay = () => !reduced.matches;
+  const browse = document.body.classList.contains('browse-page');
+  const detail = document.body.classList.contains('artifact-detail-page');
+  const safe = value => String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+
+  // 1. Card → detail cinematic flight; normal navigation remains the fallback.
+  if (browse) {
+    document.addEventListener('click', event => {
+      const link = event.target.closest('.browse-artifact-card a[href*="artifact-detail.html"]');
+      if (!link || !okay() || mobile.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button || link.target === '_blank') return;
+      const card = link.closest('.browse-artifact-card');
+      const img = card?.querySelector('.browse-artifact-image img');
+      if (!img || !img.complete || !img.naturalWidth) return;
+      event.preventDefault();
+      const rect = img.getBoundingClientRect();
+      const fly = img.cloneNode(true);
+      fly.className = 'alfaw-flying-artifact';
+      Object.assign(fly.style,{position:'fixed',left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px',objectFit:'contain',zIndex:'3000',pointerEvents:'none'});
+      document.body.append(fly);
+      const finish = () => { window.location.href = link.href; };
+      try { sessionStorage.setItem('alfaw-detail-flight','1'); } catch (_) {}
+      const animation = fly.animate([
+        {transform:'translate(0,0) scale(1)',opacity:1,borderRadius:'12px'},
+        {transform:'translate('+(innerWidth/2-(rect.left+rect.width/2))+'px,'+(innerHeight/2-(rect.top+rect.height/2))+'px) scale('+(mobile.matches?1:1.22)+')',opacity:.15,borderRadius:'24px'}
+      ],{duration:490,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+      animation.onfinish=finish;
+      setTimeout(finish,650);
+    });
+  }
+
+  // 2 & 4. Perspective carousel and subtle scroll-driven parallax of the
+  // actual catalogue images. No fabricated artefacts or extra assets.
+  if (browse) {
+    const cards = [...document.querySelectorAll('#browse-grid .browse-artifact-card')].slice(0,6);
+    if (cards.length >= 3) {
+      const stage = document.createElement('section');
+      stage.className = 'alfaw-3d-showcase';
+      stage.setAttribute('aria-label','معرض مقتنيات ألفاو التفاعلي');
+      stage.innerHTML = '<div class="alfaw-3d-heading"><span>من كنوز ألفاو</span><h2>اكتشف المقتنيات من زاوية أخرى</h2><p>استعرض مختارات من القطع التاريخية بحركة مستوحاة من قاعات العرض المتحفية.</p></div><div class="alfaw-3d-stage" aria-live="polite"></div><div class="alfaw-3d-controls"><button type="button" data-go="next" aria-label="القطعة التالية">السابق ←</button><button type="button" data-go="previous" aria-label="القطعة السابقة">→ التالي</button></div>';
+      const display = stage.querySelector('.alfaw-3d-stage');
+      const entries = cards.map(card=>{
+        const img=card.querySelector('img'); const title=card.querySelector('h3');const a=card.querySelector('a[href*="artifact-detail.html"]');
+        return {src:img?.getAttribute('src')||'',title:title?.textContent.trim()||'مقتنى تاريخي',href:a?.getAttribute('href')||'browse.html'};
+      });
+      let active=0;
+      const render=()=>{
+        display.innerHTML='';
+        entries.forEach((item,i)=>{
+          const offset=(i-active+entries.length)%entries.length;
+          const signed=offset>entries.length/2?offset-entries.length:offset;
+          if(Math.abs(signed)>2)return;
+          const a=document.createElement('a');a.href=item.href;a.className='alfaw-3d-item';
+          a.style.setProperty('--offset',String(signed));
+          a.style.setProperty('--abs-offset',String(Math.abs(signed)));
+          a.style.zIndex=String(6-Math.abs(signed));
+          a.setAttribute('aria-label','عرض تفاصيل '+item.title);
+          a.innerHTML='<img loading="lazy" src="'+safe(item.src)+'" alt="'+safe(item.title)+'"><strong>'+safe(item.title)+'</strong>';
+          if(signed!==0)a.tabIndex=-1;
+          display.append(a);
+        });
+      };
+      stage.querySelectorAll('[data-go]').forEach(button=>button.addEventListener('click',()=>{
+        active=(active+(button.dataset.go==='next'?1:-1)+entries.length)%entries.length;render();
+      }));
+      render();
+      const target=document.querySelector('.browse-search-section');
+      if(target)target.before(stage);
+      if(okay() && !mobile.matches){
+        let ticking=false;
+        const parallax=()=>{
+          ticking=false;
+          const rect=stage.getBoundingClientRect();
+          if(rect.bottom<0||rect.top>innerHeight)return;
+          const movement=Math.max(-18,Math.min(18,(innerHeight/2-(rect.top+rect.height/2))*0.035));
+          stage.style.setProperty('--alfaw-parallax',movement.toFixed(1)+'px');
+        };
+        addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(parallax)}},{passive:true});
+        parallax();
+      }
+    }
+  }
+
+  // 3. A soft circular reveal of the primary artifact image on arrival.
+  if(detail) {
+    const image=document.getElementById('artifact-main-photo');
+    if(image && okay()) {
+      const start=()=>{image.classList.add('alfaw-mask-opening');};
+      if(image.complete)requestAnimationFrame(start);
+      else image.addEventListener('load',start,{once:true});
+    }
+  }
+
+  // 5. Animate complete Arabic headlines as a single piece, preserving ligatures.
+  if(okay()) {
+    document.querySelectorAll('.alfaw-3d-heading h2, .artifact-information-section h2, .verification-section h2').forEach(el=>{
+      el.classList.add('alfaw-whole-title');
+    });
+  }
+
+  // 6. An educational journey, explicitly described as general stages,
+  // not an unverifiable provenance history for the particular artifact.
+  if(detail) {
+    const anchor=document.querySelector('.artifact-information-section');
+    if(anchor) {
+      const section=document.createElement('section');
+      section.className='alfaw-journey';
+      section.setAttribute('aria-label','رحلة المقتنى في المنصة');
+      section.innerHTML='<div class="alfaw-journey-heading"><span>رحلة المقتنى</span><h2>من الحكاية إلى المزاد</h2><p>مراحل توضيحية لاستكشاف المعلومات وعرض المقتنيات على منصة ألفاو، وليست سجلًا تاريخيًا موثقًا لهذه القطعة.</p></div><div class="alfaw-journey-track"><div class="alfaw-journey-progress"></div><div class="alfaw-journey-stop"><b>01</b><h3>استكشاف</h3><p>تعرّف على القطعة وحكايتها.</p></div><div class="alfaw-journey-stop"><b>02</b><h3>مراجعة المعلومات</h3><p>اطّلع على البيانات وحالة التوثيق.</p></div><div class="alfaw-journey-stop"><b>03</b><h3>العرض</h3><p>استكشف القطعة ضمن المقتنيات.</p></div><div class="alfaw-journey-stop"><b>04</b><h3>المزاد</h3><p>تابع المزادات عندما تتوفر.</p></div></div>';
+      anchor.after(section);
+      const draw=()=>{
+        const rect=section.getBoundingClientRect();
+        const progress=Math.min(100,Math.max(0,(innerHeight*.75-rect.top)/(rect.height||1)*100));
+        section.style.setProperty('--alfaw-journey-progress',progress.toFixed(1)+'%');
+      };
+      if(okay()){
+        let queued=false;
+        const update=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;draw();});};
+        addEventListener('scroll',update,{passive:true});addEventListener('resize',update);draw();
+      } else section.style.setProperty('--alfaw-journey-progress','100%');
+    }
+  }
+})();
