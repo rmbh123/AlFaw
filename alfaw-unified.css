@@ -833,3 +833,10 @@ body:not(.home-page) :is(.alfaw-footer) {
   overflow: hidden;
   background: transparent;
 }
+
+/* Slightly enlarge the AlFaw emblem without changing the header layout */
+.site-header .site-logo-mark:has(.alfaw-logo-image) {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+}
