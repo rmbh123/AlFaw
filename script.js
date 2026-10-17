@@ -790,6 +790,29 @@ function setupBrowsePage() {
   }
   try { sessionStorage.removeItem("alfaw_browse_verification"); } catch (_) {}
 
+  // A click on the artifacts navbar link must clear filters even when already
+  // on browse.html (when browsers may retain the same page and its controls).
+  const resetBrowseToDefault = () => {
+    if (searchInput) searchInput.value = "";
+    if (categoryFilter) categoryFilter.value = "all";
+    if (verificationFilter) verificationFilter.value = "all";
+    if (priceFilter) priceFilter.value = "all";
+    if (sortFilter) sortFilter.value = "default";
+    browsePageIndex = 1;
+    try { sessionStorage.removeItem("alfaw_browse_verification"); } catch (_) {}
+    sortArtifacts();
+  };
+  document.querySelectorAll('.site-nav a[href="browse.html"]').forEach(link => {
+    link.addEventListener("click", event => {
+      event.preventDefault();
+      if (location.search || location.hash) {
+        history.replaceState(null, "", location.pathname);
+      }
+      resetBrowseToDefault();
+      window.scrollTo({ top: 0, behavior: "auto" });
+    });
+  });
+
   // Navigate from the "Auctions" menu.
 
   if (params.get("view") === "auctions") {
