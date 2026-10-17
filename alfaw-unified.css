@@ -1089,3 +1089,21 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
  .seller-detail-page .seller-detail-bottom-actions a { flex: 1 1 100%; }
  .seller-detail-page .seller-about-info-row { flex-wrap: wrap; gap: 6px; }
 }
+
+/* Seller profile navigation: clear, balanced return action. */
+.seller-detail-page .seller-detail-bottom-actions { align-items: center; margin-top: 32px; }
+.seller-detail-page .seller-detail-bottom-actions .seller-back-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  width: auto; min-width: 215px; padding: 13px 25px;
+  border: 1px solid #c5a674; border-radius: 999px;
+  background: transparent; color: #e6c99d;
+  font-family: var(--font-body); font-size: 15px; font-weight: 700;
+  text-decoration: none; box-shadow: none;
+  transition: background .2s ease,color .2s ease,transform .2s ease;
+}
+.seller-detail-page .seller-detail-bottom-actions .seller-back-button:hover,
+.seller-detail-page .seller-detail-bottom-actions .seller-back-button:focus-visible {
+  background: #c5a674; color: #28180e; transform: translateY(-2px);
+}
+.seller-detail-page .seller-detail-bottom-actions .seller-back-button span { font-size: 19px; line-height: 1; }
+@media(max-width:680px){.seller-detail-page .seller-detail-bottom-actions .seller-back-button{width:100%;}}
