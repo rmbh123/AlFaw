@@ -1388,6 +1388,17 @@ if (cinema) {
       const stamp=card.querySelector('.pending-badge');if(stamp)stamp.textContent=verifications[a.verification]||'غير موثق';
       const ac=auctions.find(z=>z.artifactId===a.id);const strong=card.querySelector('.artifact-price');if(ac&&strong)strong.textContent=money(highest(ac)??a.price);
       const r=rating(a.sellerId),container=card.querySelector('.browse-card-content');if(container){
+        // Sprint 1: show auction context from local demo data, without a backend.
+        const priceLabel=container.querySelector('.price-label');
+        if(priceLabel)priceLabel.textContent=ac?'أعلى مزايدة':'السعر المبدئي';
+        let auctionInfo=container.querySelector('.alfaw-browse-auction-info');
+        if(!auctionInfo){auctionInfo=document.createElement('div');auctionInfo.className='alfaw-browse-auction-info';container.querySelector('.artifact-card-footer')?.before(auctionInfo)}
+        if(ac){
+          const remaining=Date.parse(ac.end)-Date.now();
+          const timeText=status(ac)==='ended'?'انتهى المزاد':status(ac)==='upcoming'?'لم يبدأ بعد':remaining>0?Math.floor(remaining/86400000)+' يوم، '+Math.floor(remaining%86400000/3600000)+' ساعة، '+Math.floor(remaining%3600000/60000)+' دقيقة':'انتهى المزاد';
+          auctionInfo.innerHTML='<span>حالة المزاد: <strong>'+escape(statusName(ac))+'</strong></span><span>الوقت المتبقي: <strong>'+escape(timeText)+'</strong></span>';
+        } else auctionInfo.innerHTML='<span>لا يوجد مزاد مرتبط بهذه القطعة حاليًا</span>';
+
         let trust=container.querySelector('.alfaw-trust');if(!trust){trust=document.createElement('p');trust.className='alfaw-trust';container.querySelector('.artifact-card-footer')?.before(trust)}
         trust.textContent='موثوقية البائع: '+(r.trust===null?'لا توجد تقييمات':r.trust+'%');
       }
