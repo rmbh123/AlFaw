@@ -10,35 +10,31 @@
 <!-- SHARED CSS AND JAVASCRIPT -->
 <link href="styles.css" rel="stylesheet"/>
 <script defer="" src="script.js"></script>
+  <link rel="stylesheet" href="alfaw-unified.css">
+  <script src="alfaw-ui.js" defer></script>
 </head>
 <body class="auction-detail-page">
 <div class="alfaw-sprint-note" role="note">نموذج واجهات Sprint 1 — بيانات تجريبية محلية، دون ربط بقاعدة بيانات أو توثيق رسمي فعلي.</div>
 <!-- HEADER -->
-<header class="site-header">
-<a class="site-logo" href="index.html">
-    ألفاو
+<header class="site-header" data-site-header>
+  <a class="site-logo" href="index.html" aria-label="ألفاو — العودة للرئيسية">
+    <span class="site-logo-mark" aria-hidden="true">✦</span>
+    <span class="site-logo-name">ألفاو<small>حكاية إرث</small></span>
   </a>
-<nav aria-label="القائمة الرئيسية" class="site-nav">
-<a aria-current="page" href="index.html">
-      الرئيسية
-    </a>
-<a href="browse.html">
-      القطع الأثرية
-    </a>
-<a href="auctions.html">
-      المزادات
-    </a>
-<a href="verification.html">
-      التوثيق
-    </a>
-<a href="seller-profile.html">
-      البائعون
-    </a>
-<a href="login.html">
-      دخول
-    </a>
-<a href="bidding-guide.html">دليل المزايدة</a>
-</nav>
+  <nav class="site-nav" id="site-navigation" aria-label="التنقل الرئيسي">
+      <a href="index.html">الرئيسية</a>
+      <a href="browse.html">القطع الأثرية</a>
+      <a href="auctions.html" aria-current="page">المزادات</a>
+      <a href="verification.html">التوثيق</a>
+      <a href="seller-profile.html">البائعون</a>
+      <a href="bidding-guide.html">دليل المزايدة</a>
+  </nav>
+  <div class="header-actions">
+    <a class="header-login" href="login.html" id="site-account-link">دخول <span aria-hidden="true">↗</span></a>
+    <button class="site-menu-toggle" type="button" aria-label="فتح قائمة التنقل" aria-controls="site-navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
 <main class="auction-detail-main">
 <!-- BREADCRUMB -->

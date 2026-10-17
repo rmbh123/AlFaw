@@ -1,0 +1,687 @@
+/* =========================================================
+   ALFAW — UNIFIED VISUAL LANGUAGE
+   Shared navigation, heritage styling, spacing, motion.
+   Extends the original cinematic homepage without replacing it.
+   ========================================================= */
+:root {
+  --alfaw-ink: #160d08;
+  --alfaw-deep: #20120b;
+  --alfaw-surface: #302014;
+  --alfaw-surface-raised: #3b281a;
+  --alfaw-line: rgba(198, 163, 109, .27);
+  --alfaw-gold: #c9a878;
+  --alfaw-gold-bright: #e4c79a;
+  --alfaw-text: #f5e8d4;
+  --alfaw-muted: #cfbaa0;
+  --alfaw-radius: 22px;
+  --alfaw-ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+html { scroll-padding-top: 108px; }
+body:not(.home-page) {
+  background: radial-gradient(ellipse 90% 550px at 50% 0%, rgba(107, 70, 41, .37), transparent 80%),
+              linear-gradient(180deg, #21130b 0%, #170d08 46%, #140b06 100%);
+  color: var(--alfaw-text);
+}
+body:not(.home-page) main { position: relative; isolation: isolate; }
+body:not(.home-page) main::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 720px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .34;
+  background: repeating-linear-gradient(110deg, transparent 0 83px, rgba(201,168,120,.055) 84px 85px, transparent 86px 168px);
+  mask-image: linear-gradient(#000, transparent);
+}
+body:not(.home-page) :is(h1,h2,h3) { text-wrap: balance; }
+body:not(.home-page) :is(p,li) { overflow-wrap: break-word; }
+body:not(.home-page) :is(.section-label,.collection-eyebrow,.verification-eyebrow,.scene-eyebrow) {
+  color: var(--alfaw-gold-bright);
+  letter-spacing: .025em;
+  font-weight: 700;
+}
+body:not(.home-page) :is(.section-label,.collection-eyebrow,.verification-eyebrow)::before {
+  content: "✦";
+  display: inline-block;
+  color: var(--alfaw-gold);
+  font-size: .8em;
+  margin-inline-end: 9px;
+  vertical-align: .07em;
+}
+
+/* Navigation: identical on every page, including the home scene. */
+.site-header,
+.site-header.inner-header {
+  position: sticky;
+  top: 0;
+  inset-inline: 0;
+  z-index: 900;
+  width: 100%;
+  min-height: 84px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(12px, 2.1vw, 32px);
+  padding: 10px clamp(20px, 4.2vw, 76px);
+  border: 0;
+  border-bottom: 1px solid rgba(218, 181, 126, .19);
+  background: rgba(24, 13, 7, .94);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 34px rgba(0,0,0,.13);
+}
+.home-page .site-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  background: linear-gradient(180deg, rgba(19,10,5,.79), rgba(19,10,5,.19));
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.site-header .site-logo {
+  flex: 0 0 auto;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  min-width: 158px;
+  color: var(--alfaw-text);
+  font: 400 36px/1.1 var(--font-heritage);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.site-logo-mark {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 39px;
+  width: 39px;
+  height: 39px;
+  border: 1px solid rgba(224, 186, 129, .63);
+  border-radius: 50%;
+  color: var(--alfaw-gold-bright);
+  font: 18px/1 var(--font-body);
+  background: radial-gradient(circle, rgba(201,168,120,.13), transparent 75%);
+  box-shadow: 0 0 0 5px rgba(201,168,120,.045);
+}
+.site-logo-name { display: flex; flex-direction: column; gap: 3px; }
+.site-logo-name small {
+  color: var(--alfaw-gold);
+  font: 600 9px/1.3 var(--font-body);
+  letter-spacing: .15em;
+}
+.site-header .site-nav {
+  grid-column: auto;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: clamp(10px, 1.7vw, 27px);
+  min-width: 0;
+  direction: rtl;
+}
+.site-header .site-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 1px;
+  color: #e4d5c1;
+  font: 600 clamp(12px, 1vw, 14px)/1.6 var(--font-body);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .25s ease;
+}
+.site-header .site-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  inset-inline-start: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--alfaw-gold), #f4dcaa);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform .32s var(--alfaw-ease);
+}
+.site-header .site-nav a:is(:hover,:focus-visible,[aria-current="page"]) { color: var(--alfaw-gold-bright); }
+.site-header .site-nav a:is(:hover,:focus-visible,[aria-current="page"])::after { transform: scaleX(1); }
+.site-header .header-actions {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  min-width: 118px;
+}
+.site-header .header-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 8px 19px;
+  border: 1px solid rgba(224, 188, 139, .69);
+  border-radius: 999px;
+  background: rgba(201,168,120,.11);
+  color: #f1d9b6;
+  font: 700 13px/1.5 var(--font-body);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .25s, transform .25s, border-color .25s;
+}
+.site-header .header-login:hover {
+  background: rgba(201,168,120,.24);
+  border-color: var(--alfaw-gold-bright);
+  transform: translateY(-2px);
+}
+.site-menu-toggle { display: none; }
+
+/* Demo note: quieter and consistent with the site's palette. */
+.alfaw-sprint-note {
+  position: relative;
+  z-index: 901;
+  background: #352316;
+  border-bottom: 1px solid var(--alfaw-line);
+  color: #e9d1aa;
+  padding: 7px 18px;
+  text-align: center;
+  font: 600 11px/1.75 var(--font-body);
+}
+
+/* One consistent editorial language for interior page openings. */
+body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: min(1240px, calc(100% - 48px));
+  max-width: 1240px;
+  min-height: 320px;
+  margin: 30px auto 64px;
+  padding: clamp(42px, 6vw, 76px) clamp(22px, 5vw, 65px);
+  border: 1px solid rgba(205,170,118,.34);
+  border-radius: 30px;
+  background: radial-gradient(circle at 12% 0%, rgba(205,170,118,.19), transparent 37%),
+              radial-gradient(circle at 89% 95%, rgba(131,81,44,.3), transparent 46%),
+              linear-gradient(135deg, #3b2416 0%, #23140c 65%, #1b0f09 100%);
+  box-shadow: 0 25px 65px rgba(0,0,0,.20);
+  text-align: center;
+}
+body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero)::after {
+  content: "✦";
+  position: absolute;
+  inset-inline-end: 5%;
+  top: -55px;
+  z-index: -1;
+  color: rgba(218,183,130,.095);
+  font: 300 clamp(150px, 25vw, 360px)/1 var(--font-heritage);
+  pointer-events: none;
+}
+.auctions-page .auctions-hero { background: radial-gradient(circle at 12% 0%,rgba(205,170,118,.19),transparent 37%),linear-gradient(135deg,#3b2416,#1b0f09); }
+.auctions-page .auctions-hero-inner {
+  width: 100%;
+  max-width: 860px;
+  min-height: 0;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero) h1 {
+  color: var(--alfaw-text);
+  font: 400 clamp(42px, 5.4vw, 74px)/1.4 var(--font-heritage);
+  margin: 10px auto 16px;
+}
+body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero) h1 span { color: var(--alfaw-gold-bright); }
+body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero) p:not(.section-label) {
+  max-width: 750px;
+  margin-inline: auto;
+  color: #e2cdb0;
+  font: 400 clamp(14px, 1.2vw, 16px)/2.15 var(--font-body);
+}
+.auctions-page .auctions-hero-title span { display: inline; }
+.sellers-page .sellers-hero-decoration { opacity: .24; pointer-events: none; }
+.bidding-guide-main { max-width: 1160px; margin: 0 auto; padding: 0 22px 90px; }
+.bidding-guide-main .bidding-guide-hero { width: 100%; margin: 30px auto 54px; }
+.bidding-guide-hero > p:first-child { color: var(--alfaw-gold-bright); font-weight: 700; }
+.bidding-guide-main .bidding-guide-hero h1 { font-family: var(--font-heritage); font-weight: 400; }
+.bidding-guide-main .bidding-guide-hero p:last-child { max-width: 720px; }
+
+/* Consistent introduction style for account, detail and dashboard pages. */
+body:not(.home-page) :is(.register-intro,.login-intro,.profile-page-heading,.dashboard-intro,.admin-dashboard-heading,.manage-artifact-heading,.manage-auctions-heading,.auction-detail-heading) {
+  position: relative;
+  padding: clamp(26px, 3.8vw, 46px) clamp(18px, 3vw, 38px);
+  margin-top: 20px;
+  margin-bottom: 35px;
+  border: 1px solid var(--alfaw-line);
+  border-radius: var(--alfaw-radius);
+  background: radial-gradient(circle at 90% 0%, rgba(201,168,120,.13), transparent 52%),
+              linear-gradient(135deg, rgba(60,38,24,.88), rgba(28,16,10,.91));
+  box-shadow: 0 18px 55px rgba(0,0,0,.12);
+}
+body:not(.home-page) :is(.register-intro,.login-intro,.profile-page-heading,.dashboard-intro,.admin-dashboard-heading,.manage-artifact-heading,.manage-auctions-heading,.auction-detail-heading) h1 {
+  color: var(--alfaw-text);
+  font: 400 clamp(37px, 4.2vw, 61px)/1.45 var(--font-heritage);
+}
+body:not(.home-page) :is(.register-intro,.login-intro,.profile-page-heading,.dashboard-intro,.admin-dashboard-heading,.manage-artifact-heading,.manage-auctions-heading,.auction-detail-heading) h1 span { color: var(--alfaw-gold-bright); }
+body:not(.home-page) :is(.register-intro,.login-intro,.profile-page-heading,.dashboard-intro,.admin-dashboard-heading,.manage-artifact-heading,.manage-auctions-heading,.auction-detail-heading) p { color: var(--alfaw-muted); }
+
+/* Cards, controls and surfaces share the same radius, tone and borders. */
+body:not(.home-page) :is(
+  .browse-artifact-card,.auction-card,.seller-directory-card,.seller-artifact-card,
+  .bidding-guide-step,.bidding-guide-rules,.profile-panel,.dashboard-panel,.admin-panel,
+  .login-form-card,.register-form-card,.login-benefits-card,.register-benefits-card,
+  .manage-auctions-form-card,.manage-artifact-form-card,.auction-rules-card,
+  .verification-card,.verification-status-card,.verification-info-card,
+  .seller-detail-about,.seller-review-card,.seller-trust-card,
+  .browse-filters,.auctions-filter-sidebar,.profile-guest-state,
+  .dashboard-access-message,.collection-detail-panel
+) {
+  border: 1px solid var(--alfaw-line);
+  border-radius: var(--alfaw-radius);
+  background: linear-gradient(148deg, rgba(61,40,26,.93), rgba(34,20,12,.97));
+  box-shadow: 0 15px 43px rgba(0,0,0,.12);
+}
+body:not(.home-page) :is(.browse-artifact-card,.auction-card,.seller-directory-card,.seller-artifact-card,.bidding-guide-step,.verification-card) {
+  transition: transform .42s var(--alfaw-ease), box-shadow .42s ease, border-color .35s ease;
+}
+@media (hover:hover) and (pointer:fine) {
+  body:not(.home-page) :is(.browse-artifact-card,.auction-card,.seller-directory-card,.seller-artifact-card,.bidding-guide-step,.verification-card):hover {
+    transform: translateY(-7px);
+    border-color: rgba(225,190,136,.57);
+    box-shadow: 0 25px 54px rgba(0,0,0,.24);
+  }
+}
+body:not(.home-page) :is(.browse-artifact-image,.auction-card-image,.seller-artifact-image) {
+  background: radial-gradient(ellipse at 50% 32%, #765139 0%, #3b2618 53%, #28180f 100%);
+}
+body:not(.home-page) :is(.browse-artifact-image img,.auction-card-image img,.seller-artifact-image img) {
+  object-fit: contain;
+}
+body:not(.home-page) :is(.browse-artifact-card,.auction-card,.seller-directory-card) h3 {
+  color: var(--alfaw-text);
+  font-family: var(--font-heritage);
+  font-weight: 400;
+}
+body:not(.home-page) :is(.results-heading,.sellers-section-heading,.auctions-results-heading,.seller-detail-section-heading) h2 {
+  color: var(--alfaw-text);
+  font: 400 clamp(31px, 3.6vw, 48px)/1.4 var(--font-heritage);
+}
+body:not(.home-page) :is(.results-heading,.sellers-section-heading,.auctions-results-heading,.seller-detail-section-heading) h2::after {
+  content: "";
+  display: block;
+  width: 58px;
+  height: 2px;
+  margin-top: 12px;
+  background: linear-gradient(90deg, var(--alfaw-gold), transparent);
+}
+body:not(.home-page) :is(input,select,textarea) {
+  border-color: rgba(205,170,118,.31);
+  background-color: #25170f;
+  color: var(--alfaw-text);
+}
+body:not(.home-page) :is(input,select,textarea):focus-visible {
+  outline: 2px solid var(--alfaw-gold);
+  outline-offset: 2px;
+}
+body:not(.home-page) :is(button,a) { -webkit-tap-highlight-color: transparent; }
+body:not(.home-page) :is(.collection-button,.hero-primary-button,.sellers-primary-button,.profile-primary-button,.register-primary-button,.login-primary-button,.auction-pretty-button,.collection-card-button) {
+  border-radius: 999px;
+  transition: transform .28s var(--alfaw-ease), box-shadow .28s ease, background .28s ease;
+}
+@media (hover:hover) and (pointer:fine) {
+  body:not(.home-page) :is(.collection-button,.hero-primary-button,.sellers-primary-button,.profile-primary-button,.register-primary-button,.login-primary-button,.auction-pretty-button,.collection-card-button):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.2);
+  }
+}
+
+/* Consistent content widths and vertical rhythm. */
+body:not(.home-page) :is(.sellers-main-section,.sellers-trust-section,.sellers-join-section,.verification-section,.verification-bottom-cta) {
+  max-width: 1240px;
+  margin-inline: auto;
+}
+body:not(.home-page) :is(.browse-content,.auctions-main,.sellers-main-section) { gap: clamp(18px, 2.4vw, 32px); }
+body:not(.home-page) :is(.browse-grid,.auctions-grid,.sellers-grid,.bidding-guide-steps) { gap: clamp(16px, 2vw, 25px); }
+body:not(.home-page) :is(.browse-content,.auctions-main,.sellers-main-section,.verification-section) { scroll-margin-top: 105px; }
+body:not(.home-page) :is(.alfaw-footer) {
+  margin-top: 60px;
+  border-top: 1px solid var(--alfaw-line);
+  background: linear-gradient(180deg, #26170e, #120a06);
+}
+
+/* Reveal on scroll: JS enables motion only if IntersectionObserver is available. */
+@media (prefers-reduced-motion: no-preference) {
+  html.alfaw-motion-ready body:not(.home-page) .alfaw-reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+    filter: blur(3px);
+  }
+  html.alfaw-motion-ready body:not(.home-page) .alfaw-reveal {
+    transition: opacity .78s var(--alfaw-ease), transform .88s var(--alfaw-ease), filter .78s ease;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  html.alfaw-motion-ready body:not(.home-page) .alfaw-reveal.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+  html.alfaw-motion-ready body:not(.home-page) .alfaw-reveal.alfaw-card-reveal:not(.is-visible) {
+    transform: translate3d(0, 25px, 0) scale(.985);
+  }
+  html.alfaw-motion-ready body:not(.home-page) .alfaw-reveal.alfaw-card-reveal.is-visible {
+    transform: translate3d(0,0,0) scale(1);
+  }
+}
+
+@media (max-width: 1180px) {
+  .site-header, .site-header.inner-header { padding-inline: 24px; gap: 14px; }
+  .site-header .site-logo { min-width: 136px; font-size: 32px; }
+  .site-logo-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .site-header .site-nav { gap: 12px; }
+  .site-header .site-nav a { font-size: 12px; }
+  .site-header .header-actions { min-width: 105px; }
+  .site-header .header-login { padding: 8px 13px; font-size: 12px; }
+}
+@media (max-width: 920px) {
+  .site-header, .site-header.inner-header {
+    min-height: 74px;
+    padding: 10px 22px;
+    gap: 12px;
+  }
+  .site-header .site-logo { min-width: 0; font-size: 33px; }
+  .site-header .header-actions { margin-inline-start: auto; min-width: 0; }
+  .site-header .site-menu-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--alfaw-line);
+    border-radius: 12px;
+    background: rgba(201,168,120,.09);
+    color: var(--alfaw-text);
+  }
+  .site-menu-toggle span {
+    display: block;
+    width: 19px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .site-header.menu-open .site-menu-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .site-header.menu-open .site-menu-toggle span:nth-child(2) { opacity: 0; }
+  .site-header.menu-open .site-menu-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .site-header .site-nav {
+    position: absolute;
+    top: calc(100% + 1px);
+    inset-inline: 12px;
+    z-index: 901;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: stretch;
+    align-items: stretch;
+    gap: 5px;
+    max-height: min(70vh, 490px);
+    overflow-y: auto;
+    padding: 13px;
+    border: 1px solid rgba(205,170,118,.38);
+    border-radius: 0 0 19px 19px;
+    background: rgba(32,19,11,.985);
+    box-shadow: 0 24px 45px rgba(0,0,0,.32);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity .25s, transform .25s, visibility .25s;
+  }
+  .site-header.menu-open .site-nav { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+  .site-header .site-nav a {
+    justify-content: center;
+    min-height: 46px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    text-align: center;
+  }
+  .site-header .site-nav a[aria-current="page"] { background: rgba(201,168,120,.14); }
+  .site-header .site-nav a::after { bottom: 3px; width: 48%; inset-inline-start: 26%; }
+  body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero) { margin-top: 24px; }
+}
+@media (max-width: 650px) {
+  .site-header, .site-header.inner-header { min-height: 70px; padding-inline: 15px; }
+  .site-header .site-logo { gap: 8px; font-size: 30px; }
+  .site-logo-mark { width: 31px; height: 31px; flex-basis: 31px; font-size: 14px; }
+  .site-logo-name small { font-size: 8px; }
+  .site-header .header-actions { gap: 8px; }
+  .site-header .header-login { min-height: 40px; padding: 7px 12px; font-size: 11px; }
+  .site-header .site-nav { grid-template-columns: 1fr; }
+  .site-header .site-nav a { font-size: 14px; }
+  .alfaw-sprint-note { padding: 7px 11px; font-size: 10px; }
+  body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero) {
+    width: calc(100% - 26px);
+    min-height: 0;
+    margin: 18px auto 38px;
+    padding: 36px 19px 42px;
+    border-radius: 21px;
+  }
+  body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero,.bidding-guide-hero) h1 {
+    font-size: clamp(34px, 9vw, 51px);
+  }
+  body:not(.home-page) :is(.register-intro,.login-intro,.profile-page-heading,.dashboard-intro,.admin-dashboard-heading,.manage-artifact-heading,.manage-auctions-heading,.auction-detail-heading) {
+    margin-top: 9px;
+    padding: 25px 20px;
+    border-radius: 18px;
+  }
+  body:not(.home-page) :is(.register-intro,.login-intro,.profile-page-heading,.dashboard-intro,.admin-dashboard-heading,.manage-artifact-heading,.manage-auctions-heading,.auction-detail-heading) h1 {
+    font-size: clamp(34px, 9vw, 47px);
+  }
+  .bidding-guide-main { padding-inline: 13px; }
+  body:not(.home-page) :is(.browse-artifact-card,.auction-card,.seller-directory-card,.bidding-guide-step,.profile-panel,.dashboard-panel,.admin-panel) { border-radius: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header *, body:not(.home-page) .alfaw-reveal { animation: none !important; transition: none !important; }
+  body:not(.home-page) .alfaw-reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+}
+
+/* Targeted fixes for pages that previously had unfinished or cramped UI. */
+.sellers-page .sellers-hero-content { position: relative; z-index: 1; max-width: 850px; margin-inline: auto; }
+.sellers-page .sellers-hero-decoration { display: none; }
+.sellers-page .sellers-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+.sellers-page .sellers-hero-actions :is(.sellers-primary-button,.sellers-secondary-button) {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  min-width: 185px;
+  padding: 12px 22px;
+  border: 1px solid var(--alfaw-gold);
+  border-radius: 999px;
+  background: var(--alfaw-gold);
+  color: #231409;
+  font: 700 14px/1.6 var(--font-body);
+  text-decoration: none;
+  transition: transform .3s var(--alfaw-ease), background .3s;
+}
+.sellers-page .sellers-hero-actions .sellers-secondary-button { background: transparent; color: var(--alfaw-text); }
+.sellers-page .sellers-hero-actions :is(.sellers-primary-button,.sellers-secondary-button):hover { transform: translateY(-3px); }
+.sellers-page .sellers-hero-actions .sellers-secondary-button:hover { background: rgba(201,168,120,.15); }
+
+:is(.login-page,.register-page) :is(.login-form-heading,.register-form-heading) { margin-bottom: 22px; }
+:is(.login-page,.register-page) :is(.login-form-heading,.register-form-heading) h2 {
+  margin: 7px 0 10px;
+  color: var(--alfaw-text);
+  font: 400 clamp(30px, 3vw, 43px)/1.4 var(--font-heritage);
+}
+:is(.login-page,.register-page) :is(.login-form-heading,.register-form-heading) p:not(.section-label) {
+  color: var(--alfaw-muted);
+  font: 400 14px/1.9 var(--font-body);
+}
+:is(.login-page,.register-page) .password-input-wrapper { display: flex; align-items: center; gap: 8px; min-width: 0; }
+:is(.login-page,.register-page) .password-input-wrapper input { flex: 1 1 auto; min-width: 0; }
+:is(.login-page,.register-page) .toggle-password {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid var(--alfaw-line);
+  border-radius: 10px;
+  background: rgba(201,168,120,.10);
+  color: var(--alfaw-text);
+  font: 600 12px/1.5 var(--font-body);
+}
+:is(.login-page,.register-page) .toggle-password:hover { background: rgba(201,168,120,.21); }
+:is(.login-page,.register-page) :is(.login-side-panel,.register-side-panel) {
+  border: 1px solid var(--alfaw-line);
+  border-radius: var(--alfaw-radius);
+  background: linear-gradient(148deg, rgba(61,40,26,.93), rgba(34,20,12,.97));
+}
+:is(.login-page,.register-page) :is(.login-form-card,.register-form-card) { padding: clamp(22px, 3vw, 36px); }
+
+/* Tables scroll inside their cards instead of stretching the entire mobile page. */
+.auction-detail-page .auction-history-table-wrapper,
+:is(.seller-dashboard-page,.admin-dashboard-page,.profile-page) :is(.dashboard-table-wrapper,.admin-table-wrapper) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--alfaw-line);
+  border-radius: 13px;
+}
+:is(.seller-dashboard-page,.admin-dashboard-page,.profile-page) :is(.dashboard-layout,.admin-dashboard-layout,.profile-content-layout) > *,
+:is(.seller-dashboard-page,.admin-dashboard-page) :is(.dashboard-main-content,.admin-main-content,.dashboard-panel,.admin-panel,.dashboard-sidebar,.admin-sidebar),
+.auction-detail-page .auction-history-section { min-width: 0; max-width: 100%; }
+@media (max-width: 740px) {
+  :is(.seller-dashboard-page,.admin-dashboard-page,.profile-page) :is(.dashboard-layout,.admin-dashboard-layout,.profile-content-layout) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .profile-page .profile-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :is(.seller-dashboard-page,.admin-dashboard-page) :is(.dashboard-summary,.admin-summary) { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  :is(.seller-dashboard-page,.admin-dashboard-page) :is(.dashboard-panel,.admin-panel,.dashboard-sidebar,.admin-sidebar) { padding: 17px; }
+}
+@media (max-width: 650px) {
+  .sellers-page .sellers-hero-actions { flex-direction: column; align-items: stretch; }
+  .sellers-page .sellers-hero-actions :is(.sellers-primary-button,.sellers-secondary-button) { width: 100%; }
+  :is(.login-page,.register-page) .password-input-wrapper { gap: 6px; }
+  :is(.login-page,.register-page) .toggle-password { padding-inline: 10px; }
+}
+
+/* Narrow phones and tablet profile layouts. */
+.sellers-page .sellers-toolbar { min-width: 0; }
+.sellers-page .sellers-search-form { flex: 1 1 285px; min-width: 0; max-width: 100%; }
+.sellers-page .sellers-search-form input { flex: 1 1 auto; min-width: 0; width: 100%; }
+.sellers-page .sellers-filters { max-width: 100%; flex-wrap: wrap; }
+.profile-page .profile-form-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.profile-page .profile-field { min-width: 0; }
+.profile-page .profile-field :is(input,select,textarea) { min-width: 0; max-width: 100%; width: 100%; }
+@media (max-width: 980px) {
+  .profile-page .profile-content-layout { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 650px) {
+  .profile-page .profile-form-grid { grid-template-columns: minmax(0,1fr); }
+}
+
+/* Previously unstyled discovery/help sections now match the rest of AlFaw. */
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-section,.login-explore-section,.register-help-section) {
+  width: 100%;
+  margin: 68px auto 10px;
+  padding: clamp(25px, 4vw, 45px);
+  border: 1px solid var(--alfaw-line);
+  border-radius: 25px;
+  background: radial-gradient(circle at 90% 0%, rgba(201,168,120,.12), transparent 47%),
+              linear-gradient(145deg, rgba(55,34,21,.88), rgba(26,15,9,.95));
+}
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-heading,.login-explore-heading,.register-help-content) > h2 {
+  margin: 9px 0 12px;
+  color: var(--alfaw-text);
+  font: 400 clamp(31px, 3.6vw, 47px)/1.45 var(--font-heritage);
+}
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-heading,.login-explore-heading) > p:last-child {
+  color: var(--alfaw-muted);
+  font: 400 14px/1.95 var(--font-body);
+}
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-grid,.login-explore-grid,.register-help-grid) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-card,.login-explore-card,.register-help-card) {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  min-height: 195px;
+  padding: 23px;
+  border: 1px solid var(--alfaw-line);
+  border-radius: 18px;
+  background: linear-gradient(150deg, #442c1c, #2b1b11);
+  color: var(--alfaw-text);
+  text-decoration: none;
+  transition: transform .32s var(--alfaw-ease), border-color .32s;
+}
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-card,.login-explore-card,.register-help-card) > span {
+  color: var(--alfaw-gold-bright);
+  font-size: 25px;
+  line-height: 1.3;
+}
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-card,.login-explore-card,.register-help-card) h3 {
+  color: var(--alfaw-text);
+  font: 400 29px/1.45 var(--font-heritage);
+}
+:is(.profile-page,.login-page,.register-page) :is(.profile-discover-card,.login-explore-card,.register-help-card) p {
+  color: var(--alfaw-muted);
+  font: 400 13px/1.9 var(--font-body);
+}
+:is(.profile-page,.login-page) :is(.profile-discover-card,.login-explore-card) strong {
+  margin-top: auto;
+  color: var(--alfaw-gold-bright);
+  font-size: 12px;
+}
+@media (hover:hover) and (pointer:fine) {
+  :is(.profile-page,.login-page) :is(.profile-discover-card,.login-explore-card):hover {
+    transform: translateY(-5px);
+    border-color: var(--alfaw-gold);
+  }
+}
+@media (max-width: 900px) {
+  :is(.profile-page,.login-page,.register-page) :is(.profile-discover-grid,.login-explore-grid,.register-help-grid) {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+}
+@media (max-width: 650px) {
+  :is(.profile-page,.login-page,.register-page) :is(.profile-discover-section,.login-explore-section,.register-help-section) {
+    padding: 24px 17px;
+    border-radius: 19px;
+  }
+  :is(.profile-page,.login-page,.register-page) :is(.profile-discover-grid,.login-explore-grid,.register-help-grid) {
+    grid-template-columns: minmax(0,1fr);
+  }
+  :is(.profile-page,.login-page,.register-page) :is(.profile-discover-card,.login-explore-card,.register-help-card) {
+    min-height: 0;
+    padding: 20px;
+  }
+}
+.login-page .site-header .header-login,
+.register-page .site-header .header-login { background: rgba(201,168,120,.21); color: var(--alfaw-gold-bright); }
