@@ -856,3 +856,22 @@ body.home-page .cinema-scroll .hero-tags > span {
   border: 1px solid rgba(184,155,115,.7);
   box-shadow: 0 8px 22px rgba(0,0,0,.28);
 }
+
+/* Make home introduction and tags more legible without resizing their cards */
+body.home-page .cinema-scroll .intro-copy > p {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.9;
+}
+body.home-page .cinema-scroll .hero-tags > span {
+  font-size: 16px;
+  font-weight: 700;
+}
+@media (max-width: 800px) {
+  body.home-page .cinema-scroll .intro-copy > p { font-size: 16px; }
+  body.home-page .cinema-scroll .hero-tags > span { font-size: 13px; }
+}
+@media (max-width: 550px) {
+  body.home-page .cinema-scroll .intro-copy > p { font-size: 14px; }
+  body.home-page .cinema-scroll .hero-tags > span { font-size: 11px; }
+}
