@@ -39,7 +39,7 @@
       <a href="auctions.html" aria-current="page">المزادات</a>
       <a href="verification.html">التوثيق</a>
       <a href="seller-profile.html">البائعون</a>
-      <a href="bidding-guide.html">دليل المزايدة</a>
+      <a href="auctions.html#bidding-guide">دليل المزايدة</a>
   </nav>
   <div class="header-actions">
     <a class="header-login" href="login.html" id="site-account-link">دخول <span aria-hidden="true">↗</span></a>
@@ -800,114 +800,83 @@
 
     </section>
 
-    <!-- =====================================
-         RULES CARD — BELOW ALL AUCTIONS
-    ====================================== -->
+    <!-- BIDDING GUIDE — inspired by Qamat's alternating journey layout -->
+    <section class="alfaw-guide" id="bidding-guide" aria-labelledby="alfaw-guide-title">
+      <div class="alfaw-guide-inner">
+        <div class="alfaw-guide-heading">
+          <span class="alfaw-guide-eyebrow">دليل المشاركة في مزادات ألفاو</span>
+          <h2 id="alfaw-guide-title">دليل <span>المزايدة</span></h2>
+          <p class="alfaw-guide-lead">من اختيار القطعة إلى متابعة عرضك، تعرّف على خطوات المشاركة وما ينبغي معرفته قبل المزايدة.</p>
+          <span class="alfaw-guide-heading-rule" aria-hidden="true"></span>
+        </div>
 
-    <section
-      class="auction-rules-card"
-      aria-labelledby="auction-rules-title"
-    >
+        <div class="alfaw-guide-timeline" aria-label="خطوات المشاركة في المزايدة">
+          <span class="alfaw-guide-track" aria-hidden="true"></span>
+          <span class="alfaw-guide-track-progress" aria-hidden="true"></span>
 
-      <div class="auction-rules-header">
+          <div class="alfaw-guide-row">
+            <span class="alfaw-guide-dot" aria-hidden="true"></span>
+            <article class="alfaw-guide-card">
+              <div class="alfaw-guide-number"><span>01</span><small>الخطوة الأولى</small></div>
+              <h3>أنشئ حساب مشتري</h3>
+              <p>سجّل حسابًا، ثم ادخل بالبريد الإلكتروني وكلمة المرور.</p>
+              <ul><li>اختر نوع الحساب «مشتري».</li><li>تُستخدم بيانات الحساب التجريبي في هذا المتصفح فقط.</li></ul>
+              <a class="alfaw-guide-card-link" href="register.html">إنشاء حساب <span aria-hidden="true">←</span></a>
+            </article>
+          </div>
 
-        <span class="auction-rules-eyebrow">
-          دليل المشاركة
-        </span>
+          <div class="alfaw-guide-row">
+            <span class="alfaw-guide-dot" aria-hidden="true"></span>
+            <article class="alfaw-guide-card">
+              <div class="alfaw-guide-number"><span>02</span><small>الخطوة الثانية</small></div>
+              <h3>ابحث وراجع القطعة</h3>
+              <p>استخدم البحث والفلاتر لاختيار المقتنى المناسب.</p>
+              <ul><li>اقرأ الوصف والفترة التاريخية والحالة والمصدر.</li><li>راجع المستندات المتاحة وحالة التوثيق المعروضة.</li></ul>
+              <a class="alfaw-guide-card-link" href="browse.html">استعراض القطع <span aria-hidden="true">←</span></a>
+            </article>
+          </div>
 
-        <h2 id="auction-rules-title">
-          قواعد مهمة قبل المزايدة
-        </h2>
+          <div class="alfaw-guide-row">
+            <span class="alfaw-guide-dot" aria-hidden="true"></span>
+            <article class="alfaw-guide-card">
+              <div class="alfaw-guide-number"><span>03</span><small>الخطوة الثالثة</small></div>
+              <h3>راجع شروط المزاد</h3>
+              <p>تأكد من أن المزاد نشط قبل تقديم عرضك.</p>
+              <ul><li>اطّلع على أعلى عرض والحد الأدنى للزيادة.</li><li>تحقق من الوقت المتبقي والسعر الاحتياطي إن وُجد.</li></ul>
+              <a class="alfaw-guide-card-link" href="#auctions-cards">العودة إلى المزادات <span aria-hidden="true">←</span></a>
+            </article>
+          </div>
 
-        <div class="auction-rules-divider"></div>
+          <div class="alfaw-guide-row">
+            <span class="alfaw-guide-dot" aria-hidden="true"></span>
+            <article class="alfaw-guide-card">
+              <div class="alfaw-guide-number"><span>04</span><small>الخطوة الرابعة</small></div>
+              <h3>قدّم وتابع عرضك</h3>
+              <p>أدخل مبلغًا لا يقل عن الحد المسموح للمزايدة.</p>
+              <ul><li>تابع سجل العروض وترتيب المشاركين.</li><li>بعد انتهاء المزاد تظهر النتيجة في صفحة التفاصيل.</li></ul>
+            </article>
+          </div>
 
+          <div class="alfaw-guide-row">
+            <span class="alfaw-guide-dot" aria-hidden="true"></span>
+            <article class="alfaw-guide-card">
+              <div class="alfaw-guide-number"><span>05</span><small>قواعد المشاركة</small></div>
+              <h3>قبل أن تزايد</h3>
+              <ul><li>الحد الأدنى المقبول هو أعلى عرض حالي زائد الزيادة الدنيا؛ وإذا لم توجد عروض فهو السعر الابتدائي زائد الزيادة الدنيا.</li><li>لا يمكن تقديم عرض بعد انتهاء المزاد، ولا يجوز للبائع المزايدة على قطعته.</li><li>إذا لم تبلغ العروض السعر الاحتياطي، فلا فائز بالمزاد.</li></ul>
+            </article>
+          </div>
+
+          <div class="alfaw-guide-row">
+            <span class="alfaw-guide-dot" aria-hidden="true"></span>
+            <article class="alfaw-guide-card">
+              <div class="alfaw-guide-number"><span>06</span><small>ملاحظات الأمان</small></div>
+              <h3>مشاركة واعية وآمنة</h3>
+              <ul><li>لا تشارك كلمة المرور، ولا تُدخل بيانات حقيقية حساسة في النسخة التجريبية.</li><li>حالة التوثيق تظهر وفق بيانات القطعة؛ ألفاو لا تنفّذ توثيقًا رسميًا.</li><li>مزايدات Sprint 1 تجريبية وغير ملزمة؛ المزامنة الحقيقية تتطلب خادمًا وقاعدة بيانات.</li></ul>
+            </article>
+          </div>
+        </div>
+        <p class="alfaw-guide-disclaimer"><span aria-hidden="true">✦</span> دليل إرشادي للنسخة التجريبية من ألفاو — لا توجد معاملات مالية حقيقية في Sprint 1.</p>
       </div>
-
-      <ul class="auction-rules-list">
-
-        <li>
-          <span
-            class="auction-rule-icon"
-            aria-hidden="true"
-          >
-            01
-          </span>
-
-          <span>
-            المشاركة في المزايدة تتطلب تسجيل الدخول.
-          </span>
-        </li>
-
-        <li>
-          <span
-            class="auction-rule-icon"
-            aria-hidden="true"
-          >
-            02
-          </span>
-
-          <span>
-            يجب أن يساوي العرض الحد الأدنى
-            المطلوب أو يتجاوزه.
-          </span>
-        </li>
-
-        <li>
-          <span
-            class="auction-rule-icon"
-            aria-hidden="true"
-          >
-            03
-          </span>
-
-          <span>
-            لا يمكن تقديم عرض بعد انتهاء المزاد.
-          </span>
-        </li>
-
-        <li>
-          <span
-            class="auction-rule-icon"
-            aria-hidden="true"
-          >
-            04
-          </span>
-
-          <span>
-            لا يحق للبائع المزايدة على قطعته الخاصة.
-          </span>
-        </li>
-
-        <li>
-          <span
-            class="auction-rule-icon"
-            aria-hidden="true"
-          >
-            05
-          </span>
-
-          <span>
-            السعر الاحتياطي، إن وُجد، هو الحد
-            الذي يحدده البائع لقبول نتيجة المزاد.
-          </span>
-        </li>
-
-        <li>
-          <span
-            class="auction-rule-icon"
-            aria-hidden="true"
-          >
-            06
-          </span>
-
-          <span>
-            راجع معلومات القطعة وحالة توثيقها،
-            واحرص على حماية بيانات حسابك.
-          </span>
-        </li>
-
-      </ul>
-
     </section>
 
   </main>

@@ -35,7 +35,7 @@ New buyer or seller accounts can be created using the registration form. Admin r
 - Seller pages: `seller-profile.html`, `seller-detail.html`, `seller-dashboard.html`, `manage-artifact.html`, `manage-auctions.html`
 - Accounts: `register.html`, `login.html`, `profile.html`
 - Admin read-only view: `admin-dashboard.html`
-- Information: `verification.html`, `bidding-guide.html`
+- Information: `verification.html`; the bidding guide is now embedded at `auctions.html#bidding-guide` (`bidding-guide.html` redirects for old bookmarks)
 - `serller-detail.html` redirects to `seller-detail.html` for compatibility with older URLs.
 
 ### Data rules

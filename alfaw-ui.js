@@ -130,3 +130,51 @@
   const main = document.querySelector('main');
   if (main) mutations.observe(main, { childList: true, subtree: true });
 })();
+
+
+/* Qamat-inspired guide: draw the timeline as visitors scroll; reveal each card. */
+(() => {
+  const guide = document.querySelector('.auctions-page .alfaw-guide');
+  if (!guide) return;
+  const timeline = guide.querySelector('.alfaw-guide-timeline');
+  const progress = guide.querySelector('.alfaw-guide-track-progress');
+  const rows = [...guide.querySelectorAll('.alfaw-guide-row')];
+  if (!timeline || !progress || !rows.length) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    progress.style.height = '100%';
+    return;
+  }
+  // Keep all cards visible when IntersectionObserver is unavailable.
+  if (!('IntersectionObserver' in window)) return;
+  const reveal = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        reveal.unobserve(entry.target);
+      }
+    });
+  }, { threshold: .08, rootMargin: '0px 0px -35px 0px' });
+  rows.forEach(row => {
+    if (row.getBoundingClientRect().top < window.innerHeight * .95) row.classList.add('is-visible');
+    else reveal.observe(row);
+  });
+  guide.classList.add('alfaw-guide-motion');
+  let pending = false;
+  const updateProgress = () => {
+    pending = false;
+    const rect = timeline.getBoundingClientRect();
+    const height = rect.height;
+    if (!height) return;
+    const drawn = Math.min(height, Math.max(0, window.innerHeight * .68 - rect.top));
+    progress.style.height = `${drawn}px`;
+  };
+  const schedule = () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(updateProgress);
+  };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+  schedule();
+})();
