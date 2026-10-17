@@ -1220,3 +1220,19 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
  .sellers-page .seller-card-cover { height:54px; min-height:54px; }
  .sellers-page .seller-card-description { min-height:0; }
 }
+
+/* Sellers landing-page rhythm: distinct introduction, search and cards. */
+.sellers-page .sellers-main-section { padding-top: 48px; }
+.sellers-page .sellers-intro { margin-bottom: 38px; padding-bottom: 0; }
+.sellers-page .sellers-intro h1 { margin-bottom: 18px; line-height: 1.6; }
+.sellers-page .sellers-intro > p:last-child { line-height: 1.95; }
+.sellers-page .sellers-search-section { margin-top: 36px; margin-bottom: 48px; }
+.sellers-page .sellers-results-heading { margin: 0 0 26px; padding-top: 6px; }
+.sellers-page .sellers-results-heading h3 { margin-bottom: 7px; }
+.sellers-page .sellers-grid { row-gap: 30px; }
+@media (max-width: 800px) {
+ .sellers-page .sellers-main-section { padding-top: 30px; }
+ .sellers-page .sellers-intro { margin-bottom: 25px; }
+ .sellers-page .sellers-search-section { margin-top: 22px; margin-bottom: 32px; }
+ .sellers-page .sellers-results-heading { margin-bottom: 20px; }
+}
