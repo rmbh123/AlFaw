@@ -1205,7 +1205,7 @@ if (cinema) {
   const feedback = (s,v) => {const el=$(s);if(el){el.textContent=v;el.hidden=!v}};
   const params = new URLSearchParams(location.search);
   const categories={coins:'العملات التاريخية',pottery:'الفخار',manuscripts:'المخطوطات',jewelry:'الحلي والمجوهرات',weapons:'المقتنيات التقليدية',other:'مقتنيات أخرى'};
-  const verifications={verified:'موثق (بيانات تجريبية)',unverified:'غير موثق',pending:'حالة غير معروفة'};
+  const verifications={verified:'موثق (بيانات تجريبية)',unverified:'غير موثق',pending:'قيد المراجعة'};
   const startingSellers=[
     {id:'ahmed',name:'أحمد العتيبي',city:'الرياض',category:'coins',specialty:'العملات التاريخية',bio:'مهتم بالعملات التاريخية والمقتنيات التراثية.',joined:'2026-09-01'},
     {id:'noura',name:'نورة القحطاني',city:'الرياض',category:'pottery',specialty:'الفخار التراثي',bio:'مهتمة بالفخار والحرف التقليدية.',joined:'2026-09-05'},
@@ -1360,7 +1360,12 @@ if (cinema) {
         trust.textContent='موثوقية البائع: '+(r.trust===null?'لا توجد تقييمات':r.trust+'%');
       }
     });
-    // Refresh existing native filter and sort controller after the cards are integrated.
+    // Refresh the active deep-linked verification filter after saved artifact states load.
+    const requestedStatus = new URLSearchParams(location.search).get('verification');
+    const statusSelect = document.getElementById('verification-filter');
+    if (statusSelect && ['verified','pending','unverified'].includes(requestedStatus)) {
+      statusSelect.value = requestedStatus;
+    }
     if(typeof sortArtifacts==='function')sortArtifacts();
   }
 
