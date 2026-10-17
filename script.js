@@ -777,11 +777,12 @@ function setupBrowsePage() {
 
   // Navigate from the "Verification" menu.
 
+  const requestedVerification = params.get("verification");
   if (
     verificationFilter &&
-    params.get("verification") === "verified"
+    ["verified", "pending", "unverified"].includes(requestedVerification)
   ) {
-    verificationFilter.value = "verified";
+    verificationFilter.value = requestedVerification;
   }
 
   // Navigate from the "Auctions" menu.
