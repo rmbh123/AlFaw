@@ -778,11 +778,16 @@ function setupBrowsePage() {
   // Navigate from the "Verification" menu.
 
   const requestedVerification = params.get("verification");
-  if (
-    verificationFilter &&
-    ["verified", "pending", "unverified"].includes(requestedVerification)
-  ) {
-    verificationFilter.value = requestedVerification;
+  const validVerification = ["all", "verified", "pending", "unverified"];
+  let rememberedVerification = "all";
+  try { rememberedVerification = sessionStorage.getItem("alfaw_browse_verification") || "all"; } catch (_) {}
+  if (verificationFilter) {
+    const initialVerification = validVerification.includes(requestedVerification)
+      ? requestedVerification
+      : rememberedVerification;
+    verificationFilter.value = validVerification.includes(initialVerification)
+      ? initialVerification : "all";
+    try { sessionStorage.setItem("alfaw_browse_verification", verificationFilter.value); } catch (_) {}
   }
 
   // Navigate from the "Auctions" menu.
@@ -825,7 +830,11 @@ function setupBrowsePage() {
   if (verificationFilter) {
     verificationFilter.addEventListener(
       "change",
-      () => { browsePageIndex=1; filterArtifacts(); }
+      () => {
+        try { sessionStorage.setItem("alfaw_browse_verification", verificationFilter.value); } catch (_) {}
+        browsePageIndex=1;
+        filterArtifacts();
+      }
     );
   }
 
@@ -852,6 +861,7 @@ function setupBrowsePage() {
 
         if (verificationFilter) {
           verificationFilter.value = "all";
+          try { sessionStorage.removeItem("alfaw_browse_verification"); } catch (_) {}
         }
 
         if (priceFilter) priceFilter.value = "all";
@@ -1365,6 +1375,7 @@ if (cinema) {
     const statusSelect = document.getElementById('verification-filter');
     if (statusSelect && ['verified','pending','unverified'].includes(requestedStatus)) {
       statusSelect.value = requestedStatus;
+      try { sessionStorage.setItem('alfaw_browse_verification', requestedStatus); } catch (_) {}
     }
     if(typeof sortArtifacts==='function')sortArtifacts();
   }
