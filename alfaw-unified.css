@@ -897,5 +897,6 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
   background: #ead9bd !important;
   background-image: none !important;
   color: #2b170c !important;
-  border-color: #b89b73;
+  border: 2px solid #c9a35f !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
 }
