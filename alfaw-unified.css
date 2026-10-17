@@ -860,11 +860,13 @@ body.home-page .cinema-scroll .hero-tags > span {
 /* Make home introduction and tags more legible without resizing their cards */
 body.home-page .cinema-scroll .intro-copy > p {
   font-size: 20px;
+  font-synthesis: weight;
   font-weight: 700;
   line-height: 1.9;
 }
 body.home-page .cinema-scroll .hero-tags > span {
   font-size: 16px;
+  font-synthesis: weight;
   font-weight: 700;
 }
 @media (max-width: 800px) {
