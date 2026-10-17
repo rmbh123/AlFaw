@@ -1,0 +1,998 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="إضافة وتعديل القطع الأثرية والمقتنيات التاريخية وإدارة معلوماتها وصورها ووثائقها عبر منصة ألفاو.">
+
+  <title>إضافة وتعديل قطعة أثرية | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="manage-artifact-page">
+
+ 
+<!-- HEADER -->
+
+<header class="site-header">
+
+  <a href="index.html" class="site-logo">
+    ألفاو
+  </a>
+
+  <nav class="site-nav"
+       aria-label="القائمة الرئيسية">
+
+    <a href="index.html" aria-current="page">
+      الرئيسية
+    </a>
+
+    <a href="browse.html">
+      القطع الأثرية
+    </a>
+
+    <a href="auctions.html">
+      المزادات
+    </a>
+
+    <a href="verification.html">
+      التوثيق
+    </a>
+
+    <a href="seller-profile.html">
+      البائعون
+    </a>
+
+    <a href="login.html">
+      دخول
+    </a>
+
+  </nav>
+
+</header>
+
+  <main class="manage-artifact-main">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="dashboard-breadcrumb"
+         aria-label="مسار التنقل">
+
+      <a href="index.html">الرئيسية</a>
+      <span aria-hidden="true">/</span>
+
+      <a href="seller-dashboard.html">
+        لوحة تحكم البائع
+      </a>
+
+      <span aria-hidden="true">/</span>
+
+      <span id="manage-artifact-breadcrumb">
+        إضافة قطعة أثرية
+      </span>
+
+    </nav>
+
+    <!-- ACCESS MESSAGE -->
+
+    <section
+      id="manage-artifact-access-message"
+      class="dashboard-access-message"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+
+      <h2>إدارة القطع مخصصة للبائعين</h2>
+
+      <p>
+        سجّل الدخول بحساب بائع
+        لتتمكن من إضافة القطع الأثرية
+        وإدارة معلوماتها.
+      </p>
+
+      <a href="login.html">تسجيل الدخول</a>
+
+    </section>
+
+    <!-- PAGE CONTENT -->
+
+    <div id="manage-artifact-content">
+
+      <!-- PAGE HEADING -->
+
+      <section class="manage-artifact-heading">
+
+        <div>
+
+          <p class="section-label">
+            إدارة المقتنيات
+          </p>
+
+          <h1 id="manage-artifact-title">
+            إضافة <span>قطعة أثرية</span>
+          </h1>
+
+          <p id="manage-artifact-description">
+            أضف المعلومات التاريخية
+            للقطعة وصورها وحالتها
+            والمستندات المتاحة عنها.
+          </p>
+
+        </div>
+
+        <a href="seller-dashboard.html"
+           class="manage-artifact-back-button">
+          العودة إلى لوحة التحكم ←
+        </a>
+
+      </section>
+
+      <!-- FORM LAYOUT -->
+
+      <div class="manage-artifact-layout">
+
+        <!-- MAIN FORM -->
+
+        <div class="manage-artifact-form-card">
+
+          <form
+            id="manage-artifact-form"
+            class="manage-artifact-form"
+            enctype="multipart/form-data"
+            novalidate
+          >
+
+            <input
+              type="hidden"
+              id="manage-artifact-id"
+              name="artifactId"
+              value=""
+            >
+
+            <!-- SECTION 1: BASIC INFORMATION -->
+
+            <fieldset class="manage-artifact-fieldset">
+
+              <legend>
+                <span class="manage-step-number">01</span>
+                المعلومات الأساسية
+              </legend>
+
+              <p class="manage-section-description">
+                أدخل اسم القطعة ووصفها
+                والفئة التي تنتمي إليها.
+              </p>
+
+              <div class="manage-fields-grid">
+
+                <div class="manage-field manage-field-full">
+
+                  <label for="artifact-name">
+                    اسم القطعة *
+                  </label>
+
+                  <input
+                    type="text"
+                    id="artifact-name"
+                    name="artifactName"
+                    placeholder="مثال: عملة تاريخية"
+                    minlength="3"
+                    maxlength="120"
+                    required
+                    aria-describedby="artifact-name-error"
+                  >
+
+                  <small
+                    id="artifact-name-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="manage-field">
+
+                  <label for="artifact-category">
+                    فئة القطعة *
+                  </label>
+
+                  <select
+                    id="artifact-category"
+                    name="category"
+                    required
+                    aria-describedby="artifact-category-error"
+                  >
+
+                    <option value="">
+                      اختر الفئة
+                    </option>
+
+                    <option value="coins">
+                      العملات التاريخية
+                    </option>
+
+                    <option value="pottery">
+                      الفخار
+                    </option>
+
+                    <option value="manuscripts">
+                      المخطوطات
+                    </option>
+
+                    <option value="jewelry">
+                      الحلي والمجوهرات
+                    </option>
+
+                    <option value="weapons">
+                      المقتنيات التقليدية
+                    </option>
+
+                    <option value="other">
+                      مقتنيات أخرى
+                    </option>
+
+                  </select>
+
+                  <small
+                    id="artifact-category-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="manage-field">
+
+                  <label for="artifact-period">
+                    الفترة التاريخية *
+                  </label>
+
+                  <input
+                    type="text"
+                    id="artifact-period"
+                    name="historicalPeriod"
+                    placeholder="مثال: العصر الإسلامي"
+                    maxlength="120"
+                    required
+                    aria-describedby="artifact-period-error"
+                  >
+
+                  <small
+                    id="artifact-period-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="manage-field manage-field-full">
+
+                  <label for="artifact-description">
+                    وصف القطعة *
+                  </label>
+
+                  <textarea
+                    id="artifact-description"
+                    name="description"
+                    rows="6"
+                    minlength="20"
+                    maxlength="2000"
+                    placeholder="صف القطعة ومظهرها وأهميتها التاريخية والمعلومات المتاحة عنها..."
+                    required
+                    aria-describedby="artifact-description-hint artifact-description-error"
+                  ></textarea>
+
+                  <small
+                    id="artifact-description-hint"
+                    class="field-hint"
+                  >
+                    اكتب وصفًا واضحًا لا يقل عن 20 حرفًا.
+                  </small>
+
+                  <small
+                    id="artifact-description-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- SECTION 2: ORIGIN AND CONDITION -->
+
+            <fieldset class="manage-artifact-fieldset">
+
+              <legend>
+                <span class="manage-step-number">02</span>
+                المنشأ وحالة القطعة
+              </legend>
+
+              <p class="manage-section-description">
+                وضّح معلومات المنشأ
+                والحالة الفيزيائية للقطعة.
+              </p>
+
+              <div class="manage-fields-grid">
+
+                <div class="manage-field">
+
+                  <label for="artifact-origin">
+                    المنشأ *
+                  </label>
+
+                  <input
+                    type="text"
+                    id="artifact-origin"
+                    name="origin"
+                    placeholder="مثال: الجزيرة العربية"
+                    maxlength="150"
+                    required
+                    aria-describedby="artifact-origin-error"
+                  >
+
+                  <small
+                    id="artifact-origin-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="manage-field">
+
+                  <label for="artifact-condition">
+                    حالة القطعة *
+                  </label>
+
+                  <select
+                    id="artifact-condition"
+                    name="condition"
+                    required
+                    aria-describedby="artifact-condition-error"
+                  >
+
+                    <option value="">
+                      اختر الحالة
+                    </option>
+
+                    <option value="excellent">
+                      ممتازة
+                    </option>
+
+                    <option value="good">
+                      جيدة
+                    </option>
+
+                    <option value="fair">
+                      متوسطة
+                    </option>
+
+                    <option value="needs-restoration">
+                      تحتاج إلى ترميم
+                    </option>
+
+                  </select>
+
+                  <small
+                    id="artifact-condition-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="manage-field manage-field-full">
+
+                  <label for="artifact-provenance">
+                    تفاصيل المصدر والملكية
+                  </label>
+
+                  <textarea
+                    id="artifact-provenance"
+                    name="provenance"
+                    rows="4"
+                    maxlength="1500"
+                    placeholder="اذكر المعلومات المتاحة عن مصدر القطعة وتاريخ ملكيتها..."
+                  ></textarea>
+
+                </div>
+
+                <div class="manage-field manage-field-full">
+
+                  <label for="artifact-condition-notes">
+                    ملاحظات على حالة القطعة
+                  </label>
+
+                  <textarea
+                    id="artifact-condition-notes"
+                    name="conditionNotes"
+                    rows="4"
+                    maxlength="1000"
+                    placeholder="اذكر أي تلف أو ترميم أو تفاصيل مهمة عن الحالة..."
+                  ></textarea>
+
+                </div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- SECTION 3: IMAGES -->
+
+            <fieldset class="manage-artifact-fieldset">
+
+              <legend>
+                <span class="manage-step-number">03</span>
+                صور القطعة
+              </legend>
+
+              <p class="manage-section-description">
+                أضف صورًا واضحة تُظهر
+                القطعة من زوايا مختلفة.
+              </p>
+
+              <div class="manage-upload-area"
+                   id="artifact-image-upload-area">
+
+                <label
+                  for="artifact-images"
+                  class="manage-upload-label"
+                >
+
+                  <span class="manage-upload-icon"
+                        aria-hidden="true">
+                    ＋
+                  </span>
+
+                  <strong>
+                    اختر صور القطعة
+                  </strong>
+
+                  <span>
+                    PNG أو JPG أو WEBP
+                  </span>
+
+                  <small>
+                    يمكنك اختيار أكثر من صورة.
+                  </small>
+
+                </label>
+
+                <input
+                  type="file"
+                  id="artifact-images"
+                  name="artifactImages"
+                  accept="image/png,image/jpeg,image/webp"
+                  multiple
+                  required
+                  aria-describedby="artifact-images-error"
+                >
+
+              </div>
+
+              <small
+                id="artifact-images-error"
+                class="field-error"
+                aria-live="polite"
+              ></small>
+
+              <div
+                class="manage-images-preview"
+                id="artifact-images-preview"
+                aria-live="polite"
+              ></div>
+
+              <div
+                class="manage-existing-images"
+                id="artifact-existing-images"
+                hidden
+              >
+
+                <h3>الصور المضافة</h3>
+
+                <div
+                  class="manage-existing-images-grid"
+                  id="artifact-existing-images-grid"
+                ></div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- SECTION 4: VERIFICATION -->
+
+            <fieldset class="manage-artifact-fieldset">
+
+              <legend>
+                <span class="manage-step-number">04</span>
+                معلومات التوثيق
+              </legend>
+
+              <p class="manage-section-description">
+                حدد حالة التوثيق
+                كما هي في المستندات الرسمية
+                المتوفرة لديك.
+              </p>
+
+              <div class="manage-verification-options">
+
+                <label class="manage-verification-option">
+
+                  <input
+                    type="radio"
+                    name="verificationStatus"
+                    value="unverified"
+                    checked
+                    required
+                  >
+
+                  <span>
+                    <strong>غير موثق</strong>
+
+                    <small>
+                      لا تتوفر وثيقة توثيق رسمية.
+                    </small>
+                  </span>
+
+                </label>
+
+                <label class="manage-verification-option">
+
+                  <input
+                    type="radio"
+                    name="verificationStatus"
+                    value="verified"
+                    required
+                  >
+
+                  <span>
+                    <strong>موثق</strong>
+
+                    <small>
+                      تتوفر وثيقة توثيق رسمية
+                      ومرجع يمكن الرجوع إليه.
+                    </small>
+                  </span>
+
+                </label>
+
+              </div>
+
+              <div
+                class="manage-verification-reference"
+                id="manage-verification-reference"
+                hidden
+              >
+
+                <div class="manage-field">
+
+                  <label for="artifact-verification-reference">
+                    الرقم المرجعي للتوثيق *
+                  </label>
+
+                  <input
+                    type="text"
+                    id="artifact-verification-reference"
+                    name="verificationReference"
+                    placeholder="أدخل الرقم المرجعي كما يظهر في الوثيقة"
+                    maxlength="150"
+                    disabled
+                    aria-describedby="artifact-verification-reference-error"
+                  >
+
+                  <small
+                    id="artifact-verification-reference-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+              </div>
+
+              <div class="manage-verification-note">
+
+                <span aria-hidden="true">ⓘ</span>
+
+                <p>
+                  ألفاو تعرض حالة التوثيق
+                  والمعلومات التي يقدمها البائع.
+                  ولا تقوم المنصة بإصدار
+                  شهادات الأصالة أو إجراء
+                  التوثيق الأثري بنفسها.
+                </p>
+
+              </div>
+
+            </fieldset>
+
+            <!-- SECTION 5: DOCUMENTS -->
+
+            <fieldset class="manage-artifact-fieldset">
+
+              <legend>
+                <span class="manage-step-number">05</span>
+                المستندات والوثائق
+              </legend>
+
+              <p class="manage-section-description">
+                أرفق الوثائق المتاحة
+                عن مصدر القطعة وتاريخها
+                وحالة توثيقها.
+              </p>
+
+              <div class="manage-upload-area">
+
+                <label
+                  for="artifact-documents"
+                  class="manage-upload-label"
+                >
+
+                  <span class="manage-upload-icon"
+                        aria-hidden="true">
+                    ▤
+                  </span>
+
+                  <strong>
+                    إرفاق المستندات
+                  </strong>
+
+                  <span>
+                    PDF أو JPG أو PNG
+                  </span>
+
+                  <small>
+                    يمكنك اختيار أكثر من مستند.
+                  </small>
+
+                </label>
+
+                <input
+                  type="file"
+                  id="artifact-documents"
+                  name="documents"
+                  accept=".pdf,application/pdf,image/png,image/jpeg"
+                  multiple
+                >
+
+              </div>
+
+              <div
+                id="artifact-documents-preview"
+                class="manage-documents-preview"
+                aria-live="polite"
+              ></div>
+
+              <div
+                id="artifact-existing-documents"
+                class="manage-existing-documents"
+                hidden
+              >
+
+                <h3>المستندات المرفقة</h3>
+
+                <div
+                  id="artifact-existing-documents-list"
+                ></div>
+
+              </div>
+
+            </fieldset>
+
+            <!-- SECTION 6: STARTING PRICE -->
+
+            <fieldset class="manage-artifact-fieldset">
+
+              <legend>
+                <span class="manage-step-number">06</span>
+                معلومات السعر
+              </legend>
+
+              <p class="manage-section-description">
+                حدد السعر الابتدائي
+                الذي ترغب في استخدامه
+                عند إنشاء مزاد لهذه القطعة.
+              </p>
+
+              <div class="manage-fields-grid">
+
+                <div class="manage-field">
+
+                  <label for="artifact-starting-price">
+                    السعر الابتدائي (ر.س) *
+                  </label>
+
+                  <div class="manage-price-input">
+
+                    <input
+                      type="number"
+                      id="artifact-starting-price"
+                      name="startingPrice"
+                      min="1"
+                      step="1"
+                      inputmode="numeric"
+                      placeholder="أدخل السعر الابتدائي"
+                      required
+                      aria-describedby="artifact-starting-price-error"
+                    >
+
+                    <span>ر.س</span>
+
+                  </div>
+
+                  <small
+                    id="artifact-starting-price-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+              </div>
+
+              <div class="manage-price-note">
+
+                <span aria-hidden="true">◇</span>
+
+                <p>
+                  إضافة القطعة لا تعني
+                  بدء المزاد تلقائيًا.
+                  يمكنك إدارة المزاد
+                  من لوحة تحكم البائع.
+                </p>
+
+              </div>
+
+            </fieldset>
+
+            <!-- FORM STATUS -->
+
+            <div
+              id="manage-artifact-form-message"
+              class="manage-artifact-form-message"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></div>
+
+            <!-- ACTIONS -->
+
+            <div class="manage-artifact-actions">
+
+              <button
+                type="submit"
+                id="save-artifact-button"
+                class="manage-artifact-save-button"
+              >
+                حفظ القطعة
+                <span aria-hidden="true">←</span>
+              </button>
+
+              <button
+                type="reset"
+                id="reset-artifact-button"
+                class="manage-artifact-reset-button"
+              >
+                إعادة تعيين
+              </button>
+
+              <a
+                href="seller-dashboard.html"
+                class="manage-artifact-cancel-button"
+              >
+                إلغاء
+              </a>
+
+            </div>
+
+          </form>
+
+        </div>
+
+        <!-- SIDEBAR -->
+
+        <aside class="manage-artifact-sidebar">
+
+          <!-- HELPFUL GUIDE -->
+
+          <div class="manage-sidebar-card">
+
+            <p class="section-label">
+              دليلك لإضافة القطع
+            </p>
+
+            <h2>
+              قبل نشر مقتناك
+            </h2>
+
+            <ul class="manage-sidebar-checklist">
+
+              <li>
+                <span aria-hidden="true">✓</span>
+                تأكد من صحة اسم القطعة
+                والفترة التاريخية.
+              </li>
+
+              <li>
+                <span aria-hidden="true">✓</span>
+                أضف وصفًا واضحًا
+                ومعلومات المنشأ.
+              </li>
+
+              <li>
+                <span aria-hidden="true">✓</span>
+                استخدم صورًا واضحة
+                من زوايا متعددة.
+              </li>
+
+              <li>
+                <span aria-hidden="true">✓</span>
+                حدد حالة القطعة
+                وأي ملاحظات مهمة.
+              </li>
+
+              <li>
+                <span aria-hidden="true">✓</span>
+                أرفق المستندات
+                المتاحة عند وجودها.
+              </li>
+
+              <li>
+                <span aria-hidden="true">✓</span>
+                لا تحدد حالة «موثق»
+                دون مرجع رسمي داعم.
+              </li>
+
+            </ul>
+
+          </div>
+
+          <!-- LIVE PREVIEW -->
+
+          <div class="manage-sidebar-card manage-preview-card">
+
+            <p class="section-label">
+              معاينة المقتنى
+            </p>
+
+            <h2>
+              كيف ستظهر القطعة؟
+            </h2>
+
+            <div class="manage-artifact-preview">
+
+              <div class="manage-preview-image">
+
+                <img
+                  id="artifact-live-preview-image"
+                  alt="معاينة صورة القطعة"
+                  hidden
+                >
+
+                <div
+                  id="artifact-live-preview-placeholder"
+                  class="manage-preview-placeholder"
+                >
+                  <span aria-hidden="true">◈</span>
+                  <p>صورة القطعة</p>
+                </div>
+
+              </div>
+
+              <div class="manage-preview-content">
+
+                <span
+                  id="artifact-live-preview-category"
+                  class="manage-preview-category"
+                >
+                  فئة القطعة
+                </span>
+
+                <h3 id="artifact-live-preview-name">
+                  اسم القطعة الأثرية
+                </h3>
+
+                <p id="artifact-live-preview-description">
+                  سيظهر وصف القطعة هنا
+                  أثناء إدخال المعلومات.
+                </p>
+
+                <div class="manage-preview-price">
+
+                  <span>السعر الابتدائي</span>
+
+                  <strong id="artifact-live-preview-price">
+                    — ر.س
+                  </strong>
+
+                </div>
+
+                <span
+                  id="artifact-live-preview-verification"
+                  class="manage-preview-verification"
+                >
+                  غير موثق
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- NEXT STEP -->
+
+          <div class="manage-sidebar-card manage-next-step">
+
+            <span class="section-label">
+              الخطوة التالية
+            </span>
+
+            <h2>
+              أنشئ مزادًا لقطعتك
+            </h2>
+
+            <p>
+              بعد حفظ معلومات القطعة،
+              يمكنك إنشاء مزاد وتحديد
+              موعد البداية والنهاية
+              والحد الأدنى للزيادة.
+            </p>
+
+            <a href="manage-auctions.html">
+              إدارة المزادات ←
+            </a>
+
+          </div>
+
+        </aside>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="alfaw-footer">
+
+    <h2>ألفاو</h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+
+     <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+
+  </footer>
+
+</body>
+</html>

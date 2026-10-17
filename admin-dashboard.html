@@ -1,0 +1,1017 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="لوحة المسؤول في منصة ألفاو لمراقبة المستخدمين والقطع الأثرية والمزادات وسجل المزايدات.">
+
+  <title>لوحة المسؤول | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="admin-dashboard-page">
+
+<!-- HEADER -->
+
+<header class="site-header">
+
+  <a href="index.html" class="site-logo">
+    ألفاو
+  </a>
+
+  <nav class="site-nav"
+       aria-label="القائمة الرئيسية">
+
+    <a href="index.html" aria-current="page">
+      الرئيسية
+    </a>
+
+    <a href="browse.html">
+      القطع الأثرية
+    </a>
+
+    <a href="auctions.html">
+      المزادات
+    </a>
+
+    <a href="verification.html">
+      التوثيق
+    </a>
+
+    <a href="seller-profile.html">
+      البائعون
+    </a>
+
+    <a href="login.html">
+      دخول
+    </a>
+
+  </nav>
+
+</header>
+
+
+  <main class="admin-dashboard-main">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="dashboard-breadcrumb"
+         aria-label="مسار التنقل">
+
+      <a href="index.html">الرئيسية</a>
+
+      <span aria-hidden="true">/</span>
+
+      <span>لوحة المسؤول</span>
+
+    </nav>
+
+    <!-- ACCESS MESSAGE -->
+
+    <section
+      id="admin-dashboard-access-message"
+      class="dashboard-access-message"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+
+      <h2>هذه الصفحة مخصصة للمسؤول</h2>
+
+      <p>
+        يتطلب الوصول إلى لوحة المراقبة
+        تسجيل الدخول بحساب مسؤول.
+      </p>
+
+      <a href="login.html">
+        تسجيل الدخول
+      </a>
+
+    </section>
+
+    <!-- ADMIN CONTENT -->
+
+    <div id="admin-dashboard-content">
+
+      <!-- PAGE HEADING -->
+
+      <section class="admin-dashboard-heading">
+
+        <div>
+
+          <p class="section-label">
+            إدارة منصة ألفاو
+          </p>
+
+          <h1>
+            لوحة <span>المسؤول</span>
+          </h1>
+
+          <p>
+            مراقبة نشاط المستخدمين
+            والقطع الأثرية والمزادات
+            وسجلات المزايدات من مكان واحد.
+          </p>
+
+        </div>
+
+        <div class="admin-heading-badge">
+
+          <span aria-hidden="true">◈</span>
+
+          <div>
+            <strong>وضع المراقبة</strong>
+            <small>عرض البيانات فقط</small>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- PLATFORM SUMMARY -->
+
+      <section
+        class="admin-summary"
+        aria-label="ملخص نشاط المنصة"
+      >
+
+        <article class="admin-summary-card">
+
+          <span class="admin-summary-icon"
+                aria-hidden="true">◎</span>
+
+          <p>إجمالي المستخدمين</p>
+
+          <strong id="admin-total-users">
+            0
+          </strong>
+
+          <span class="admin-summary-caption">
+            المشترون والبائعون المسجلون
+          </span>
+
+        </article>
+
+        <article class="admin-summary-card">
+
+          <span class="admin-summary-icon"
+                aria-hidden="true">◈</span>
+
+          <p>القطع الأثرية</p>
+
+          <strong id="admin-total-artifacts">
+            0
+          </strong>
+
+          <span class="admin-summary-caption">
+            المقتنيات الموجودة في المنصة
+          </span>
+
+        </article>
+
+        <article class="admin-summary-card">
+
+          <span class="admin-summary-icon"
+                aria-hidden="true">◇</span>
+
+          <p>إجمالي المزادات</p>
+
+          <strong id="admin-total-auctions">
+            0
+          </strong>
+
+          <span class="admin-summary-caption">
+            المزادات المسجلة
+          </span>
+
+        </article>
+
+        <article class="admin-summary-card">
+
+          <span class="admin-summary-icon"
+                aria-hidden="true">✦</span>
+
+          <p>إجمالي المزايدات</p>
+
+          <strong id="admin-total-bids">
+            0
+          </strong>
+
+          <span class="admin-summary-caption">
+            العروض المقدمة على المزادات
+          </span>
+
+        </article>
+
+      </section>
+
+      <!-- ADMIN LAYOUT -->
+
+      <div class="admin-dashboard-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="admin-sidebar"
+               aria-label="أقسام لوحة المسؤول">
+
+          <div class="admin-sidebar-heading">
+
+            <span class="section-label">
+              ألفاو
+            </span>
+
+            <h2>
+              لوحة المراقبة
+            </h2>
+
+          </div>
+
+          <nav
+            class="admin-side-nav"
+            aria-label="التنقل بين أقسام المسؤول"
+          >
+
+            <a
+              href="#admin-overview"
+              class="admin-side-link active"
+            >
+              <span aria-hidden="true">▣</span>
+              نظرة عامة
+            </a>
+
+            <a
+              href="#admin-users"
+              class="admin-side-link"
+            >
+              <span aria-hidden="true">◎</span>
+              المستخدمون
+            </a>
+
+            <a
+              href="#admin-artifacts"
+              class="admin-side-link"
+            >
+              <span aria-hidden="true">◈</span>
+              القطع الأثرية
+            </a>
+
+            <a
+              href="#admin-auctions"
+              class="admin-side-link"
+            >
+              <span aria-hidden="true">◇</span>
+              المزادات
+            </a>
+
+            <a
+              href="#admin-bids"
+              class="admin-side-link"
+            >
+              <span aria-hidden="true">✦</span>
+              سجل المزايدات
+            </a>
+
+          </nav>
+
+          <div class="admin-sidebar-note">
+
+            <span aria-hidden="true">ⓘ</span>
+
+            <p>
+              تتيح هذه اللوحة الاطلاع
+              على معلومات النظام ومراقبة نشاطه.
+              لا تتضمن صلاحيات تعديل
+              أو حذف بيانات المستخدمين
+              أو القطع أو المزادات.
+            </p>
+
+          </div>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+
+        <div class="admin-main-content">
+
+          <!-- OVERVIEW -->
+
+          <section
+            class="admin-panel"
+            id="admin-overview"
+            aria-labelledby="admin-overview-title"
+          >
+
+            <div class="admin-panel-heading">
+
+              <div>
+
+                <p class="section-label">
+                  ملخص المنصة
+                </p>
+
+                <h2 id="admin-overview-title">
+                  نظرة عامة
+                </h2>
+
+                <p>
+                  متابعة حالة المزادات
+                  ونشاط منصة ألفاو.
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="admin-overview-grid">
+
+              <article class="admin-overview-card">
+
+                <div class="admin-overview-card-heading">
+
+                  <span aria-hidden="true">◇</span>
+
+                  <h3>حالة المزادات</h3>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>مزادات نشطة</span>
+
+                  <strong id="admin-active-auctions">
+                    0
+                  </strong>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>مزادات قادمة</span>
+
+                  <strong id="admin-upcoming-auctions">
+                    0
+                  </strong>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>مزادات منتهية</span>
+
+                  <strong id="admin-ended-auctions">
+                    0
+                  </strong>
+
+                </div>
+
+              </article>
+
+              <article class="admin-overview-card">
+
+                <div class="admin-overview-card-heading">
+
+                  <span aria-hidden="true">◈</span>
+
+                  <h3>حالة توثيق القطع</h3>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>موثقة</span>
+
+                  <strong id="admin-verified-artifacts">
+                    0
+                  </strong>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>غير موثقة</span>
+
+                  <strong id="admin-unverified-artifacts">
+                    0
+                  </strong>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>قيد المراجعة</span>
+
+                  <strong id="admin-pending-artifacts">
+                    0
+                  </strong>
+
+                </div>
+
+              </article>
+
+              <article class="admin-overview-card">
+
+                <div class="admin-overview-card-heading">
+
+                  <span aria-hidden="true">◎</span>
+
+                  <h3>أنواع الحسابات</h3>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>المشترون</span>
+
+                  <strong id="admin-buyers-count">
+                    0
+                  </strong>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>البائعون</span>
+
+                  <strong id="admin-sellers-count">
+                    0
+                  </strong>
+
+                </div>
+
+                <div class="admin-overview-row">
+
+                  <span>المسؤولون</span>
+
+                  <strong id="admin-admins-count">
+                    0
+                  </strong>
+
+                </div>
+
+              </article>
+
+            </div>
+
+          </section>
+
+          <!-- USERS -->
+
+          <section
+            class="admin-panel"
+            id="admin-users"
+            aria-labelledby="admin-users-title"
+          >
+
+            <div class="admin-panel-heading">
+
+              <div>
+
+                <p class="section-label">
+                  حسابات ألفاو
+                </p>
+
+                <h2 id="admin-users-title">
+                  المستخدمون
+                </h2>
+
+                <p>
+                  استعراض الحسابات المسجلة
+                  وأدوار المستخدمين.
+                </p>
+
+              </div>
+
+              <span class="admin-readonly-badge">
+                عرض فقط
+              </span>
+
+            </div>
+
+            <!-- SEARCH AND FILTER -->
+
+            <div class="admin-table-toolbar">
+
+              <label
+                for="admin-users-search"
+                class="visually-hidden"
+              >
+                البحث عن مستخدم
+              </label>
+
+              <input
+                type="search"
+                id="admin-users-search"
+                placeholder="ابحث بالاسم أو البريد الإلكتروني..."
+              >
+
+              <label
+                for="admin-users-role-filter"
+                class="visually-hidden"
+              >
+                نوع المستخدم
+              </label>
+
+              <select id="admin-users-role-filter">
+
+                <option value="all">
+                  جميع المستخدمين
+                </option>
+
+                <option value="buyer">
+                  المشترون
+                </option>
+
+                <option value="seller">
+                  البائعون
+                </option>
+
+                <option value="admin">
+                  المسؤولون
+                </option>
+
+              </select>
+
+            </div>
+
+            <!-- USERS TABLE -->
+
+            <div class="admin-table-wrapper">
+
+              <table class="admin-table">
+
+                <thead>
+
+                  <tr>
+                    <th scope="col">رقم المستخدم</th>
+                    <th scope="col">الاسم</th>
+                    <th scope="col">البريد الإلكتروني</th>
+                    <th scope="col">نوع الحساب</th>
+                    <th scope="col">المدينة</th>
+                    <th scope="col">تاريخ الانضمام</th>
+                  </tr>
+
+                </thead>
+
+                <tbody id="admin-users-table-body">
+
+                  <tr class="admin-empty-row">
+
+                    <td colspan="6">
+                      لا توجد بيانات مستخدمين للعرض.
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <p
+              id="admin-users-results"
+              class="admin-results-caption"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+          </section>
+
+          <!-- ARTIFACTS -->
+
+          <section
+            class="admin-panel"
+            id="admin-artifacts"
+            aria-labelledby="admin-artifacts-title"
+          >
+
+            <div class="admin-panel-heading">
+
+              <div>
+
+                <p class="section-label">
+                  مقتنيات المنصة
+                </p>
+
+                <h2 id="admin-artifacts-title">
+                  مراقبة القطع الأثرية
+                </h2>
+
+                <p>
+                  استعراض معلومات القطع
+                  وحالة توثيقها والبائع المرتبط بها.
+                </p>
+
+              </div>
+
+              <span class="admin-readonly-badge">
+                عرض فقط
+              </span>
+
+            </div>
+
+            <!-- SEARCH AND FILTER -->
+
+            <div class="admin-table-toolbar">
+
+              <label
+                for="admin-artifacts-search"
+                class="visually-hidden"
+              >
+                البحث عن قطعة
+              </label>
+
+              <input
+                type="search"
+                id="admin-artifacts-search"
+                placeholder="ابحث باسم القطعة أو رقمها..."
+              >
+
+              <label
+                for="admin-artifacts-verification-filter"
+                class="visually-hidden"
+              >
+                حالة التوثيق
+              </label>
+
+              <select
+                id="admin-artifacts-verification-filter"
+              >
+
+                <option value="all">
+                  جميع حالات التوثيق
+                </option>
+
+                <option value="verified">
+                  موثق
+                </option>
+
+                <option value="unverified">
+                  غير موثق
+                </option>
+
+                <option value="pending">
+                  قيد المراجعة
+                </option>
+
+              </select>
+
+            </div>
+
+            <!-- ARTIFACTS TABLE -->
+
+            <div class="admin-table-wrapper">
+
+              <table class="admin-table">
+
+                <thead>
+
+                  <tr>
+                    <th scope="col">رقم القطعة</th>
+                    <th scope="col">اسم القطعة</th>
+                    <th scope="col">الفئة</th>
+                    <th scope="col">البائع</th>
+                    <th scope="col">حالة التوثيق</th>
+                    <th scope="col">السعر الابتدائي</th>
+                    <th scope="col">التفاصيل</th>
+                  </tr>
+
+                </thead>
+
+                <tbody id="admin-artifacts-table-body">
+
+                  <tr class="admin-empty-row">
+
+                    <td colspan="7">
+                      لا توجد بيانات قطع أثرية للعرض.
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <p
+              id="admin-artifacts-results"
+              class="admin-results-caption"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+          </section>
+
+          <!-- AUCTIONS -->
+
+          <section
+            class="admin-panel"
+            id="admin-auctions"
+            aria-labelledby="admin-auctions-title"
+          >
+
+            <div class="admin-panel-heading">
+
+              <div>
+
+                <p class="section-label">
+                  متابعة المزادات
+                </p>
+
+                <h2 id="admin-auctions-title">
+                  مراقبة المزادات
+                </h2>
+
+                <p>
+                  الاطلاع على المزادات
+                  وحالتها وأسعارها ومواعيدها.
+                </p>
+
+              </div>
+
+              <span class="admin-readonly-badge">
+                عرض فقط
+              </span>
+
+            </div>
+
+            <!-- SEARCH AND FILTER -->
+
+            <div class="admin-table-toolbar">
+
+              <label
+                for="admin-auctions-search"
+                class="visually-hidden"
+              >
+                البحث عن مزاد
+              </label>
+
+              <input
+                type="search"
+                id="admin-auctions-search"
+                placeholder="ابحث برقم المزاد أو اسم القطعة..."
+              >
+
+              <label
+                for="admin-auctions-status-filter"
+                class="visually-hidden"
+              >
+                حالة المزاد
+              </label>
+
+              <select id="admin-auctions-status-filter">
+
+                <option value="all">
+                  جميع المزادات
+                </option>
+
+                <option value="upcoming">
+                  قادم
+                </option>
+
+                <option value="active">
+                  نشط
+                </option>
+
+                <option value="ended">
+                  منتهٍ
+                </option>
+
+              </select>
+
+            </div>
+
+            <!-- AUCTIONS TABLE -->
+
+            <div class="admin-table-wrapper">
+
+              <table class="admin-table">
+
+                <thead>
+
+                  <tr>
+                    <th scope="col">رقم المزاد</th>
+                    <th scope="col">القطعة</th>
+                    <th scope="col">البائع</th>
+                    <th scope="col">السعر الابتدائي</th>
+                    <th scope="col">أعلى عرض</th>
+                    <th scope="col">وقت البداية</th>
+                    <th scope="col">وقت النهاية</th>
+                    <th scope="col">الحالة</th>
+                    <th scope="col">التفاصيل</th>
+                  </tr>
+
+                </thead>
+
+                <tbody id="admin-auctions-table-body">
+
+                  <tr class="admin-empty-row">
+
+                    <td colspan="9">
+                      لا توجد بيانات مزادات للعرض.
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <p
+              id="admin-auctions-results"
+              class="admin-results-caption"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+          </section>
+
+          <!-- BIDDING HISTORY -->
+
+          <section
+            class="admin-panel"
+            id="admin-bids"
+            aria-labelledby="admin-bids-title"
+          >
+
+            <div class="admin-panel-heading">
+
+              <div>
+
+                <p class="section-label">
+                  نشاط المزايدات
+                </p>
+
+                <h2 id="admin-bids-title">
+                  سجل المزايدات
+                </h2>
+
+                <p>
+                  استعراض العروض المسجلة
+                  وتواريخها والمزادات المرتبطة بها.
+                </p>
+
+              </div>
+
+              <span class="admin-readonly-badge">
+                عرض فقط
+              </span>
+
+            </div>
+
+            <!-- SEARCH AND FILTER -->
+
+            <div class="admin-table-toolbar">
+
+              <label
+                for="admin-bids-search"
+                class="visually-hidden"
+              >
+                البحث في سجل المزايدات
+              </label>
+
+              <input
+                type="search"
+                id="admin-bids-search"
+                placeholder="ابحث برقم المزاد أو اسم المزايد..."
+              >
+
+              <label
+                for="admin-bids-auction-filter"
+                class="visually-hidden"
+              >
+                اختيار المزاد
+              </label>
+
+              <select id="admin-bids-auction-filter">
+
+                <option value="all">
+                  جميع المزادات
+                </option>
+
+              </select>
+
+            </div>
+
+            <!-- BIDS TABLE -->
+
+            <div class="admin-table-wrapper">
+
+              <table class="admin-table">
+
+                <thead>
+
+                  <tr>
+                    <th scope="col">رقم العرض</th>
+                    <th scope="col">رقم المزاد</th>
+                    <th scope="col">القطعة</th>
+                    <th scope="col">المزايد</th>
+                    <th scope="col">مبلغ المزايدة</th>
+                    <th scope="col">تاريخ العرض</th>
+                    <th scope="col">التفاصيل</th>
+                  </tr>
+
+                </thead>
+
+                <tbody id="admin-bids-table-body">
+
+                  <tr class="admin-empty-row">
+
+                    <td colspan="7">
+                      لا توجد مزايدات مسجلة للعرض.
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <p
+              id="admin-bids-results"
+              class="admin-results-caption"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+          </section>
+
+        </div>
+
+      </div>
+
+      <!-- INFORMATION NOTICE -->
+
+      <section class="admin-information-section">
+
+        <div class="admin-information-icon"
+             aria-hidden="true">
+          ⓘ
+        </div>
+
+        <div>
+
+          <h2>
+            صلاحيات المسؤول في ألفاو
+          </h2>
+
+          <p>
+            تقتصر صلاحيات المسؤول على
+            استعراض بيانات المستخدمين والقطع
+            الأثرية والمزادات وسجل المزايدات
+            لأغراض المراقبة والمتابعة.
+            لا تتوفر في هذه اللوحة
+            وظائف تعديل البيانات أو حذفها.
+          </p>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="alfaw-footer">
+
+    <h2>ألفاو</h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+   <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+
+      <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+  </footer>
+
+</body>
+</html>

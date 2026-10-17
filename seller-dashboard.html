@@ -1,0 +1,630 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="لوحة تحكم بائع ألفاو لإدارة القطع الأثرية والمزادات ومتابعة الأداء والتقييمات.">
+
+  <title>لوحة تحكم البائع | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="seller-dashboard-page">
+
+ 
+<!-- HEADER -->
+
+<header class="site-header">
+
+  <a href="index.html" class="site-logo">
+    ألفاو
+  </a>
+
+  <nav class="site-nav"
+       aria-label="القائمة الرئيسية">
+
+    <a href="index.html" aria-current="page">
+      الرئيسية
+    </a>
+
+    <a href="browse.html">
+      القطع الأثرية
+    </a>
+
+    <a href="auctions.html">
+      المزادات
+    </a>
+
+    <a href="verification.html">
+      التوثيق
+    </a>
+
+    <a href="seller-profile.html">
+      البائعون
+    </a>
+
+    <a href="login.html">
+      دخول
+    </a>
+
+  </nav>
+
+</header>
+
+
+  <main class="seller-dashboard-main">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="dashboard-breadcrumb" aria-label="مسار التنقل">
+      <a href="index.html">الرئيسية</a>
+      <span aria-hidden="true">/</span>
+      <a href="profile.html">حسابي</a>
+      <span aria-hidden="true">/</span>
+      <span>لوحة تحكم البائع</span>
+    </nav>
+
+    <!-- ACCESS MESSAGE -->
+
+    <section
+      id="seller-dashboard-access-message"
+      class="dashboard-access-message"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <h2>لوحة التحكم مخصصة للبائعين</h2>
+      <p>
+        يرجى تسجيل الدخول بحساب بائع
+        للوصول إلى إدارة المقتنيات والمزادات.
+      </p>
+      <a href="login.html">تسجيل الدخول</a>
+    </section>
+
+    <!-- DASHBOARD CONTENT -->
+
+    <div id="seller-dashboard-content">
+
+      <!-- PAGE INTRO -->
+
+      <section class="dashboard-intro">
+
+        <div class="dashboard-intro-text">
+          <p class="section-label">
+            مساحة إدارة المقتنيات
+          </p>
+
+          <h1>
+            لوحة تحكم <span>البائع</span>
+          </h1>
+
+          <p>
+            أهلًا بك،
+            <strong id="dashboard-seller-name">البائع</strong>.
+            يمكنك متابعة القطع المسجلة وإدارة
+            مزاداتك والاطلاع على تقييمات المشترين.
+          </p>
+        </div>
+
+        <div class="dashboard-intro-actions">
+
+          <a href="manage-artifact.html"
+             class="dashboard-primary-button">
+            <span aria-hidden="true">＋</span>
+            إضافة قطعة جديدة
+          </a>
+
+          <a href="manage-auctions.html"
+             class="dashboard-secondary-button">
+            إدارة المزادات
+          </a>
+
+        </div>
+
+      </section>
+
+      <!-- SUMMARY CARDS -->
+
+      <section class="dashboard-summary"
+               aria-label="ملخص حساب البائع">
+
+        <article class="dashboard-summary-card">
+          <span class="dashboard-summary-icon" aria-hidden="true">◈</span>
+
+          <p>إجمالي القطع</p>
+
+          <strong id="dashboard-total-artifacts">0</strong>
+
+          <span class="dashboard-summary-caption">
+            القطع المسجلة في حسابك
+          </span>
+        </article>
+
+        <article class="dashboard-summary-card">
+          <span class="dashboard-summary-icon" aria-hidden="true">◇</span>
+
+          <p>المزادات النشطة</p>
+
+          <strong id="dashboard-active-auctions">0</strong>
+
+          <span class="dashboard-summary-caption">
+            مزادات متاحة للمزايدة
+          </span>
+        </article>
+
+        <article class="dashboard-summary-card">
+          <span class="dashboard-summary-icon" aria-hidden="true">✦</span>
+
+          <p>المزادات المكتملة</p>
+
+          <strong id="dashboard-completed-auctions">0</strong>
+
+          <span class="dashboard-summary-caption">
+            المزادات التي انتهت
+          </span>
+        </article>
+
+        <article class="dashboard-summary-card">
+          <span class="dashboard-summary-icon" aria-hidden="true">☆</span>
+
+          <p>Trust Score</p>
+
+          <strong id="dashboard-trust-score">
+            لا توجد تقييمات
+          </strong>
+
+          <span class="dashboard-summary-caption">
+            بناءً على تقييمات المشترين المؤهلين
+          </span>
+        </article>
+
+      </section>
+
+      <!-- MAIN DASHBOARD LAYOUT -->
+
+      <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="dashboard-sidebar"
+               aria-label="أقسام لوحة البائع">
+
+          <div class="dashboard-sidebar-heading">
+            <span class="section-label">ألفاو</span>
+            <h2>إدارة أعمالك</h2>
+          </div>
+
+          <nav class="dashboard-side-nav"
+               aria-label="التنقل بين أقسام الإدارة">
+
+            <a href="#dashboard-overview"
+               class="dashboard-side-link active">
+              <span aria-hidden="true">◈</span>
+              نظرة عامة
+            </a>
+
+            <a href="#dashboard-artifacts"
+               class="dashboard-side-link">
+              <span aria-hidden="true">▣</span>
+              القطع الأثرية
+            </a>
+
+            <a href="#dashboard-auctions"
+               class="dashboard-side-link">
+              <span aria-hidden="true">◇</span>
+              المزادات
+            </a>
+
+            <a href="#dashboard-reviews"
+               class="dashboard-side-link">
+              <span aria-hidden="true">☆</span>
+              التقييمات
+            </a>
+
+            <a href="profile.html"
+               class="dashboard-side-link">
+              <span aria-hidden="true">◎</span>
+              الملف الشخصي
+            </a>
+
+          </nav>
+
+          <div class="dashboard-sidebar-note">
+            <span aria-hidden="true">✦</span>
+
+            <p>
+              احرص على إضافة معلومات دقيقة
+              وصور واضحة ووثائق المصدر
+              عند تسجيل كل قطعة.
+            </p>
+          </div>
+
+        </aside>
+
+        <!-- DASHBOARD MAIN CONTENT -->
+
+        <div class="dashboard-main-content">
+
+          <!-- OVERVIEW -->
+
+          <section class="dashboard-panel"
+                   id="dashboard-overview"
+                   aria-labelledby="dashboard-overview-title">
+
+            <div class="dashboard-panel-heading">
+
+              <div>
+                <p class="section-label">ملخص النشاط</p>
+                <h2 id="dashboard-overview-title">نظرة عامة</h2>
+              </div>
+
+            </div>
+
+            <div class="dashboard-quick-actions">
+
+              <a href="manage-artifact.html"
+                 class="dashboard-quick-action">
+
+                <span class="quick-action-symbol"
+                      aria-hidden="true">＋</span>
+
+                <h3>إضافة قطعة</h3>
+
+                <p>
+                  سجّل قطعة أثرية جديدة
+                  ومعلوماتها وصورها ووثائقها.
+                </p>
+
+                <strong>ابدأ الآن ←</strong>
+              </a>
+
+              <a href="manage-auctions.html"
+                 class="dashboard-quick-action">
+
+                <span class="quick-action-symbol"
+                      aria-hidden="true">◇</span>
+
+                <h3>إنشاء مزاد</h3>
+
+                <p>
+                  أدر مزادات القطع
+                  وحدد سعر البداية ومدة المزاد.
+                </p>
+
+                <strong>إدارة المزادات ←</strong>
+              </a>
+
+              <a href="seller-detail.html"
+                 id="dashboard-public-profile-link"
+                 class="dashboard-quick-action">
+
+                <span class="quick-action-symbol"
+                      aria-hidden="true">☆</span>
+
+                <h3>ملفك العام</h3>
+
+                <p>
+                  استعرض مقتنياتك وتقييماتك
+                  كما تظهر للمشترين.
+                </p>
+
+                <strong>عرض الملف ←</strong>
+              </a>
+
+            </div>
+
+          </section>
+
+          <!-- ARTIFACT MANAGEMENT -->
+
+          <section class="dashboard-panel"
+                   id="dashboard-artifacts"
+                   aria-labelledby="dashboard-artifacts-title">
+
+            <div class="dashboard-panel-heading">
+
+              <div>
+                <p class="section-label">إدارة المقتنيات</p>
+                <h2 id="dashboard-artifacts-title">
+                  القطع الأثرية الخاصة بي
+                </h2>
+                <p>
+                  أضف القطع وعدّل معلوماتها
+                  أو احذف القطع المسموح بحذفها.
+                </p>
+              </div>
+
+              <a href="manage-artifact.html"
+                 class="dashboard-add-button">
+                + إضافة قطعة
+              </a>
+
+            </div>
+
+            <!-- ARTIFACT FILTERS -->
+
+            <div class="dashboard-table-toolbar">
+
+              <label for="dashboard-artifact-search"
+                     class="visually-hidden">
+                البحث في قطعي
+              </label>
+
+              <input
+                type="search"
+                id="dashboard-artifact-search"
+                placeholder="ابحث باسم القطعة..."
+              >
+
+              <label for="dashboard-artifact-status-filter"
+                     class="visually-hidden">
+                حالة القطعة
+              </label>
+
+              <select id="dashboard-artifact-status-filter">
+                <option value="all">جميع القطع</option>
+                <option value="available">متاحة</option>
+                <option value="in-auction">ضمن مزاد</option>
+                <option value="sold">مكتملة البيع</option>
+              </select>
+
+            </div>
+
+            <!-- ARTIFACT TABLE -->
+
+            <div class="dashboard-table-wrapper">
+
+              <table class="dashboard-table">
+
+                <thead>
+                  <tr>
+                    <th scope="col">القطعة</th>
+                    <th scope="col">الفئة</th>
+                    <th scope="col">حالة التوثيق</th>
+                    <th scope="col">السعر الابتدائي</th>
+                    <th scope="col">الحالة</th>
+                    <th scope="col">الإجراءات</th>
+                  </tr>
+                </thead>
+
+                <tbody id="dashboard-artifacts-table-body">
+
+                  <tr class="dashboard-empty-row">
+                    <td colspan="6">
+                      لا توجد قطع مضافة إلى حسابك بعد.
+                    </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div
+              id="dashboard-artifacts-empty"
+              class="dashboard-empty-state"
+              hidden
+            >
+              <span aria-hidden="true">◈</span>
+              <h3>ابدأ بإضافة أول قطعة</h3>
+              <p>
+                سجّل معلومات القطعة وصورها
+                لتظهر ضمن مقتنياتك.
+              </p>
+              <a href="manage-artifact.html">
+                إضافة قطعة جديدة ←
+              </a>
+            </div>
+
+            <p
+              id="dashboard-artifacts-message"
+              class="dashboard-action-message"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+          </section>
+
+          <!-- AUCTION MANAGEMENT -->
+
+          <section class="dashboard-panel"
+                   id="dashboard-auctions"
+                   aria-labelledby="dashboard-auctions-title">
+
+            <div class="dashboard-panel-heading">
+
+              <div>
+                <p class="section-label">إدارة المزايدات</p>
+                <h2 id="dashboard-auctions-title">
+                  مزاداتي
+                </h2>
+                <p>
+                  تابع حالة المزادات المرتبطة
+                  بقطعك وأسعارها ومواعيدها.
+                </p>
+              </div>
+
+              <a href="manage-auctions.html"
+                 class="dashboard-add-button">
+                إدارة المزادات ←
+              </a>
+
+            </div>
+
+            <div class="dashboard-table-wrapper">
+
+              <table class="dashboard-table">
+
+                <thead>
+                  <tr>
+                    <th scope="col">المزاد</th>
+                    <th scope="col">القطعة</th>
+                    <th scope="col">السعر الابتدائي</th>
+                    <th scope="col">أعلى عرض</th>
+                    <th scope="col">الحالة</th>
+                    <th scope="col">الإجراءات</th>
+                  </tr>
+                </thead>
+
+                <tbody id="dashboard-auctions-table-body">
+
+                  <tr class="dashboard-empty-row">
+                    <td colspan="6">
+                      لا توجد مزادات مرتبطة بحسابك حاليًا.
+                    </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </section>
+
+          <!-- SELLER REVIEWS -->
+
+          <section class="dashboard-panel"
+                   id="dashboard-reviews"
+                   aria-labelledby="dashboard-reviews-title">
+
+            <div class="dashboard-panel-heading">
+
+              <div>
+                <p class="section-label">ثقة المشترين</p>
+                <h2 id="dashboard-reviews-title">
+                  تقييماتي
+                </h2>
+                <p>
+                  تقييمات المشترين الفائزين
+                  بمزادات مكتملة.
+                </p>
+              </div>
+
+            </div>
+
+            <div class="dashboard-reviews-summary">
+
+              <div class="dashboard-rating-stat">
+                <span>متوسط التقييم</span>
+                <strong id="dashboard-average-rating">—</strong>
+                <span id="dashboard-rating-stars">☆☆☆☆☆</span>
+              </div>
+
+              <div class="dashboard-rating-stat">
+                <span>عدد التقييمات</span>
+                <strong id="dashboard-reviews-count">0</strong>
+              </div>
+
+              <div class="dashboard-rating-stat">
+                <span>Trust Score</span>
+                <strong id="dashboard-review-trust">—</strong>
+              </div>
+
+            </div>
+
+            <div
+              class="dashboard-reviews-list"
+              id="dashboard-reviews-list"
+            >
+
+              <div class="dashboard-empty-state">
+                <span aria-hidden="true">☆</span>
+                <h3>لا توجد تقييمات حتى الآن</h3>
+                <p>
+                  ستظهر تقييمات المشترين
+                  بعد اكتمال المزادات
+                  وتسجيل التقييمات المؤهلة.
+                </p>
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+      <!-- DELETE CONFIRMATION -->
+
+      <dialog
+        id="dashboard-delete-dialog"
+        class="dashboard-confirm-dialog"
+        aria-labelledby="dashboard-delete-title"
+      >
+
+        <h2 id="dashboard-delete-title">
+          تأكيد حذف القطعة
+        </h2>
+
+        <p id="dashboard-delete-description">
+          هل تريد حذف هذه القطعة؟
+        </p>
+
+        <div class="dashboard-dialog-actions">
+
+          <button
+            type="button"
+            id="dashboard-cancel-delete"
+            class="dashboard-cancel-button"
+          >
+            إلغاء
+          </button>
+
+          <button
+            type="button"
+            id="dashboard-confirm-delete"
+            class="dashboard-danger-button"
+          >
+            تأكيد الحذف
+          </button>
+
+        </div>
+
+      </dialog>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="alfaw-footer">
+
+    <h2>ألفاو</h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+
+     <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+
+  </footer>
+
+</body>
+</html>

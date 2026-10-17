@@ -1,0 +1,811 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="إدارة الملف الشخصي والحساب والمزادات والتقييمات في منصة ألفاو.">
+
+  <title>الملف الشخصي | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="profile-page">
+
+  <!-- HEADER -->
+
+  <header class="site-header inner-header">
+
+    <a href="index.html"
+       class="site-logo"
+       aria-label="ألفاو - الرئيسية">
+      ألفاو
+    </a>
+
+    <nav class="site-nav" aria-label="القائمة الرئيسية">
+      <a href="index.html">الرئيسية</a>
+      <a href="browse.html">القطع الأثرية</a>
+      <a href="auctions.html">المزادات</a>
+      <a href="verification.html">التوثيق</a>
+      <a href="seller-profile.html">البائعون</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="profile.html"
+         class="header-login active"
+         id="profile-header-account">
+        حسابي
+      </a>
+    </div>
+
+  </header>
+
+  <main class="profile-main">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="profile-breadcrumb" aria-label="مسار التنقل">
+      <a href="index.html">الرئيسية</a>
+      <span aria-hidden="true">/</span>
+      <span>الملف الشخصي</span>
+    </nav>
+
+    <!-- PAGE HEADING -->
+
+    <section class="profile-page-heading">
+
+      <p class="section-label">
+        حسابك في ألفاو
+      </p>
+
+      <h1>
+        الملف <span>الشخصي</span>
+      </h1>
+
+      <p>
+        إدارة معلوماتك الشخصية ومتابعة أنشطتك
+        ومزاداتك من مكان واحد.
+      </p>
+
+    </section>
+
+    <!-- SIGNED OUT STATE -->
+
+    <section
+      id="profile-guest-state"
+      class="profile-guest-state"
+      hidden
+    >
+
+      <div class="profile-guest-icon" aria-hidden="true">
+        ◈
+      </div>
+
+      <h2>سجّل دخولك للوصول إلى حسابك</h2>
+
+      <p>
+        يمكنك إدارة ملفك الشخصي ومتابعة
+        مشاركاتك في المزادات بعد تسجيل الدخول.
+      </p>
+
+      <div class="profile-guest-actions">
+        <a href="login.html" class="profile-primary-button">
+          تسجيل الدخول
+        </a>
+
+        <a href="register.html" class="profile-secondary-button">
+          إنشاء حساب
+        </a>
+      </div>
+
+    </section>
+
+    <!-- SIGNED IN CONTENT -->
+
+    <div id="profile-authenticated-content">
+
+      <!-- PROFILE OVERVIEW -->
+
+      <section class="profile-overview">
+
+        <div class="profile-overview-card">
+
+          <div class="profile-cover-decoration" aria-hidden="true">
+            <span>ألفاو</span>
+          </div>
+
+          <div class="profile-overview-body">
+
+            <div
+              id="profile-avatar"
+              class="profile-avatar"
+              aria-hidden="true"
+            >
+              أ
+            </div>
+
+            <div class="profile-overview-info">
+
+              <p class="section-label">
+                عضو في مجتمع ألفاو
+              </p>
+
+              <h2 id="profile-display-name">
+                اسم المستخدم
+              </h2>
+
+              <span
+                id="profile-account-role"
+                class="profile-role-badge"
+              >
+                مشتري
+              </span>
+
+              <p id="profile-display-city">
+                المدينة غير محددة
+              </p>
+
+            </div>
+
+            <div class="profile-overview-actions">
+
+              <button
+                type="button"
+                class="profile-edit-button"
+                id="profile-edit-shortcut"
+              >
+                تعديل الملف الشخصي
+              </button>
+
+              <button
+                type="button"
+                class="profile-logout-button"
+                id="profile-logout-button"
+              >
+                تسجيل الخروج
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ACCOUNT STATS -->
+
+      <section
+        class="profile-stats"
+        aria-label="ملخص نشاط الحساب"
+      >
+
+        <div class="profile-stat-card">
+
+          <span class="profile-stat-icon" aria-hidden="true">
+            ◈
+          </span>
+
+          <strong id="profile-auctions-count">0</strong>
+
+          <span>مزادات شاركت فيها</span>
+
+        </div>
+
+        <div class="profile-stat-card">
+
+          <span class="profile-stat-icon" aria-hidden="true">
+            ◇
+          </span>
+
+          <strong id="profile-bids-count">0</strong>
+
+          <span>مزايدات مقدمة</span>
+
+        </div>
+
+        <div class="profile-stat-card">
+
+          <span class="profile-stat-icon" aria-hidden="true">
+            ✦
+          </span>
+
+          <strong id="profile-wins-count">0</strong>
+
+          <span>مزادات فزت بها</span>
+
+        </div>
+
+        <div class="profile-stat-card">
+
+          <span class="profile-stat-icon" aria-hidden="true">
+            ▣
+          </span>
+
+          <strong id="profile-reviews-count">0</strong>
+
+          <span>تقييمات أرسلتها</span>
+
+        </div>
+
+      </section>
+
+      <!-- MAIN PROFILE LAYOUT -->
+
+      <section class="profile-content-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside
+          class="profile-sidebar"
+          aria-label="أقسام الحساب"
+        >
+
+          <div class="profile-sidebar-heading">
+
+            <span class="section-label">
+              لوحة الحساب
+            </span>
+
+            <h2>إدارة الحساب</h2>
+
+          </div>
+
+          <nav
+            class="profile-tabs"
+            aria-label="التنقل داخل الملف الشخصي"
+          >
+
+            <button
+              type="button"
+              class="profile-tab active"
+              data-profile-tab="personal"
+              aria-controls="profile-panel-personal"
+              aria-selected="true"
+            >
+              <span aria-hidden="true">◈</span>
+              المعلومات الشخصية
+            </button>
+
+            <button
+              type="button"
+              class="profile-tab"
+              data-profile-tab="auctions"
+              aria-controls="profile-panel-auctions"
+              aria-selected="false"
+            >
+              <span aria-hidden="true">◇</span>
+              مزاداتي
+            </button>
+
+            <button
+              type="button"
+              class="profile-tab"
+              data-profile-tab="notifications"
+              aria-controls="profile-panel-notifications"
+              aria-selected="false"
+            >
+              <span aria-hidden="true">✦</span>
+              الإشعارات
+              <span
+                id="profile-unread-count"
+                class="profile-notification-count"
+                hidden
+              >0</span>
+            </button>
+
+            <button
+              type="button"
+              class="profile-tab"
+              data-profile-tab="reviews"
+              aria-controls="profile-panel-reviews"
+              aria-selected="false"
+            >
+              <span aria-hidden="true">☆</span>
+              تقييماتي
+            </button>
+
+          </nav>
+
+          <div
+            class="profile-seller-shortcut"
+            id="profile-seller-shortcut"
+            hidden
+          >
+
+            <h3>حساب البائع</h3>
+
+            <p>
+              أدر مقتنياتك والمزادات
+              المرتبطة بها.
+            </p>
+
+            <a href="seller-dashboard.html">
+              لوحة تحكم البائع ←
+            </a>
+
+          </div>
+
+        </aside>
+
+        <!-- PANELS -->
+
+        <div class="profile-panels">
+
+          <!-- PERSONAL INFORMATION -->
+
+          <section
+            id="profile-panel-personal"
+            class="profile-panel active"
+            data-profile-panel="personal"
+            aria-labelledby="profile-personal-heading"
+          >
+
+            <div class="profile-panel-heading">
+
+              <div>
+                <p class="section-label">بيانات الحساب</p>
+                <h2 id="profile-personal-heading">
+                  معلوماتي الشخصية
+                </h2>
+              </div>
+
+            </div>
+
+            <form
+              id="profile-edit-form"
+              class="profile-edit-form"
+              novalidate
+            >
+
+              <div class="profile-form-grid">
+
+                <div class="profile-field">
+
+                  <label for="profile-full-name">
+                    الاسم الكامل
+                  </label>
+
+                  <input
+                    type="text"
+                    id="profile-full-name"
+                    name="fullName"
+                    minlength="3"
+                    maxlength="100"
+                    autocomplete="name"
+                    placeholder="الاسم الكامل"
+                    required
+                  >
+
+                  <small
+                    id="profile-full-name-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="profile-field">
+
+                  <label for="profile-email">
+                    البريد الإلكتروني
+                  </label>
+
+                  <input
+                    type="email"
+                    id="profile-email"
+                    name="email"
+                    autocomplete="email"
+                    dir="ltr"
+                    maxlength="254"
+                    placeholder="example@email.com"
+                    required
+                  >
+
+                  <small
+                    id="profile-email-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="profile-field">
+
+                  <label for="profile-phone">
+                    رقم الجوال
+                  </label>
+
+                  <input
+                    type="tel"
+                    id="profile-phone"
+                    name="phone"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    pattern="05[0-9]{8}"
+                    maxlength="10"
+                    placeholder="05XXXXXXXX"
+                    dir="ltr"
+                    required
+                  >
+
+                  <small
+                    id="profile-phone-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+                <div class="profile-field">
+
+                  <label for="profile-city">
+                    المدينة
+                  </label>
+
+                  <select
+                    id="profile-city"
+                    name="city"
+                    required
+                  >
+                    <option value="">اختر المدينة</option>
+                    <option value="riyadh">الرياض</option>
+                    <option value="jeddah">جدة</option>
+                    <option value="makkah">مكة المكرمة</option>
+                    <option value="madinah">المدينة المنورة</option>
+                    <option value="dammam">الدمام</option>
+                    <option value="khobar">الخبر</option>
+                    <option value="taif">الطائف</option>
+                    <option value="abha">أبها</option>
+                    <option value="tabuk">تبوك</option>
+                    <option value="other">مدينة أخرى</option>
+                  </select>
+
+                  <small
+                    id="profile-city-error"
+                    class="field-error"
+                    aria-live="polite"
+                  ></small>
+
+                </div>
+
+              </div>
+
+              <!-- READ ONLY ACCOUNT INFORMATION -->
+
+              <div class="profile-account-details">
+
+                <h3>تفاصيل العضوية</h3>
+
+                <div class="profile-account-details-grid">
+
+                  <div>
+                    <span>نوع الحساب</span>
+                    <strong id="profile-detail-role">
+                      مشتري
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>تاريخ الانضمام</span>
+                    <strong id="profile-joined-date">
+                      غير متوفر
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>رقم العضوية</span>
+                    <strong id="profile-member-id">
+                      غير متوفر
+                    </strong>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div
+                id="profile-form-message"
+                class="profile-form-message"
+                role="status"
+                aria-live="polite"
+                hidden
+              ></div>
+
+              <div class="profile-form-actions">
+
+                <button
+                  type="submit"
+                  class="profile-save-button"
+                  id="profile-save-button"
+                >
+                  حفظ التغييرات
+                </button>
+
+                <button
+                  type="button"
+                  class="profile-cancel-button"
+                  id="profile-cancel-button"
+                >
+                  إلغاء التعديلات
+                </button>
+
+              </div>
+
+            </form>
+
+          </section>
+
+          <!-- MY AUCTIONS -->
+
+          <section
+            id="profile-panel-auctions"
+            class="profile-panel"
+            data-profile-panel="auctions"
+            aria-labelledby="profile-auctions-heading"
+            hidden
+          >
+
+            <div class="profile-panel-heading">
+
+              <div>
+                <p class="section-label">
+                  نشاط المزادات
+                </p>
+
+                <h2 id="profile-auctions-heading">
+                  مزاداتي
+                </h2>
+              </div>
+
+              <a href="auctions.html"
+                 class="profile-panel-link">
+                استكشف المزادات ←
+              </a>
+
+            </div>
+
+            <div
+              id="profile-my-auctions-list"
+              class="profile-auctions-list"
+            >
+
+              <div class="profile-empty-state">
+
+                <span aria-hidden="true">◇</span>
+
+                <h3>لا توجد مشاركات بعد</h3>
+
+                <p>
+                  ستظهر هنا المزادات التي
+                  شاركت فيها بحسابك.
+                </p>
+
+                <a href="auctions.html">
+                  استعراض المزادات ←
+                </a>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- NOTIFICATIONS -->
+
+          <section
+            id="profile-panel-notifications"
+            class="profile-panel"
+            data-profile-panel="notifications"
+            aria-labelledby="profile-notifications-heading"
+            hidden
+          >
+
+            <div class="profile-panel-heading">
+
+              <div>
+                <p class="section-label">
+                  تحديثات حسابك
+                </p>
+
+                <h2 id="profile-notifications-heading">
+                  الإشعارات
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                class="profile-mark-read-button"
+                id="profile-mark-all-read"
+              >
+                تحديد الكل كمقروء
+              </button>
+
+            </div>
+
+            <div
+              id="profile-notifications-list"
+              class="profile-notifications-list"
+              aria-live="polite"
+            >
+
+              <div class="profile-empty-state">
+
+                <span aria-hidden="true">✦</span>
+
+                <h3>لا توجد إشعارات جديدة</h3>
+
+                <p>
+                  ستظهر هنا تحديثات المزادات،
+                  والعروض ونتائج المشاركة.
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- MY REVIEWS -->
+
+          <section
+            id="profile-panel-reviews"
+            class="profile-panel"
+            data-profile-panel="reviews"
+            aria-labelledby="profile-reviews-heading"
+            hidden
+          >
+
+            <div class="profile-panel-heading">
+
+              <div>
+                <p class="section-label">
+                  تقييمات البائعين
+                </p>
+
+                <h2 id="profile-reviews-heading">
+                  تقييماتي
+                </h2>
+              </div>
+
+            </div>
+
+            <div
+              id="profile-reviews-list"
+              class="profile-reviews-list"
+            >
+
+              <div class="profile-empty-state">
+
+                <span aria-hidden="true">☆</span>
+
+                <h3>لم تضف أي تقييم بعد</h3>
+
+                <p>
+                  يمكنك تقييم البائع بعد
+                  تأكيد فوزك في أحد المزادات.
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- DISCOVER SECTION -->
+
+    <section class="profile-discover-section">
+
+      <div class="profile-discover-heading">
+
+        <p class="section-label">
+          اكتشف المزيد
+        </p>
+
+        <h2>
+          رحلتك في ألفاو مستمرة
+        </h2>
+
+        <p>
+          استكشف المقتنيات التراثية،
+          وتابع المزادات واكتشف البائعين.
+        </p>
+
+      </div>
+
+      <div class="profile-discover-grid">
+
+        <a href="browse.html" class="profile-discover-card">
+
+          <span aria-hidden="true">◈</span>
+
+          <h3>القطع الأثرية</h3>
+
+          <p>
+            تعرّف على القطع وتفاصيلها
+            التاريخية وحالة توثيقها.
+          </p>
+
+          <strong>استكشف ←</strong>
+
+        </a>
+
+        <a href="auctions.html" class="profile-discover-card">
+
+          <span aria-hidden="true">◇</span>
+
+          <h3>مزادات ألفاو</h3>
+
+          <p>
+            اطّلع على المزادات وأسعار
+            البداية ومعلومات المزايدة.
+          </p>
+
+          <strong>استكشف ←</strong>
+
+        </a>
+
+        <a href="seller-profile.html" class="profile-discover-card">
+
+          <span aria-hidden="true">✦</span>
+
+          <h3>البائعون</h3>
+
+          <p>
+            تصفّح ملفات البائعين
+            وتقييماتهم ومقتنياتهم.
+          </p>
+
+          <strong>استكشف ←</strong>
+
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="alfaw-footer">
+
+    <h2>ألفاو</h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+
+    <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+  </footer>
+
+</body>
+</html>

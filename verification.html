@@ -1,0 +1,768 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="تعرف على حالات توثيق المقتنيات التراثية في منصة ألفاو">
+
+  <title>التوثيق | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* =========================================
+       ALFAW — VERIFICATION PAGE
+       Standalone page styles
+    ========================================= */
+
+    .verification-page {
+      --verification-bg: #160b06;
+      --verification-card: #2c190e;
+      --verification-card-light: #422918;
+      --verification-gold: #b99b70;
+      --verification-cream: #f0dfc5;
+      --verification-muted: #c8b49a;
+
+      background:
+        radial-gradient(
+          circle at 50% 15%,
+          #402718 0%,
+          #211108 40%,
+          #130904 100%
+        );
+
+      color: var(--verification-cream);
+      min-height: 100vh;
+    }
+
+    .verification-page main {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* HERO */
+
+    .verification-hero {
+      position: relative;
+      width: min(1200px, calc(100% - 48px));
+      margin: 75px auto 65px;
+      padding: 85px 45px;
+
+      border: 1px solid rgba(185,155,112,.4);
+      border-radius: 30px;
+
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(185,155,112,.15),
+          transparent 60%
+        ),
+        linear-gradient(
+          135deg,
+          #432919,
+          #26150d 65%,
+          #1a0e08
+        );
+
+      text-align: center;
+      box-shadow: 0 25px 70px rgba(0,0,0,.22);
+    }
+
+    .verification-eyebrow {
+      display: inline-block;
+      color: var(--verification-gold);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      margin-bottom: 18px;
+    }
+
+    .verification-hero h1 {
+      margin: 0 0 20px;
+
+      color: var(--verification-cream);
+      font-family: var(--font-heritage, "Amiri", serif);
+      font-size: clamp(46px, 6vw, 86px);
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    .verification-hero h1 span {
+      color: var(--verification-gold);
+    }
+
+    .verification-divider {
+      width: 115px;
+      height: 2px;
+      margin: 0 auto 25px;
+
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--verification-gold),
+        transparent
+      );
+    }
+
+    .verification-hero p {
+      max-width: 740px;
+      margin: 0 auto 30px;
+      color: var(--verification-muted);
+      font-size: 17px;
+      line-height: 2.2;
+    }
+
+    .verification-primary-button,
+    .verification-outline-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      padding: 15px 30px;
+      border-radius: 100px;
+
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      transition:
+        background .25s ease,
+        transform .25s ease,
+        border-color .25s ease;
+    }
+
+    .verification-primary-button {
+      color: #1c1009;
+      background: var(--verification-gold);
+      border: 1px solid var(--verification-gold);
+    }
+
+    .verification-outline-button {
+      color: var(--verification-cream);
+      background: transparent;
+      border: 1px solid var(--verification-gold);
+    }
+
+    .verification-primary-button:hover,
+    .verification-outline-button:hover {
+      transform: translateY(-3px);
+    }
+
+    .verification-outline-button:hover {
+      background: rgba(185,155,112,.12);
+    }
+
+    /* SHARED SECTIONS */
+
+    .verification-section {
+      width: min(1200px, calc(100% - 48px));
+      margin: 0 auto 90px;
+    }
+
+    .verification-section-heading {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .verification-section-heading h2 {
+      margin: 0 0 12px;
+      font-family: var(--font-heritage, "Amiri", serif);
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 400;
+      color: var(--verification-cream);
+    }
+
+    .verification-section-heading p {
+      max-width: 680px;
+      margin: 0 auto;
+      color: var(--verification-muted);
+      line-height: 2;
+      font-size: 15px;
+    }
+
+    /* STATUS CARDS */
+
+    .verification-status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 22px;
+    }
+
+    .verification-status-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 350px;
+      padding: 32px 27px;
+
+      background: linear-gradient(
+        150deg,
+        #422919,
+        #2a180e 65%,
+        #201109
+      );
+
+      border: 1px solid rgba(185,155,112,.35);
+      border-radius: 23px;
+
+      box-shadow: 0 15px 38px rgba(0,0,0,.16);
+      transition:
+        transform .3s ease,
+        border-color .3s ease;
+    }
+
+    .verification-status-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--verification-gold);
+    }
+
+    .verification-status-number {
+      color: var(--verification-gold);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .verification-status-card h3 {
+      margin: 0 0 17px;
+
+      font-family: var(--font-heritage, "Amiri", serif);
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--verification-cream);
+    }
+
+    .verification-status-card p {
+      color: var(--verification-muted);
+      font-size: 14px;
+      line-height: 2;
+      margin: 0 0 25px;
+    }
+
+    .verification-status-card a {
+      align-self: flex-start;
+      margin-top: auto;
+      color: var(--verification-gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(185,155,112,.45);
+      padding-bottom: 5px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* PROCESS */
+
+    .verification-process {
+      padding: 48px 40px;
+
+      border: 1px solid rgba(185,155,112,.33);
+      border-radius: 26px;
+
+      background: linear-gradient(
+        135deg,
+        rgba(80,49,29,.6),
+        rgba(33,18,10,.9)
+      );
+    }
+
+    .verification-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 24px;
+    }
+
+    .verification-step {
+      padding: 25px;
+      border: 1px solid rgba(185,155,112,.22);
+      border-radius: 16px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .verification-step span {
+      display: inline-block;
+      color: var(--verification-gold);
+      font-size: 23px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .verification-step h3 {
+      margin: 0 0 12px;
+      color: var(--verification-cream);
+      font-size: 19px;
+    }
+
+    .verification-step p {
+      margin: 0;
+      color: var(--verification-muted);
+      line-height: 2;
+      font-size: 14px;
+    }
+
+    /* TRANSPARENCY NOTE */
+
+    .verification-notice {
+      position: relative;
+
+      padding: 45px;
+      border-radius: 24px;
+
+      background: linear-gradient(
+        135deg,
+        #432919,
+        #28170e
+      );
+
+      border: 1px solid rgba(185,155,112,.38);
+      text-align: center;
+    }
+
+    .verification-notice h2 {
+      margin: 0 0 15px;
+      font-family: var(--font-heritage, "Amiri", serif);
+      font-size: 38px;
+      font-weight: 400;
+    }
+
+    .verification-notice p {
+      max-width: 790px;
+      margin: 0 auto;
+      color: var(--verification-muted);
+      line-height: 2.2;
+      font-size: 15px;
+    }
+
+    /* BOTTOM CTA */
+
+    .verification-bottom-cta {
+      text-align: center;
+      margin-bottom: 100px;
+    }
+
+    .verification-bottom-cta h2 {
+      font-family: var(--font-heritage, "Amiri", serif);
+      font-size: 39px;
+      font-weight: 400;
+      margin: 0 0 12px;
+    }
+
+    .verification-bottom-cta p {
+      color: var(--verification-muted);
+      margin: 0 0 25px;
+      line-height: 2;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 900px) {
+      .verification-status-grid,
+      .verification-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .verification-status-card {
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .verification-hero {
+        width: calc(100% - 26px);
+        margin: 30px auto 55px;
+        padding: 55px 20px;
+      }
+
+      .verification-hero p {
+        font-size: 14px;
+      }
+
+      .verification-section {
+        width: calc(100% - 26px);
+        margin-bottom: 60px;
+      }
+
+      .verification-process {
+        padding: 23px 17px;
+      }
+
+      .verification-notice {
+        padding: 30px 22px;
+      }
+
+      .verification-notice h2 {
+        font-size: 30px;
+      }
+
+      .verification-bottom-cta {
+        margin-bottom: 65px;
+      }
+    }
+  </style>
+
+</head>
+
+<body class="verification-page">
+
+  
+<!-- HEADER -->
+
+<header class="site-header">
+
+  <a href="index.html" class="site-logo">
+    ألفاو
+  </a>
+
+  <nav class="site-nav"
+       aria-label="القائمة الرئيسية">
+
+    <a href="index.html" aria-current="page">
+      الرئيسية
+    </a>
+
+    <a href="browse.html">
+      القطع الأثرية
+    </a>
+
+    <a href="auctions.html">
+      المزادات
+    </a>
+
+    <a href="verification.html">
+      التوثيق
+    </a>
+
+    <a href="seller-profile.html">
+      البائعون
+    </a>
+
+    <a href="login.html">
+      دخول
+    </a>
+
+  </nav>
+
+</header>
+
+
+  <main>
+
+    <!-- =====================================
+         VERIFICATION HERO
+    ====================================== -->
+
+    <section class="verification-hero">
+
+      <span class="verification-eyebrow">
+        الثقة والشفافية في ألفاو
+      </span>
+
+      <h1>
+        التوثيق
+        <span>والأصالة</span>
+      </h1>
+
+      <div class="verification-divider"></div>
+
+      <p>
+        لكل قطعة تراثية حكاية تستحق أن تُروى بوضوح.
+        في ألفاو نتيح لك الاطلاع على حالة التوثيق
+        والمعلومات والمستندات المتوفرة عن المقتنيات،
+        لتتمكن من التعرف عليها قبل المشاركة في المزادات.
+      </p>
+
+      <a href="#verification-statuses"
+         class="verification-primary-button">
+        اكتشف حالات التوثيق ↓
+      </a>
+
+    </section>
+
+    <!-- =====================================
+         VERIFICATION STATUSES
+    ====================================== -->
+
+    <section
+      class="verification-section"
+      id="verification-statuses"
+    >
+
+      <div class="verification-section-heading">
+
+        <span class="verification-eyebrow">
+          حالات المقتنيات
+        </span>
+
+        <h2>
+          ماذا تعني حالة التوثيق؟
+        </h2>
+
+        <p>
+          تُعرض حالة كل قطعة بناءً على معلومات التوثيق
+          المتاحة في المنصة، حتى يتمكن المستخدم
+          من التمييز بين الحالات المختلفة.
+        </p>
+
+      </div>
+
+      <div class="verification-status-grid">
+
+        <!-- VERIFIED -->
+
+        <article class="verification-status-card">
+
+          <span class="verification-status-number">
+            01 / 03
+          </span>
+
+          <h3>
+            موثّقة
+          </h3>
+
+          <p>
+            تعني أن القطعة مسجلة في المنصة بحالة
+            «موثقة» بناءً على المعلومات أو المستندات
+            المرتبطة بسجلها. يمكنك مراجعة تفاصيلها
+            للاطلاع على ما يتوفر من مراجع ووثائق.
+            لا تُعد هذه الحالة وحدها شهادة أصالة رسمية.
+          </p>
+
+          <a href="browse.html?verification=verified">
+            استعرض القطع الموثّقة ←
+          </a>
+
+        </article>
+
+        <!-- PENDING -->
+
+        <article class="verification-status-card">
+
+          <span class="verification-status-number">
+            02 / 03
+          </span>
+
+          <h3>
+            قيد المراجعة
+          </h3>
+
+          <p>
+            تعني أن حالة توثيق القطعة لم تُحسم
+            بعد، وأن المعلومات أو المستندات
+            المرتبطة بها تحتاج إلى مراجعة
+            أو استكمال قبل تحديث حالة التوثيق.
+          </p>
+
+          <a href="browse.html?verification=pending">
+            استعرض القطع قيد المراجعة ←
+          </a>
+
+        </article>
+
+        <!-- UNVERIFIED -->
+
+        <article class="verification-status-card">
+
+          <span class="verification-status-number">
+            03 / 03
+          </span>
+
+          <h3>
+            غير موثّقة
+          </h3>
+
+          <p>
+            تعني أن القطعة لا تحمل حالة توثيق
+            معتمدة ضمن بيانات المنصة حاليًا.
+            وهذا لا يثبت أن القطعة غير أصلية،
+            لكنه يعني ضرورة مراجعة المعلومات
+            والتحقق بشكل مستقل قبل اتخاذ قرار.
+          </p>
+
+          <a href="browse.html?verification=unverified">
+            استعرض القطع غير الموثّقة ←
+          </a>
+
+        </article>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================
+         VERIFICATION INFORMATION
+    ====================================== -->
+
+    <section class="verification-section">
+
+      <div class="verification-process">
+
+        <div class="verification-section-heading">
+
+          <span class="verification-eyebrow">
+            الشفافية في عرض المعلومات
+          </span>
+
+          <h2>
+            كيف تتعرّف على حالة القطعة؟
+          </h2>
+
+          <p>
+            خطوات تساعدك على قراءة المعلومات
+            المتاحة داخل منصة ألفاو.
+          </p>
+
+        </div>
+
+        <div class="verification-steps">
+
+          <div class="verification-step">
+
+            <span>01</span>
+
+            <h3>
+              استكشف القطعة
+            </h3>
+
+            <p>
+              افتح صفحة المقتنى للاطلاع
+              على اسمه ووصفه ومعلوماته
+              الأساسية وصوره.
+            </p>
+
+          </div>
+
+          <div class="verification-step">
+
+            <span>02</span>
+
+            <h3>
+              راجع حالة التوثيق
+            </h3>
+
+            <p>
+              تحقق من الحالة المعروضة للقطعة،
+              سواء كانت موثقة أو قيد المراجعة
+              أو غير موثقة.
+            </p>
+
+          </div>
+
+          <div class="verification-step">
+
+            <span>03</span>
+
+            <h3>
+              اطّلع على المستندات
+            </h3>
+
+            <p>
+              راجع معلومات المصدر والمراجع
+              والوثائق المتاحة، ولا تعتمد
+              على حالة التوثيق وحدها
+              لإثبات الأصالة.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================
+         IMPORTANT NOTICE
+    ====================================== -->
+
+    <section class="verification-section">
+
+      <div class="verification-notice">
+
+        <span class="verification-eyebrow">
+          معلومة مهمة
+        </span>
+
+        <h2>
+          الشفافية قبل المزايدة
+        </h2>
+
+        <p>
+          منصة ألفاو مشروع رقمي لعرض المقتنيات
+          التراثية ومعلوماتها. لا تُجري المنصة
+          بنفسها الفحص الأثري ولا تصدر شهادات
+          أصالة رسمية. حالات التوثيق المعروضة
+          تعبّر عن البيانات المسجلة لكل قطعة،
+          ولا تمثّل بالضرورة اعتمادًا من جهة رسمية.
+          ويُنصح دائمًا بمراجعة المستندات
+          والتحقق من المصادر قبل المشاركة
+          في أي مزاد.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================
+         FINAL CTA
+    ====================================== -->
+
+    <section class="verification-bottom-cta">
+
+      <span class="verification-eyebrow">
+        اكتشف مجموعة ألفاو
+      </span>
+
+      <h2>
+        ابدأ رحلتك بين المقتنيات
+      </h2>
+
+      <p>
+        استكشف القطع التراثية وتعرّف
+        على تفاصيلها وحالات توثيقها.
+      </p>
+
+      <a href="browse.html"
+         class="verification-outline-button">
+        استعراض جميع القطع ←
+      </a>
+
+    </section>
+
+  </main>
+
+  <!-- =====================================
+       FOOTER
+  ====================================== -->
+
+  <footer class="alfaw-footer">
+
+    <h2>ألفاو</h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+
+    <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+  </footer>
+
+</body>
+</html>

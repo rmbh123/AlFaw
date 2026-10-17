@@ -1,0 +1,963 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="استكشف المزادات التراثية والمقتنيات التاريخية في منصة ألفاو"
+  >
+
+  <title>المزادات | ألفاو</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="browse-page auctions-page">
+
+  
+<!-- HEADER -->
+
+<header class="site-header">
+
+  <a href="index.html" class="site-logo">
+    ألفاو
+  </a>
+
+  <nav class="site-nav"
+       aria-label="القائمة الرئيسية">
+
+    <a href="index.html" aria-current="page">
+      الرئيسية
+    </a>
+
+    <a href="browse.html">
+      القطع الأثرية
+    </a>
+
+    <a href="auctions.html">
+      المزادات
+    </a>
+
+    <a href="verification.html">
+      التوثيق
+    </a>
+
+    <a href="seller-profile.html">
+      البائعون
+    </a>
+
+    <a href="login.html">
+      دخول
+    </a>
+
+  </nav>
+
+</header>
+
+
+  <main>
+
+    <!-- =====================================
+         HERO — FULL WIDTH
+    ====================================== -->
+
+    <section class="auctions-hero">
+
+      <div class="auctions-hero-inner">
+
+        <span class="section-label">
+          مزادات ألفاو
+        </span>
+
+        <h1 class="auctions-hero-title">
+          اكتشف عالم
+          <span>المزادات التراثية</span>
+        </h1>
+
+        <p class="auctions-hero-description">
+          كل قطعة تحمل حكاية من الماضي.
+          استكشف المقتنيات التراثية،
+          واطّلع على تفاصيلها وحالة توثيقها،
+          وشارك في المزادات المتاحة
+          بطريقة واضحة ومنظمة.
+        </p>
+
+        <div class="auctions-hero-actions">
+
+          <a
+            href="#auctions-cards"
+            class="hero-primary-button"
+          >
+            عرض المزادات ↓
+          </a>
+
+          <a
+            href="browse.html"
+            class="hero-secondary-button"
+          >
+            استعرض القطع ←
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================
+         AUCTION STATUSES — FULL WIDTH
+    ====================================== -->
+
+    <section
+      class="auctions-status-full"
+      id="auctions-list"
+      aria-labelledby="auction-status-title"
+    >
+
+      <div class="results-heading">
+
+        <div>
+
+          <span class="section-label">
+            المتاح الآن
+          </span>
+
+          <h2 id="auction-status-title">
+            حالات المزادات
+          </h2>
+
+        </div>
+
+        <span id="auction-count">
+          6 مزادات
+        </span>
+
+      </div>
+
+      <div class="auctions-status-row">
+
+        <!-- LIVE AUCTIONS -->
+
+        <div class="auction-status-box">
+
+          <strong>02</strong>
+
+          <span>
+            مزادات مباشرة
+          </span>
+
+        </div>
+
+        <!-- UPCOMING AUCTIONS -->
+
+        <div class="auction-status-box">
+
+          <strong>02</strong>
+
+          <span>
+            مزادات قريبة
+          </span>
+
+        </div>
+
+        <!-- CLOSED AUCTIONS -->
+
+        <div class="auction-status-box">
+
+          <strong>02</strong>
+
+          <span>
+            مزادات منتهية
+          </span>
+
+        </div>
+
+      </div>
+
+      <!-- ===================================
+           LOGIN STRIP
+           SAME WIDTH AS STATUS CARDS
+      ==================================== -->
+
+      <div class="auctions-login-strip">
+
+        <div>
+
+          <span class="section-label">
+            خطوة مهمة
+          </span>
+
+          <h3>
+            سجّل دخولك وابدأ المزايدة
+          </h3>
+
+          <p>
+            لمتابعة العروض، ومشاهدة السجل،
+            وتقديم مزايدتك بسهولة داخل المنصة.
+          </p>
+
+        </div>
+
+        <a
+          href="login.html"
+          class="auctions-login-button"
+        >
+          تسجيل الدخول
+        </a>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================
+         AUCTIONS CARDS + SIDEBAR
+    ====================================== -->
+
+    <section
+      class="auctions-main"
+      id="auctions-cards"
+      aria-label="استكشاف المزادات"
+    >
+
+      <!-- ===================================
+           RIGHT SIDEBAR
+           SEARCH + FILTERS ONLY
+      ==================================== -->
+
+      <aside
+        class="auctions-sidebar"
+        aria-label="البحث والتصفية"
+      >
+
+        <div class="auction-search-card">
+
+          <span class="section-label">
+            خيارات العرض
+          </span>
+
+          <h2>
+            البحث والتصفية
+          </h2>
+
+          <div class="auction-search-divider"></div>
+
+          <!-- SEARCH -->
+
+          <form
+            class="auction-search-form"
+            id="auction-search-form"
+            role="search"
+          >
+
+            <div class="auction-form-group">
+
+              <label for="auction-search-input">
+                ابحث عن مزاد
+              </label>
+
+              <input
+                type="search"
+                id="auction-search-input"
+                placeholder="اسم القطعة أو رقم المزاد"
+                autocomplete="off"
+              >
+
+            </div>
+
+            <button
+              type="submit"
+              class="auction-search-button"
+            >
+              بحث
+            </button>
+
+          </form>
+
+          <!-- STATUS FILTER -->
+
+          <div class="auction-filter-group">
+
+            <label for="auction-status-filter">
+              حالة المزاد
+            </label>
+
+            <select id="auction-status-filter">
+
+              <option value="all">
+                جميع المزادات
+              </option>
+
+              <option value="live">
+                مباشر الآن
+              </option>
+
+              <option value="upcoming">
+                قريبًا
+              </option>
+
+              <option value="closed">
+                منتهي
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- SORT FILTER -->
+
+          <div class="auction-filter-group">
+
+            <label for="auction-sort-filter">
+              ترتيب المزادات
+            </label>
+
+            <select id="auction-sort-filter">
+
+              <option value="ending-soon">
+                الترتيب الافتراضي
+              </option>
+
+              <option value="highest-bid">
+                الأعلى سعرًا
+              </option>
+
+              <option value="lowest-bid">
+                الأقل سعرًا
+              </option>
+
+              <option value="name">
+                اسم القطعة
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- RESET -->
+
+          <button
+            type="button"
+            class="auction-reset-button"
+            id="auction-reset-button"
+          >
+            إعادة ضبط التصفية
+          </button>
+
+          <!-- FILTER NOTE -->
+
+          <div class="auction-search-note">
+
+            <span aria-hidden="true">
+              ✦
+            </span>
+
+            <p>
+              اطّلع على تفاصيل القطعة
+              وحالة توثيقها قبل تقديم أي عرض.
+            </p>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+      <!-- ===================================
+           AUCTION RESULTS
+      ==================================== -->
+
+      <section
+        class="auctions-results"
+        aria-labelledby="auctions-results-title"
+      >
+
+        <div class="results-heading">
+
+          <div>
+
+            <span class="section-label">
+              المقتنيات التراثية
+            </span>
+
+            <h2 id="auctions-results-title">
+              استكشف المزادات
+            </h2>
+
+          </div>
+
+        </div>
+
+        <!-- ===================================
+             AUCTION CARDS
+        ==================================== -->
+
+        <div
+          class="auction-grid"
+          id="auction-grid"
+          aria-live="polite"
+        >
+
+          <!-- CARD 1 -->
+
+          <article
+            class="auction-card"
+            data-name="عملة تاريخية"
+            data-status="live"
+            data-price="9200"
+          >
+
+            <div class="auction-card-image">
+
+              <img
+                src="coin.jpg"
+                alt="عملة تاريخية"
+                loading="lazy"
+              >
+
+              <span class="auction-badge live">
+                مباشر الآن
+              </span>
+
+            </div>
+
+            <div class="auction-card-content">
+
+              <span class="auction-card-category">
+                مزاد رقم AUC-001
+              </span>
+
+              <h3>
+                عملة تاريخية
+              </h3>
+
+              <p>
+                قطعة بطابع تراثي مع مزاد نشط
+                ومزايدات جارية حاليًا.
+              </p>
+
+              <div class="auction-meta">
+
+                <div>
+                  <span>أعلى عرض</span>
+                  <strong>9,200 ريال</strong>
+                </div>
+
+                <div>
+                  <span>ينتهي خلال</span>
+                  <strong>02:14:56</strong>
+                </div>
+
+              </div>
+
+              <div class="auction-card-actions">
+
+                <a
+                  href="auction-detail.html?id=auction-004"
+                  class="auction-card-button"
+                >
+                  عرض المزاد
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- CARD 2 -->
+
+          <article
+            class="auction-card"
+            data-name="إناء فخاري تراثي"
+            data-status="upcoming"
+            data-price="6500"
+          >
+
+            <div class="auction-card-image">
+
+              <img
+                src="pottery.jpg"
+                alt="إناء فخاري تراثي"
+                loading="lazy"
+              >
+
+              <span class="auction-badge upcoming">
+                قريبًا
+              </span>
+
+            </div>
+
+            <div class="auction-card-content">
+
+              <span class="auction-card-category">
+                مزاد رقم AUC-002
+              </span>
+
+              <h3>
+                إناء فخاري تراثي
+              </h3>
+
+              <p>
+                قطعة فخارية مزخرفة ستبدأ
+                المزايدة عليها قريبًا.
+              </p>
+
+              <div class="auction-meta">
+
+                <div>
+                  <span>السعر الافتتاحي</span>
+                  <strong>6,500 ريال</strong>
+                </div>
+
+                <div>
+                  <span>يبدأ خلال</span>
+                  <strong>غدًا 08:00 م</strong>
+                </div>
+
+              </div>
+
+              <div class="auction-card-actions">
+
+                <a
+                  href="auction-detail.html?id=auction-005"
+                  class="auction-card-button"
+                >
+                  عرض المزاد
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- CARD 3 -->
+
+          <article
+            class="auction-card"
+            data-name="مخطوطة تاريخية"
+            data-status="live"
+            data-price="27000"
+          >
+
+            <div class="auction-card-image">
+
+              <img
+                src="manuscript.jpg"
+                alt="مخطوطة تاريخية"
+                loading="lazy"
+              >
+
+              <span class="auction-badge live">
+                مباشر الآن
+              </span>
+
+            </div>
+
+            <div class="auction-card-content">
+
+              <span class="auction-card-category">
+                مزاد رقم AUC-003
+              </span>
+
+              <h3>
+                مخطوطة تاريخية
+              </h3>
+
+              <p>
+                مخطوطة تراثية مزخرفة ضمن
+                مزاد نشط بعروض متتابعة.
+              </p>
+
+              <div class="auction-meta">
+
+                <div>
+                  <span>أعلى عرض</span>
+                  <strong>27,000 ريال</strong>
+                </div>
+
+                <div>
+                  <span>ينتهي خلال</span>
+                  <strong>01:08:12</strong>
+                </div>
+
+              </div>
+
+              <div class="auction-card-actions">
+
+                <a
+                  href="auction-detail.html?id=auction-003"
+                  class="auction-card-button"
+                >
+                  عرض المزاد
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- CARD 4 -->
+
+          <article
+            class="auction-card"
+            data-name="حلية تراثية"
+            data-status="upcoming"
+            data-price="15000"
+          >
+
+            <div class="auction-card-image">
+
+              <img
+                src="jewelry.jpg"
+                alt="حلية تراثية"
+                loading="lazy"
+              >
+
+              <span class="auction-badge upcoming">
+                قريبًا
+              </span>
+
+            </div>
+
+            <div class="auction-card-content">
+
+              <span class="auction-card-category">
+                مزاد رقم AUC-004
+              </span>
+
+              <h3>
+                حلية تراثية
+              </h3>
+
+              <p>
+                قطعة حُلي مستوحاة من التراث
+                العربي ستُطرح قريبًا.
+              </p>
+
+              <div class="auction-meta">
+
+                <div>
+                  <span>السعر الافتتاحي</span>
+                  <strong>15,000 ريال</strong>
+                </div>
+
+                <div>
+                  <span>يبدأ خلال</span>
+                  <strong>بعد 3 أيام</strong>
+                </div>
+
+              </div>
+
+              <div class="auction-card-actions">
+
+                <a
+                  href="auction-detail.html?id=auction-006"
+                  class="auction-card-button"
+                >
+                  عرض المزاد
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- CARD 5 -->
+
+          <article
+            class="auction-card"
+            data-name="خنجر تراثي"
+            data-status="closed"
+            data-price="12500"
+          >
+
+            <div class="auction-card-image">
+
+              <img
+                src="dagger.jpg"
+                alt="خنجر تراثي"
+                loading="lazy"
+              >
+
+              <span class="auction-badge closed">
+                منتهي
+              </span>
+
+            </div>
+
+            <div class="auction-card-content">
+
+              <span class="auction-card-category">
+                مزاد رقم AUC-005
+              </span>
+
+              <h3>
+                خنجر تراثي
+              </h3>
+
+              <p>
+                مزاد سابق على خنجر تراثي
+                مزخرف بتفاصيل تقليدية.
+              </p>
+
+              <div class="auction-meta">
+
+                <div>
+                  <span>آخر عرض</span>
+                  <strong>12,500 ريال</strong>
+                </div>
+
+                <div>
+                  <span>الحالة</span>
+                  <strong>تم الإغلاق</strong>
+                </div>
+
+              </div>
+
+              <div class="auction-card-actions">
+
+                <a
+                  href="auction-detail.html?id=auction-001"
+                  class="auction-card-button"
+                >
+                  عرض المزاد
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- CARD 6 -->
+
+          <article
+            class="auction-card"
+            data-name="عملة فضية تاريخية"
+            data-status="closed"
+            data-price="9800"
+          >
+
+            <div class="auction-card-image">
+
+              <img
+                src="silver-coin.jpg"
+                alt="عملة فضية تاريخية"
+                loading="lazy"
+              >
+
+              <span class="auction-badge closed">
+                منتهي
+              </span>
+
+            </div>
+
+            <div class="auction-card-content">
+
+              <span class="auction-card-category">
+                مزاد رقم AUC-006
+              </span>
+
+              <h3>
+                عملة فضية تاريخية
+              </h3>
+
+              <p>
+                عملة فضية قديمة أُغلق
+                المزاد الخاص بها بعد انتهاء الوقت.
+              </p>
+
+              <div class="auction-meta">
+
+                <div>
+                  <span>آخر عرض</span>
+                  <strong>9,800 ريال</strong>
+                </div>
+
+                <div>
+                  <span>الحالة</span>
+                  <strong>تم الإغلاق</strong>
+                </div>
+
+              </div>
+
+              <div class="auction-card-actions">
+
+                <a
+                  href="auction-detail.html?id=auction-002"
+                  class="auction-card-button"
+                >
+                  عرض المزاد
+                </a>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    </section>
+
+    <!-- =====================================
+         RULES CARD — BELOW ALL AUCTIONS
+    ====================================== -->
+
+    <section
+      class="auction-rules-card"
+      aria-labelledby="auction-rules-title"
+    >
+
+      <div class="auction-rules-header">
+
+        <span class="auction-rules-eyebrow">
+          دليل المشاركة
+        </span>
+
+        <h2 id="auction-rules-title">
+          قواعد مهمة قبل المزايدة
+        </h2>
+
+        <div class="auction-rules-divider"></div>
+
+      </div>
+
+      <ul class="auction-rules-list">
+
+        <li>
+          <span
+            class="auction-rule-icon"
+            aria-hidden="true"
+          >
+            01
+          </span>
+
+          <span>
+            المشاركة في المزايدة تتطلب تسجيل الدخول.
+          </span>
+        </li>
+
+        <li>
+          <span
+            class="auction-rule-icon"
+            aria-hidden="true"
+          >
+            02
+          </span>
+
+          <span>
+            يجب أن يساوي العرض الحد الأدنى
+            المطلوب أو يتجاوزه.
+          </span>
+        </li>
+
+        <li>
+          <span
+            class="auction-rule-icon"
+            aria-hidden="true"
+          >
+            03
+          </span>
+
+          <span>
+            لا يمكن تقديم عرض بعد انتهاء المزاد.
+          </span>
+        </li>
+
+        <li>
+          <span
+            class="auction-rule-icon"
+            aria-hidden="true"
+          >
+            04
+          </span>
+
+          <span>
+            لا يحق للبائع المزايدة على قطعته الخاصة.
+          </span>
+        </li>
+
+        <li>
+          <span
+            class="auction-rule-icon"
+            aria-hidden="true"
+          >
+            05
+          </span>
+
+          <span>
+            السعر الاحتياطي، إن وُجد، هو الحد
+            الذي يحدده البائع لقبول نتيجة المزاد.
+          </span>
+        </li>
+
+        <li>
+          <span
+            class="auction-rule-icon"
+            aria-hidden="true"
+          >
+            06
+          </span>
+
+          <span>
+            راجع معلومات القطعة وحالة توثيقها،
+            واحرص على حماية بيانات حسابك.
+          </span>
+        </li>
+
+      </ul>
+
+    </section>
+
+  </main>
+
+  <!-- =====================================
+       FOOTER
+  ====================================== -->
+
+  <footer class="alfaw-footer">
+
+    <h2>
+      ألفاو
+    </h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+    <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+  </footer>
+
+</body>
+</html>
