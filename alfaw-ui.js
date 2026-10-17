@@ -1,5 +1,20 @@
 "use strict";
 
+// Ensure the removed bidding-guide entry never appears in any navigation bar.
+// Keep the bidding guide content reachable from its existing non-navigation links.
+(() => {
+  const removeLegacyGuideNavLinks = () => {
+    document.querySelectorAll('header a, nav a, [role="navigation"] a').forEach(link => {
+      if (link.textContent.trim() === 'دليل المزايدة' || /(?:^|\/)bidding-guide\.html(?:[?#]|$)/.test(link.getAttribute('href') || '')) link.remove();
+    });
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', removeLegacyGuideNavLinks, { once: true });
+  } else {
+    removeLegacyGuideNavLinks();
+  }
+})();
+
 /* Shared accessible menu and scroll reveals. Does not change auction, login,
    registration, verification or dashboard data flows. */
 (() => {
