@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="اكتشف المقتنيات التراثية في منصة ألفاو">
+  <title>استكشف المقتنيات | ألفاو</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body class="browse-page">
+
+  <header class="site-header inner-header">
+    <a href="index.html" class="site-logo">ألفاو</a>
+
+    <nav class="site-nav" aria-label="القائمة الرئيسية">
+      <a href="index.html">الرئيسية</a>
+      <a href="browse.html" aria-current="page">القطع الأثرية</a>
+      <a href="auctions.html">المزادات</a>
+      <a href="browse.html?verification=verified">التوثيق</a>
+      <a href="seller-profile.html">البائعون</a>
+      <a href="login.html">دخول</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="collection-hero">
+      <div class="collection-hero-decoration" aria-hidden="true">✦</div>
+
+      <div class="collection-hero-content">
+        <span class="collection-eyebrow">مجموعة ألفاو</span>
+
+        <h1>استكشف <span>المقتنيات</span></h1>
+
+        <div class="collection-gold-line"></div>
+
+        <p>
+          رحلة بين صفحات التاريخ، ومقتنيات تحمل قصصًا من تراثنا.
+          اكتشف القطع المعروضة، وتعرّف على تفاصيلها وحالة توثيقها.
+        </p>
+
+        <div class="collection-actions">
+          <a class="collection-button" href="#artifacts">
+            استكشف القطع ↓
+          </a>
+
+          <a class="collection-button collection-button-outline"
+             href="auctions.html">
+            مشاهدة المزادات ←
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="browse-search-section" id="artifacts">
+      <form class="artifact-search" id="artifact-search">
+        <label class="visually-hidden" for="artifact-search-input">
+          البحث عن قطعة أثرية
+        </label>
+
+        <input
+          type="search"
+          id="artifact-search-input"
+          placeholder="ابحث عن عملة، مخطوطة، فخار..."
+        >
+
+        <button type="submit">بحث</button>
+      </form>
+    </section>
+
+    <section class="browse-content">
+
+      <aside class="browse-filters">
+        <h2>تصفية المقتنيات</h2>
+
+        <div class="filter-group">
+          <label for="category-filter">نوع القطعة</label>
+          <select id="category-filter">
+            <option value="all">جميع الأنواع</option>
+            <option value="coins">العملات</option>
+            <option value="pottery">الفخار</option>
+            <option value="manuscripts">المخطوطات</option>
+            <option value="jewelry">الحُلي</option>
+            <option value="weapons">المقتنيات المعدنية</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="verification-filter">حالة التوثيق</label>
+          <select id="verification-filter">
+            <option value="all">جميع الحالات</option>
+            <option value="verified">موثقة</option>
+            <option value="pending">قيد المراجعة</option>
+            <option value="unverified">غير موثقة</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="price-filter">نطاق السعر</label>
+          <select id="price-filter">
+            <option value="all">جميع الأسعار</option>
+            <option value="under5000">أقل من 5,000 ريال</option>
+            <option value="5000to15000">5,000 – 15,000 ريال</option>
+            <option value="over15000">أكثر من 15,000 ريال</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="sort-filter">ترتيب حسب</label>
+          <select id="sort-filter">
+            <option value="default">الترتيب الافتراضي</option>
+            <option value="price-low">الأقل سعرًا</option>
+            <option value="price-high">الأعلى سعرًا</option>
+            <option value="name">اسم القطعة</option>
+          </select>
+        </div>
+
+        <button type="button" class="clear-filters" id="clear-filters">
+          مسح التصفية
+        </button>
+      </aside>
+
+      <div class="browse-results">
+
+        <div class="results-heading">
+          <div>
+            <span class="collection-eyebrow">من مجموعتنا</span>
+            <h2>مقتنيات ألفاو</h2>
+          </div>
+
+          <span id="artifact-count">6 قطع أثرية</span>
+        </div>
+
+        <div class="browse-grid" id="browse-grid">
+
+          <article class="browse-artifact-card"
+            data-name="عملة تاريخية"
+            data-category="coins"
+            data-verification="unverified"
+            data-price="8000">
+
+            <div class="browse-artifact-image">
+              <img src="coin.jpg" alt="عملة تاريخية">
+              <span class="pending-badge">غير موثقة</span>
+            </div>
+
+            <div class="browse-card-content">
+              <span class="artifact-category">العملات التاريخية</span>
+              <h3>عملة تاريخية</h3>
+              <p class="artifact-description">
+                عملة بطابع تراثي ونقوش مستوحاة من المسكوكات القديمة.
+              </p>
+              <span class="price-label">السعر المبدئي</span>
+              <strong class="artifact-price">8,000 ريال</strong>
+
+              <div class="artifact-card-footer">
+                <span>artifact-001</span>
+                <a class="collection-card-button"
+                  href="artifact-detail.html?id=artifact-001">
+                  عرض التفاصيل ←
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="browse-artifact-card"
+            data-name="إناء فخاري تراثي"
+            data-category="pottery"
+            data-verification="pending"
+            data-price="6500">
+
+            <div class="browse-artifact-image">
+              <img src="pottery.jpg" alt="إناء فخاري تراثي">
+              <span class="pending-badge">قيد المراجعة</span>
+            </div>
+
+            <div class="browse-card-content">
+              <span class="artifact-category">الفخار</span>
+              <h3>إناء فخاري تراثي</h3>
+              <p class="artifact-description">
+                إناء مزخرف مستوحى من الحرف التقليدية القديمة.
+              </p>
+              <span class="price-label">السعر المبدئي</span>
+              <strong class="artifact-price">6,500 ريال</strong>
+
+              <div class="artifact-card-footer">
+                <span>artifact-002</span>
+                <a class="collection-card-button"
+                  href="artifact-detail.html?id=artifact-002">
+                  عرض التفاصيل ←
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="browse-artifact-card"
+            data-name="مخطوطة تاريخية"
+            data-category="manuscripts"
+            data-verification="pending"
+            data-price="25000">
+
+            <div class="browse-artifact-image">
+              <img src="manuscript.jpg" alt="مخطوطة تاريخية مصورة">
+              <span class="pending-badge">قيد المراجعة</span>
+            </div>
+
+            <div class="browse-card-content">
+              <span class="artifact-category">المخطوطات</span>
+              <h3>مخطوطة تاريخية</h3>
+              <p class="artifact-description">
+                مخطوطة مزخرفة مستوحاة من فنون الكتب القديمة.
+              </p>
+              <span class="price-label">السعر المبدئي</span>
+              <strong class="artifact-price">25,000 ريال</strong>
+
+              <div class="artifact-card-footer">
+                <span>artifact-003</span>
+                <a class="collection-card-button"
+                  href="artifact-detail.html?id=artifact-003">
+                  عرض التفاصيل ←
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="browse-artifact-card"
+            data-name="حلية تراثية"
+            data-category="jewelry"
+            data-verification="unverified"
+            data-price="15000">
+
+            <div class="browse-artifact-image">
+              <img src="jewelry.jpg" alt="حلية تراثية">
+              <span class="pending-badge">غير موثقة</span>
+            </div>
+
+            <div class="browse-card-content">
+              <span class="artifact-category">الحُلي والمجوهرات</span>
+              <h3>حلية تراثية</h3>
+              <p class="artifact-description">
+                حُلي بزخارف وألوان مستوحاة من التراث العربي.
+              </p>
+              <span class="price-label">السعر المبدئي</span>
+              <strong class="artifact-price">15,000 ريال</strong>
+
+              <div class="artifact-card-footer">
+                <span>artifact-004</span>
+                <a class="collection-card-button"
+                  href="artifact-detail.html?id=artifact-004">
+                  عرض التفاصيل ←
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="browse-artifact-card"
+            data-name="خنجر تراثي"
+            data-category="weapons"
+            data-verification="pending"
+            data-price="12000">
+
+            <div class="browse-artifact-image">
+              <img src="dagger.jpg" alt="خنجر تراثي">
+              <span class="pending-badge">قيد المراجعة</span>
+            </div>
+
+            <div class="browse-card-content">
+              <span class="artifact-category">المقتنيات التقليدية</span>
+              <h3>خنجر تراثي</h3>
+              <p class="artifact-description">
+                خنجر مزخرف بتفاصيل مستوحاة من صناعة المعادن القديمة.
+              </p>
+              <span class="price-label">السعر المبدئي</span>
+              <strong class="artifact-price">12,000 ريال</strong>
+
+              <div class="artifact-card-footer">
+                <span>artifact-005</span>
+                <a class="collection-card-button"
+                  href="artifact-detail.html?id=artifact-005">
+                  عرض التفاصيل ←
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="browse-artifact-card"
+            data-name="عملة فضية تاريخية"
+            data-category="coins"
+            data-verification="unverified"
+            data-price="9000">
+
+            <div class="browse-artifact-image">
+              <img src="silver-coin.jpg" alt="عملة فضية تاريخية">
+              <span class="pending-badge">غير موثقة</span>
+            </div>
+
+            <div class="browse-card-content">
+              <span class="artifact-category">العملات التاريخية</span>
+              <h3>عملة فضية تاريخية</h3>
+              <p class="artifact-description">
+                عملة فضية بنقوش مستوحاة من المسكوكات القديمة.
+              </p>
+              <span class="price-label">السعر المبدئي</span>
+              <strong class="artifact-price">9,000 ريال</strong>
+
+              <div class="artifact-card-footer">
+                <span>artifact-006</span>
+                <a class="collection-card-button"
+                  href="artifact-detail.html?id=artifact-006">
+                  عرض التفاصيل ←
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="no-artifacts" id="no-artifacts" hidden>
+          لا توجد قطع مطابقة للبحث الحالي.
+        </p>
+
+      </div>
+    </section>
+
+    <section class="collection-verification">
+      <div class="collection-verification-icon" aria-hidden="true">✧</div>
+
+      <div class="collection-verification-content">
+        <span class="collection-eyebrow">الشفافية أولًا</span>
+
+        <h2>تعرّف على حالة <span>توثيق القطعة</span></h2>
+
+        <p>
+          تعرض منصة ألفاو حالة التوثيق والمعلومات المتاحة
+          عن المقتنيات قبل المشاركة في المزاد، حتى يتمكن
+          المهتم من الاطلاع على التفاصيل بوضوح.
+        </p>
+
+        <p>
+          لا تقوم المنصة بنفسها بإجراء التحقق الأثري
+          أو إصدار شهادات الأصالة. وتُعرض حالات التوثيق
+          وفق المعلومات والمستندات المتوفرة لكل قطعة.
+        </p>
+
+        <a href="browse.html?verification=verified"
+           class="collection-button collection-button-outline">
+          استعراض القطع حسب حالة التوثيق ←
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="alfaw-footer">
+    <h2>ألفاو</h2>
+    <p>من إرث الماضي، نصنع صلة بالمستقبل.</p>
+
+    <div class="footer-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="browse.html">القطع الأثرية</a>
+      <a href="auctions.html">المزادات</a>
+      <a href="seller-profile.html">البائعون</a>
+    </div>
+
+     <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+  </footer>
+
+</body>
+</html>
