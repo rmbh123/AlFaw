@@ -200,3 +200,69 @@ if (document.body.classList.contains('sellers-page')) {
     if (label.textContent.includes('تعرّف على البائعين')) label.remove();
   });
 }
+
+
+/* ALFAW MOTION SUITE — progressive enhancement; no layout/interaction changes. */
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const motionAllowed = () => !reduce.matches;
+  const itemSelector = '.browse-artifact-card, .seller-artifact-card, .seller-auction-card, .auction-card, .seller-card, .verification-status-card, .login-explore-card, .register-help-card';
+  const items = [...document.querySelectorAll(itemSelector)];
+  items.forEach(card => card.classList.add('alfaw-motion-card'));
+
+  // Gentle border tracing and gallery illumination, only on pointing devices.
+  if (finePointer) {
+    items.forEach(card => {
+      card.addEventListener('pointermove', event => {
+        if (!motionAllowed()) return;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--alfaw-pointer-x', ((event.clientX-rect.left)/rect.width*100).toFixed(1)+'%');
+        card.style.setProperty('--alfaw-pointer-y', ((event.clientY-rect.top)/rect.height*100).toFixed(1)+'%');
+      }, {passive:true});
+    });
+  }
+
+  // Subtle entrance sequence. No hide-until-observed state: content remains
+  // legible if observers fail or the user prefers reduced movement.
+  if ('IntersectionObserver' in window && motionAllowed()) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('alfaw-motion-seen');
+        obs.unobserve(entry.target);
+      });
+    }, {threshold:0.08, rootMargin:'0px 0px -20px 0px'});
+    document.querySelectorAll('body:not(.home-page) main :is(.seller-section-heading,.sellers-results-heading,.results-heading,.verification-status-card,.browse-artifact-card,.seller-card,.auction-card,.seller-artifact-card,.seller-auction-card,.login-explore-card,.register-help-card)').forEach((el, index) => {
+      el.classList.add('alfaw-motion-reveal');
+      el.style.setProperty('--alfaw-motion-delay',(index%4*65)+'ms');
+      observer.observe(el);
+    });
+  }
+
+  // Heritage headline mask accent, not a typing animation or replacement text.
+  document.querySelectorAll('body:not(.home-page) main :is(.collection-hero h1,.auctions-hero h1,.verification-hero h1,.sellers-hero h1,.sellers-section-heading h2,.seller-section-heading h2,.login-form-heading h2,.register-form-heading h2)').forEach(el => {
+    el.classList.add('alfaw-motion-heading');
+  });
+
+  // A one-time emblem highlight, avoiding continuous distracting motion.
+  document.querySelectorAll('.site-logo-mark').forEach(el => el.classList.add('alfaw-motion-emblem'));
+
+  // Animate only authentic auction value changes (never invent bid updates).
+  const priceSelector = '.auction-current-bid, .auction-highest-bid, [id="auction-current-bid"], [id="auction-highest-bid"]';
+  document.querySelectorAll(priceSelector).forEach(el => {
+    let previous = el.textContent.trim();
+    let initialized = false;
+    const observer = new MutationObserver(() => {
+      const next = el.textContent.trim();
+      if (next === previous) return;
+      previous = next;
+      if (!initialized) { initialized = true; return; }
+      if (!motionAllowed()) return;
+      el.classList.remove('alfaw-bid-changed');
+      void el.offsetWidth;
+      el.classList.add('alfaw-bid-changed');
+    });
+    observer.observe(el,{subtree:true,characterData:true,childList:true});
+  });
+})();
