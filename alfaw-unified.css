@@ -1035,3 +1035,57 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
   .seller-detail-page .seller-detail-avatar { flex-basis: 75px; width: 75px; height: 75px; }
   .seller-detail-page .seller-detail-view-items { width: 100%; }
 }
+
+/* Seller detail — consistent editorial grid and vertical rhythm across all sections. */
+.seller-detail-page :is(.seller-about-section,.seller-artifacts-section,.seller-auctions-section,.seller-trust-section,.seller-reviews-section) {
+  width: 100%; max-width: none; margin: 45px 0 0; padding: 0; min-width: 0;
+}
+.seller-detail-page .seller-section-heading { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin: 0 0 20px; text-align: right; }
+.seller-detail-page .seller-section-heading > div { min-width: 0; }
+.seller-detail-page .seller-section-heading .section-label { color: #cfaa78; font-size: 13px; margin: 0 0 6px; }
+.seller-detail-page .seller-section-heading h2 { font-family: var(--font-heritage); font-size: clamp(27px, 3vw, 39px); line-height: 1.5; color: #f1e1c7; margin: 0 0 5px; }
+.seller-detail-page .seller-section-heading p:not(.section-label) { font-size: 15px; color: #d3bea2; line-height: 1.85; margin: 0; }
+.seller-detail-page .seller-about-layout { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,.9fr); gap: 20px; align-items: stretch; }
+.seller-detail-page :is(.seller-about-content,.seller-about-info) { min-width: 0; padding: 26px; border-radius: 18px; background: linear-gradient(145deg,#322014,#29180f); border: 1px solid rgba(184,155,115,.38); }
+.seller-detail-page :is(.seller-about-content,.seller-about-info) h3 { color: #eddbbd; font-size: 18px; margin: 0 0 14px; }
+.seller-detail-page .seller-about-content h3:not(:first-child) { margin-top: 22px; }
+.seller-detail-page .seller-about-content p { color: #d6c2a9; line-height: 1.9; margin: 0; }
+.seller-detail-page .seller-about-info-row { display: flex; gap: 20px; justify-content: space-between; align-items: baseline; padding: 11px 0; border-bottom: 1px solid rgba(184,155,115,.18); }
+.seller-detail-page .seller-about-info-row:last-child { border-bottom: 0; }
+.seller-detail-page .seller-about-info-row span { color: #c9b394; }
+.seller-detail-page .seller-about-info-row strong { color: #f0debf; text-align: left; overflow-wrap: anywhere; font-size: 14px; }
+.seller-detail-page :is(.seller-artifacts-grid,.seller-auctions-grid) { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; align-items: stretch; }
+.seller-detail-page :is(.seller-artifact-card,.seller-auction-card) { min-width: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(184,155,115,.4); border-radius: 18px; background: #301d12; }
+.seller-detail-page :is(.seller-artifact-image,.seller-auction-image) { height: 230px; position: relative; background: #24150d; display: grid; place-items: center; overflow: hidden; }
+.seller-detail-page :is(.seller-artifact-image,.seller-auction-image) img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
+.seller-detail-page :is(.seller-artifact-content,.seller-auction-content) { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: 23px; text-align: right; }
+.seller-detail-page :is(.seller-artifact-content,.seller-auction-content) h3 { color: #f1dfbf; font-size: 20px; margin: 0; }
+.seller-detail-page :is(.seller-artifact-content,.seller-auction-content) p { color: #d1bfa6; line-height: 1.75; margin: 0; }
+.seller-detail-page :is(.seller-artifact-content,.seller-auction-content) a { display: inline-flex; align-items: center; margin-top: auto; padding-top: 14px; color: #d9b77d; font-weight: 700; text-decoration: none; }
+.seller-detail-page :is(.seller-artifact-price,.seller-auction-info) { margin: 8px 0; }
+.seller-detail-page .seller-trust-layout { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(230px,.7fr); align-items: center; gap: 30px; border-radius: 20px; background: linear-gradient(125deg,#382316,#28170d); border: 1px solid rgba(184,155,115,.4); padding: 33px; }
+.seller-detail-page .seller-trust-content { min-width: 0; }
+.seller-detail-page .seller-trust-content h2 { font-family: var(--font-heritage); font-size: clamp(27px,3vw,36px); color: #f1dfbf; margin: 8px 0 13px; }
+.seller-detail-page .seller-trust-content p { color: #d8c2a6; line-height: 1.8; }
+.seller-detail-page .seller-trust-indicator { display: grid; place-items: center; gap: 16px; text-align: center; }
+.seller-detail-page .seller-trust-circle { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 165px; height: 165px; border-radius: 50%; border: 1px solid #c1a173; background: #332014; }
+.seller-detail-page .seller-rating-summary { display: grid; grid-template-columns: minmax(220px,.8fr) minmax(0,1.5fr); align-items: center; gap: 35px; border: 1px solid rgba(184,155,115,.36); border-radius: 18px; padding: 29px; background: #301d12; }
+.seller-detail-page .seller-rating-bars { min-width: 0; }
+.seller-detail-page .seller-rating-bar-row { display: grid; grid-template-columns: 70px minmax(0,1fr) 30px; gap: 12px; align-items: center; margin-bottom: 11px; }
+.seller-detail-page .seller-rating-bar-row .rating-bar-track { min-width: 0; }
+.seller-detail-page .seller-reviews-list { margin-top: 20px; }
+.seller-detail-page .seller-detail-bottom-actions { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin: 27px 0 0; }
+.seller-detail-page .seller-detail-bottom-actions a { width: auto; min-width: 200px; max-width: 100%; padding: 12px 24px; border-radius: 28px; text-align: center; }
+.seller-detail-page :is(.seller-about-section,.seller-artifacts-section,.seller-auctions-section,.seller-reviews-section) { scroll-margin-top: 115px; }
+@media(max-width:950px) {
+ .seller-detail-page :is(.seller-artifacts-grid,.seller-auctions-grid) { grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .seller-detail-page .seller-about-layout { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:680px) {
+ .seller-detail-page :is(.seller-about-section,.seller-artifacts-section,.seller-auctions-section,.seller-trust-section,.seller-reviews-section) { margin-top: 30px; }
+ .seller-detail-page .seller-about-layout,.seller-detail-page .seller-trust-layout,.seller-detail-page .seller-rating-summary { grid-template-columns: 1fr; }
+ .seller-detail-page :is(.seller-artifacts-grid,.seller-auctions-grid) { grid-template-columns: 1fr; }
+ .seller-detail-page .seller-trust-layout,.seller-detail-page .seller-rating-summary { padding: 23px; }
+ .seller-detail-page .seller-detail-bottom-actions a { flex: 1 1 100%; }
+ .seller-detail-page .seller-about-info-row { flex-wrap: wrap; gap: 6px; }
+}
