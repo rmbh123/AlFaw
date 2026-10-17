@@ -1408,3 +1408,12 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 @media (prefers-reduced-motion:reduce) {
   .alfaw-motion-reveal,.alfaw-motion-emblem::after,.alfaw-motion-heading::after {animation:none!important;transition:none!important;}
 }
+
+/* Sprint 1: readable auction status and time in artifact catalogue cards. */
+.browse-page .alfaw-browse-auction-info {
+ display:flex;flex-wrap:wrap;gap:5px 12px;margin:13px 0 14px;padding:11px 12px;
+ border:1px solid rgba(205,170,118,.25);border-radius:11px;
+ background:rgba(201,168,120,.065);font-size:12px;line-height:1.8;color:#d9c6ac;
+}
+.browse-page .alfaw-browse-auction-info span {min-width:0;overflow-wrap:anywhere}
+.browse-page .alfaw-browse-auction-info strong {color:#f1d8ac;font-weight:700}
