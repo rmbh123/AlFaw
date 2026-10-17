@@ -272,6 +272,8 @@ if (document.body.classList.contains('sellers-page')) {
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = matchMedia('(max-width: 767px)');
+  const lowPower = matchMedia('(prefers-reduced-data: reduce)').matches || navigator.connection?.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+  const allowHeavy = () => !reduced.matches && !mobile.matches && !lowPower;
   const okay = () => !reduced.matches;
   const browse = document.body.classList.contains('browse-page');
   const detail = document.body.classList.contains('artifact-detail-page');
@@ -281,7 +283,7 @@ if (document.body.classList.contains('sellers-page')) {
   if (browse) {
     document.addEventListener('click', event => {
       const link = event.target.closest('.browse-artifact-card a[href*="artifact-detail.html"]');
-      if (!link || !okay() || mobile.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button || link.target === '_blank') return;
+      if (!link || !allowHeavy() || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button || link.target === '_blank') return;
       const card = link.closest('.browse-artifact-card');
       const img = card?.querySelector('.browse-artifact-image img');
       if (!img || !img.complete || !img.naturalWidth) return;
@@ -306,7 +308,7 @@ if (document.body.classList.contains('sellers-page')) {
   // actual catalogue images. No fabricated artefacts or extra assets.
   if (browse) {
     const cards = [...document.querySelectorAll('#browse-grid .browse-artifact-card')].slice(0,6);
-    if (cards.length >= 3) {
+    if (cards.length >= 3 && !lowPower) {
       const stage = document.createElement('section');
       stage.className = 'alfaw-3d-showcase';
       stage.setAttribute('aria-label','معرض مقتنيات ألفاو التفاعلي');
@@ -339,7 +341,7 @@ if (document.body.classList.contains('sellers-page')) {
       render();
       const target=document.querySelector('.browse-search-section');
       if(target)target.before(stage);
-      if(okay() && !mobile.matches){
+      if(allowHeavy()){
         let ticking=false;
         const parallax=()=>{
           ticking=false;
@@ -357,7 +359,7 @@ if (document.body.classList.contains('sellers-page')) {
   // 3. A soft circular reveal of the primary artifact image on arrival.
   if(detail) {
     const image=document.getElementById('artifact-main-photo');
-    if(image && okay()) {
+    if(image && allowHeavy()) {
       const start=()=>{image.classList.add('alfaw-mask-opening');};
       if(image.complete)requestAnimationFrame(start);
       else image.addEventListener('load',start,{once:true});
@@ -365,7 +367,7 @@ if (document.body.classList.contains('sellers-page')) {
   }
 
   // 5. Animate complete Arabic headlines as a single piece, preserving ligatures.
-  if(okay()) {
+  if(allowHeavy()) {
     document.querySelectorAll('.alfaw-3d-heading h2, .artifact-information-section h2, .verification-section h2').forEach(el=>{
       el.classList.add('alfaw-whole-title');
     });

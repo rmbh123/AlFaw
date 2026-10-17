@@ -1397,3 +1397,14 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
   .alfaw-3d-item,.alfaw-journey-progress,.alfaw-whole-title {animation:none!important;transition:none!important}
   .artifact-detail-page .artifact-main-image img.alfaw-mask-opening {animation:none!important;clip-path:none!important}
 }
+
+/* Motion performance budget: prefer composited animations and short effects. */
+@media (max-width:767px), (prefers-reduced-data:reduce) {
+  .alfaw-3d-item,.alfaw-flying-artifact {animation:none!important;transition:none!important;}
+  .alfaw-motion-card::after {display:none!important;}
+  .alfaw-whole-title {animation:none!important;}
+  .alfaw-motion-reveal {animation-duration:.3s!important;animation-delay:0ms!important;filter:none!important;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .alfaw-motion-reveal,.alfaw-motion-emblem::after,.alfaw-motion-heading::after {animation:none!important;transition:none!important;}
+}
