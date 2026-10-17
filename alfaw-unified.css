@@ -1346,3 +1346,54 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 @media (prefers-reduced-motion: reduce) {
   .alfaw-motion-card,.alfaw-motion-heading,.alfaw-motion-emblem {animation:none!important;transition:none!important}
 }
+
+
+/* Six cinematic experiences — isolated to browse and artifact details. */
+.alfaw-3d-showcase { position:relative; isolation:isolate; width:min(1220px,calc(100% - 32px)); margin:20px auto 55px; padding:38px 20px 28px; overflow:hidden; border-radius:26px; border:1px solid rgba(205,170,118,.4); background:radial-gradient(circle at 50% 45%,#51341f 0%,#28170e 68%,#1d1009 100%); text-align:center; }
+.alfaw-3d-heading { position:relative; z-index:2; }
+.alfaw-3d-heading span,.alfaw-journey-heading span {color:#d6b47d;font-size:13px;font-weight:700}
+.alfaw-3d-heading h2,.alfaw-journey-heading h2 {font-family:var(--font-heritage);font-size:clamp(27px,3.5vw,42px);line-height:1.4;color:#f3e1c2;margin:8px 0}
+.alfaw-3d-heading p,.alfaw-journey-heading p {color:#d4bfa3;font-size:14px;line-height:1.85;margin:0 auto;max-width:650px}
+.alfaw-3d-stage {height:345px;position:relative;perspective:1100px;transform-style:preserve-3d;margin:4px auto 0;max-width:880px;overflow:visible}
+.alfaw-3d-item {--side:var(--offset,0);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;position:absolute;left:50%;top:50%;width:220px;height:260px;padding:15px;background:linear-gradient(150deg,#543922,#2b1b10);border:1px solid #9e7f55;border-radius:18px;box-shadow:0 15px 40px rgba(0,0,0,.4);color:#f0dec4;text-decoration:none;opacity:calc(1 - var(--abs-offset,0)*.23);transform:translate(calc(-50% + var(--side)*165px),calc(-50% + var(--alfaw-parallax,0px)*.3)) rotateY(calc(var(--side)*-27deg)) scale(calc(1 - var(--abs-offset)*.13));transition:transform .65s cubic-bezier(.2,.7,.2,1),opacity .55s ease;backface-visibility:hidden}
+.alfaw-3d-item img {display:block;max-width:100%;width:100%;height:190px;object-fit:contain}
+.alfaw-3d-item strong {font-family:var(--font-heritage);font-size:17px;line-height:1.3}
+.alfaw-3d-item:hover,.alfaw-3d-item:focus-visible {border-color:#ead0a2;color:#fff1d8}
+.alfaw-3d-controls {display:flex;justify-content:center;gap:15px}
+.alfaw-3d-controls button {min-width:112px;min-height:44px;border:1px solid #be9b66;border-radius:24px;background:rgba(189,155,101,.12);color:#f4e1c5;padding:9px 20px;cursor:pointer;font-family:var(--font-body)}
+.alfaw-3d-controls button:hover,.alfaw-3d-controls button:focus-visible {background:#c5a674;color:#24160e}
+.alfaw-flying-artifact {box-shadow:0 20px 55px rgba(0,0,0,.3);background:rgba(48,31,20,.78)}
+.alfaw-journey {width:min(1200px,calc(100% - 32px));margin:55px auto;padding:40px 32px;border-radius:24px;border:1px solid rgba(197,166,116,.4);background:linear-gradient(135deg,#392416,#20120b);position:relative}
+.alfaw-journey-heading {text-align:center;margin-bottom:37px}
+.alfaw-journey-track {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:relative;gap:15px}
+.alfaw-journey-track::before,.alfaw-journey-progress {content:"";position:absolute;right:12.5%;left:12.5%;height:2px;top:25px;background:rgba(200,159,101,.2)}
+.alfaw-journey-progress {left:auto;width:calc(var(--alfaw-journey-progress,0%) * .75);max-width:75%;background:linear-gradient(270deg,#edca8d,#ae824b);box-shadow:0 0 12px rgba(238,200,134,.45);transition:width .1s linear}
+.alfaw-journey-stop {position:relative;text-align:center;min-width:0;z-index:1}
+.alfaw-journey-stop b {width:50px;height:50px;margin:0 auto 17px;display:grid;place-items:center;border-radius:50%;background:#342115;border:2px solid #c6a46f;color:#f7e5c8;box-shadow:0 0 0 7px #2b1b11;font-size:15px}
+.alfaw-journey-stop h3 {font-family:var(--font-heritage);font-size:21px;margin:0 0 8px;color:#ead8ba}
+.alfaw-journey-stop p {color:#ceb99d;font-size:13px;line-height:1.8;margin:0 auto;max-width:175px}
+@media(prefers-reduced-motion:no-preference) {
+  .artifact-detail-page .artifact-main-image img.alfaw-mask-opening {animation:alfaw-circle-reveal 1.15s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes alfaw-circle-reveal {0%{clip-path:circle(1% at 50% 50%);opacity:.6;transform:scale(1.07)}100%{clip-path:circle(75% at 50% 50%);opacity:1;transform:scale(1)}}
+  .alfaw-whole-title {animation:alfaw-heritage-title 1s ease-out both;transform-origin:right center}
+  @keyframes alfaw-heritage-title {from{opacity:.45;transform:perspective(750px) rotateX(-12deg) translateY(9px)}to{opacity:1;transform:perspective(750px) rotateX(0) translateY(0)}}
+}
+@media(max-width:767px){
+  .alfaw-3d-showcase {width:calc(100% - 22px);padding:30px 12px 23px;margin:15px auto 36px}
+  .alfaw-3d-stage {height:280px;max-width:100%;perspective:700px;overflow:hidden}
+  .alfaw-3d-item {width:160px;height:215px;padding:10px;transform:translate(calc(-50% + var(--side)*99px),-50%) rotateY(calc(var(--side)*-23deg)) scale(calc(1 - var(--abs-offset)*.19))}
+  .alfaw-3d-item img {height:153px}
+  .alfaw-3d-item strong {font-size:14px}
+  .alfaw-journey {width:calc(100% - 22px);padding:27px 18px;margin:35px auto}
+  .alfaw-journey-track {grid-template-columns:1fr;gap:23px}
+  .alfaw-journey-track::before,.alfaw-journey-progress {right:24px;left:auto;top:25px;bottom:25px;width:2px;height:auto}
+  .alfaw-journey-progress {height:var(--alfaw-journey-progress,0%);max-height:calc(100% - 50px);width:2px;top:25px}
+  .alfaw-journey-stop {display:grid;grid-template-columns:50px 1fr;grid-template-rows:auto auto;column-gap:17px;text-align:right}
+  .alfaw-journey-stop b {grid-row:span 2;margin:0}
+  .alfaw-journey-stop h3 {margin:2px 0}
+  .alfaw-journey-stop p {margin:0;max-width:none}
+}
+@media(prefers-reduced-motion:reduce) {
+  .alfaw-3d-item,.alfaw-journey-progress,.alfaw-whole-title {animation:none!important;transition:none!important}
+  .artifact-detail-page .artifact-main-image img.alfaw-mask-opening {animation:none!important;clip-path:none!important}
+}
