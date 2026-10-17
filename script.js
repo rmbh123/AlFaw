@@ -777,18 +777,18 @@ function setupBrowsePage() {
 
   // Navigate from the "Verification" menu.
 
-  const requestedVerification = params.get("verification");
-  const validVerification = ["all", "verified", "pending", "unverified"];
-  let rememberedVerification = "all";
-  try { rememberedVerification = sessionStorage.getItem("alfaw_browse_verification") || "all"; } catch (_) {}
+  // Opening browse.html from the navigation resets every filter.
+  // Explicit verification links from verification.html still apply a selected status.
+  if (searchInput) searchInput.value = "";
+  if (categoryFilter) categoryFilter.value = "all";
+  if (priceFilter) priceFilter.value = "all";
+  if (sortFilter) sortFilter.value = "default";
   if (verificationFilter) {
-    const initialVerification = validVerification.includes(requestedVerification)
-      ? requestedVerification
-      : rememberedVerification;
-    verificationFilter.value = validVerification.includes(initialVerification)
-      ? initialVerification : "all";
-    try { sessionStorage.setItem("alfaw_browse_verification", verificationFilter.value); } catch (_) {}
+    const requestedVerification = params.get("verification");
+    verificationFilter.value = ["verified", "pending", "unverified"].includes(requestedVerification)
+      ? requestedVerification : "all";
   }
+  try { sessionStorage.removeItem("alfaw_browse_verification"); } catch (_) {}
 
   // Navigate from the "Auctions" menu.
 
@@ -831,7 +831,6 @@ function setupBrowsePage() {
     verificationFilter.addEventListener(
       "change",
       () => {
-        try { sessionStorage.setItem("alfaw_browse_verification", verificationFilter.value); } catch (_) {}
         browsePageIndex=1;
         filterArtifacts();
       }
@@ -1375,7 +1374,6 @@ if (cinema) {
     const statusSelect = document.getElementById('verification-filter');
     if (statusSelect && ['verified','pending','unverified'].includes(requestedStatus)) {
       statusSelect.value = requestedStatus;
-      try { sessionStorage.setItem('alfaw_browse_verification', requestedStatus); } catch (_) {}
     }
     if(typeof sortArtifacts==='function')sortArtifacts();
   }
