@@ -840,3 +840,19 @@ body:not(.home-page) :is(.alfaw-footer) {
   width: 54px;
   height: 54px;
 }
+
+/* Homepage introductory text and heritage tags — final cascade layer */
+body.home-page .cinema-scroll .intro-copy > p {
+  font-family: var(--font-heritage, "AlFawNaskh", serif);
+  font-synthesis: none;
+  font-weight: 400;
+}
+body.home-page .cinema-scroll .hero-tags > span {
+  font-family: var(--font-heritage, "AlFawNaskh", serif);
+  font-synthesis: none;
+  font-weight: 400;
+  background: linear-gradient(135deg, #3d2719, #21130b);
+  color: var(--paper, #f3e7d3);
+  border: 1px solid rgba(184,155,115,.7);
+  box-shadow: 0 8px 22px rgba(0,0,0,.28);
+}
