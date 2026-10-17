@@ -1271,3 +1271,30 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .login-page .login-side-quote { border:0; border-top:1px solid rgba(197,166,116,.32); margin:17px 0 0; padding:20px 0 0; font-family:var(--font-heritage); color:#ddbc87; font-size:20px; }
 @media(max-width:800px) { .login-page .login-layout { grid-template-columns:1fr; } .login-page .login-side-panel { padding:26px; } }
 @media(max-width:480px) { .login-page .login-main { width:calc(100% - 24px); } .login-page .login-form-card,.login-page .login-side-panel { padding:23px 20px; border-radius:18px; } }
+
+/* Site-wide mobile safeguards: respect layouts while preventing viewport overflow. */
+@media (max-width: 767px) {
+  html, body { max-width: 100%; }
+  body { overflow-x: clip; }
+  body:not(.home-page) main { min-width: 0; }
+  body:not(.home-page) main :is(section,article,aside,form,.card,.container) { min-width: 0; }
+  body:not(.home-page) :is(img,video,canvas,iframe) { max-width: 100%; }
+  body:not(.home-page) :is(input,select,textarea,button) { max-width: 100%; box-sizing: border-box; }
+  body:not(.home-page) :is(.login-form-card,.login-side-panel,.register-form-card,.register-side-panel,.seller-card,.browse-artifact-card,.auction-card,.seller-artifact-card,.seller-auction-card) { min-width: 0; }
+  body:not(.home-page) :is(.login-layout,.register-layout,.profile-discover-grid,.register-help-grid,.login-explore-grid,.seller-about-layout,.seller-trust-layout,.seller-rating-summary) { grid-template-columns: minmax(0,1fr); }
+  body:not(.home-page) :is(.seller-artifacts-grid,.seller-auctions-grid,.browse-grid,.auctions-grid,.sellers-grid) { grid-template-columns: minmax(0,1fr); }
+  body:not(.home-page) :is(.seller-detail-statistics,.auctions-overview) { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  body:not(.home-page) :is(.dashboard-table-wrap,.table-responsive,.admin-table-wrap) { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  body:not(.home-page) :is(table) { max-width:100%; }
+  body:not(.home-page) :is(.seller-detail-bottom-actions,.login-register-section) { gap:12px; }
+  body:not(.home-page) :is(.seller-detail-bottom-actions a) { width:100%; }
+  .site-header .site-logo { min-width: 0; }
+  .site-header .header-actions { min-width: 0; }
+  body:not(.home-page) :is(.collection-hero,.auctions-hero,.verification-hero,.sellers-hero) { width:calc(100% - 24px); min-height:0; margin:18px auto 32px; padding:35px 20px; }
+}
+@media(max-width: 390px) {
+  .site-header,.site-header.inner-header { padding-inline: 11px; }
+  .site-header .site-logo { gap: 6px; font-size: 26px; }
+  .site-header .header-login { padding: 7px 9px; min-height: 40px; }
+  body:not(.home-page) :is(.seller-detail-profile,.login-form-card,.register-form-card) { max-width:100%; }
+}
