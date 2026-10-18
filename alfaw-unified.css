@@ -1417,3 +1417,7 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 }
 .browse-page .alfaw-browse-auction-info span {min-width:0;overflow-wrap:anywhere}
 .browse-page .alfaw-browse-auction-info strong {color:#f1d8ac;font-weight:700}
+
+/* Readable, lightweight file-selection feedback in the artifact form. */
+.manage-artifact-page .alfaw-upload-doc-list {margin:10px 0;padding-inline-start:22px;color:#edd7b9;font-size:13px;line-height:2;overflow-wrap:anywhere}
+.manage-artifact-page .manage-images-preview p {font-size:12px;line-height:1.7;color:#dfc49a;margin:8px 0}
