@@ -1469,6 +1469,12 @@ if (cinema) {
     // Make static example cards reflect the locally saved bid and verification state.
     $$('.browse-artifact-card',grid).forEach(card=>{const link=card.querySelector('a[href*="artifact-detail"]');const key=new URL(link?.href||location.href,location.href).searchParams.get('id');const a=artifact(key);if(!a)return;if(a.archived){card.remove();return}
       Object.assign(card.dataset,{name:a.name,category:a.category,verification:a.verification,price:String(a.price)});
+      const cardImage=card.querySelector('.browse-artifact-image img');
+      if(cardImage){cardImage.src=a.image||'coin.jpg';cardImage.alt=a.name}
+      const cardTitle=card.querySelector('.browse-card-content h3');
+      if(cardTitle)cardTitle.textContent=a.name;
+      const cardDescription=card.querySelector('.artifact-description');
+      if(cardDescription)cardDescription.textContent=a.description||'';
       const stamp=card.querySelector('.pending-badge');if(stamp)stamp.textContent=verifications[a.verification]||'غير موثق';
       const ac=auctions.find(z=>z.artifactId===a.id);const strong=card.querySelector('.artifact-price');if(ac&&strong)strong.textContent=money(highest(ac)??a.price);
       const r=rating(a.sellerId),container=card.querySelector('.browse-card-content');if(container){
