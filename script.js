@@ -1408,14 +1408,16 @@ if (cinema) {
       }
     });
   }
-  if($('.login-page')){
+  if($('.login-page')||$('.admin-login-page')){
     $('#login-form')?.addEventListener('submit',async e=>{e.preventDefault();
       const email=$('#login-email')?.value.trim().toLowerCase(),pass=$('#login-password')?.value||'';
       const u=users.find(x=>x.email===email);
+      const adminPortal=!!$('.admin-login-page');
+      if(u && (adminPortal ? u.role!=='admin' : u.role==='admin')){feedback('#login-form-message',adminPortal?'هذه البوابة مخصصة للمسؤولين فقط.':'حساب المسؤول يتطلب الدخول عبر بوابة الإدارة المستقلة.');return}
       if(!u||!pass||!u.passwordHash){feedback('#login-form-message','البريد الإلكتروني أو كلمة المرور غير صحيحة.');return}
       try{if(await fingerprint(pass,u.passwordSalt)!==u.passwordHash){feedback('#login-form-message','البريد الإلكتروني أو كلمة المرور غير صحيحة.');return}}
       catch(err){feedback('#login-form-message',err.message);return}
-      session={id:u.id,name:u.name,role:u.role,sellerId:u.sellerId};put('session',session);
+      const nextSession={id:u.id,name:u.name,role:u.role,sellerId:u.sellerId};if(!put('session',nextSession)){feedback('#login-form-message','تعذر حفظ جلسة الدخول محليًا. حاولي مرة أخرى.');return}session=nextSession;
       location.href=u.role==='seller'?'seller-dashboard.html':u.role==='admin'?'admin-dashboard.html':'profile.html';
     });
   }
