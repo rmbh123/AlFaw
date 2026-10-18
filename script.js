@@ -1358,7 +1358,7 @@ if (cinema) {
     if(u&&!u.passwordHash){u.passwordSalt='alfaw-sprint1-'+x.id;u.passwordHash=await fingerprint(x.pass,u.passwordSalt)}}))
       .then(()=>put('users',users)).catch(console.warn);
   if($('.register-page')){
-    const hasPasswordSymbol=value=>/[^\\p{L}\\p{N}\\s]/u.test(value);
+    const hasPasswordSymbol=value=>/[^\p{L}\p{N}\s]/u.test(value);
     const updatePasswordRules=()=>{
       const password=$('#register-password')?.value||'';
       const confirmation=$('#register-confirm-password')?.value||'';
@@ -1366,7 +1366,7 @@ if (cinema) {
         const element=$(selector);
         if(!element)return;
         element.dataset.met=String(met);
-        element.textContent=(met?'✓ ':'○ ')+element.textContent.replace(/^[✓○]\\s*/, '');
+        element.textContent=(met?'✓ ':'○ ')+element.textContent.replace(/^[✓○]\s*/, '');
       };
       setRule('#password-rule-length',password.length>=8&&password.length<=128);
       setRule('#password-rule-symbol',hasPasswordSymbol(password));
