@@ -1555,7 +1555,7 @@ if (cinema) {
         const phone=$('#profile-phone')?.value.trim()||'';
         const city=$('#profile-city')?.value||'';
         const validName=name.length>=3&&name.length<=100;
-        const validEmail=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)&&email.length<=254;
+        const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)&&email.length<=254;
         const uniqueEmail=!users.some(x=>x.id!==u.id&&String(x.email||'').toLowerCase()===email);
         if(!validName||!validEmail||!uniqueEmail||!/^05[0-9]{8}$/.test(phone)||!city){
           feedback('#profile-form-message','تحققي من الاسم (3 أحرف على الأقل) والبريد غير المكرر ورقم الجوال (05 ثم 8 أرقام) والمدينة.');
