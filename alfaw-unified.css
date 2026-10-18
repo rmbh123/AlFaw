@@ -1617,3 +1617,19 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 @media(prefers-reduced-motion:reduce) {
   .register-page .account-type-option,.register-page .account-type-content,.register-page .account-type-content::after {transition:none!important;animation:none!important;}
 }
+
+/* Equal-size role cards: selection changes illumination, never card dimensions. */
+.register-page .account-type-options {align-items:stretch;}
+.register-page .account-type-option,
+.register-page .account-type-option:has(input:checked),
+.register-page .account-type-option:not(:has(input:checked)),
+.register-page .account-type-option:hover:not(:has(input:checked)),
+.register-page .account-type-option:active {
+  transform:none;
+  filter:none;
+}
+.register-page .account-type-option {height:100%;}
+.register-page .account-type-content {height:100%;min-height:132px;}
+@media(max-width:540px) {
+  .register-page .account-type-option:has(input:checked) {transform:none;}
+}
