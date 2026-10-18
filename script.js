@@ -1505,7 +1505,7 @@ if (cinema) {
       if(status(a)==='ended' && a.bids.length){const top=[...a.bids].sort((x,y)=>y.amount-x.amount)[0];
         if((!a.reservePrice || top.amount>=a.reservePrice) && !notices.some(n=>n.auctionId===a.id&&n.kind==='won')){
           const uid=top.uid;notices.unshift({id:id('notice'),uid,body:'تهانينا، فزت بالمزاد '+a.id,
-            url:'auction-detail.html?id='+encodeURIComponent(a.id),auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()});if(!put('notices',notices)){notices.shift();return}if(uid===session?.id)showToast('تهانينا، فزت بالمزاد '+a.id,'auction-detail.html?id='+a.id);
+            url:'auction-detail.html?id='+encodeURIComponent(a.id),auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()});if(!put('notices',notices)){notices.shift()}else if(uid===session?.id){showToast('تهانينا، فزت بالمزاد '+a.id,'auction-detail.html?id='+a.id)}
         }
       }const ms=Math.max(0,Date.parse(status(a)==='upcoming'?a.start:a.end)-Date.now()),seconds=Math.floor(ms/1000);text('#auction-days',Math.floor(seconds/86400));text('#auction-hours',Math.floor(seconds%86400/3600));text('#auction-minutes',Math.floor(seconds%3600/60));text('#auction-seconds',seconds%60);if(status(a)!==timer.previous){timer.previous=status(a);render()}};timer();setInterval(timer,1000);
   }
