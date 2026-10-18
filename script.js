@@ -1565,7 +1565,7 @@ if (cinema) {
 
   }
   // Consistent sign-out for all roles, including seller and admin dashboards.
-  $('[data-alfaw-logout],#profile-logout-button').forEach(button=>button.addEventListener('click',()=>{
+  document.querySelectorAll('[data-alfaw-logout],#profile-logout-button').forEach(button=>button.addEventListener('click',()=>{
     session=null;
     localStorage.removeItem('alfaw_phase3_session');
     location.replace('login.html');
