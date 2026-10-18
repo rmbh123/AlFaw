@@ -1493,7 +1493,31 @@ if (cinema) {
       $$('input[name="verificationStatus"]').forEach(r=>r.addEventListener('change',updateVerification));updateVerification();
       const preview=()=>{text('#artifact-live-preview-name',$('#artifact-name')?.value||'اسم القطعة');text('#artifact-live-preview-category',categories[$('#artifact-category')?.value]||'فئة القطعة');text('#artifact-live-preview-description',$('#artifact-description')?.value||'وصف القطعة');text('#artifact-live-preview-price',money($('#artifact-starting-price')?.value));text('#artifact-live-preview-verification',verifications[$('input[name="verificationStatus"]:checked')?.value]||'غير موثق')};
       $$('#manage-artifact-form input,#manage-artifact-form select,#manage-artifact-form textarea').forEach(el=>el.addEventListener('input',preview));preview();
-      $('#artifact-images')?.addEventListener('change',e=>{const area=$('#artifact-images-preview');if(!area)return;area.replaceChildren();[...e.target.files].filter(f=>f.type.startsWith('image/')).forEach(f=>{const img=document.createElement('img');img.alt=f.name;img.src=URL.createObjectURL(f);area.append(img)})});
+      // Preview selection without uploading. Restrict memory use to one thumbnail.
+      const allowedImage=['image/jpeg','image/png','image/webp'];
+      const allowedDoc=['application/pdf','image/jpeg','image/png','image/webp'];
+      let previewURL=null;
+      const fileLabel=(file)=>file.name+' ('+(file.size/1024/1024).toFixed(2)+' MB)';
+      $('#artifact-images')?.addEventListener('change',e=>{
+        const area=$('#artifact-images-preview');if(!area)return;
+        if(previewURL){URL.revokeObjectURL(previewURL);previewURL=null}
+        area.replaceChildren();const files=[...e.target.files];
+        if(!files.length)return;
+        const invalid=files.filter(file=>!allowedImage.includes(file.type)||file.size>1024*1024);
+        if(invalid.length){area.textContent='صيغة الصور المسموحة JPG أو PNG أو WEBP، بحد تجريبي 1 MB لكل صورة.';return}
+        const first=files[0];const img=document.createElement('img');img.alt='معاينة '+first.name;previewURL=URL.createObjectURL(first);img.src=previewURL;img.onload=()=>{if(previewURL===img.src){URL.revokeObjectURL(previewURL);previewURL=null}};
+        area.append(img);
+        const note=document.createElement('p');note.textContent='معاينة: '+fileLabel(first)+(files.length>1?' — سيتم حفظ الصورة الأولى فقط في النسخة التجريبية.':'');area.append(note);
+      });
+      $('#artifact-documents')?.addEventListener('change',e=>{
+        const area=$('#artifact-documents-preview');if(!area)return;area.replaceChildren();
+        const files=[...e.target.files];if(!files.length)return;
+        const bad=files.filter(file=>!allowedDoc.includes(file.type)||file.size>1024*1024);
+        if(bad.length){area.textContent='المستندات المسموحة PDF أو JPG أو PNG أو WEBP، بحد تجريبي 1 MB لكل ملف.';return}
+        const list=document.createElement('ul');list.className='alfaw-upload-doc-list';
+        files.forEach(file=>{const li=document.createElement('li');li.textContent=fileLabel(file);list.append(li)});
+        area.append(list);
+      });
       $('#manage-artifact-form')?.addEventListener('submit',async e=>{e.preventDefault();const name=$('#artifact-name')?.value.trim()||'',description=$('#artifact-description')?.value.trim()||'',price=Number($('#artifact-starting-price')?.value),cat=$('#artifact-category')?.value,period=$('#artifact-period')?.value.trim(),origin=$('#artifact-origin')?.value.trim(),condition=$('#artifact-condition')?.value,v=$('input[name="verificationStatus"]:checked')?.value||'unverified',ref=$('#artifact-verification-reference')?.value.trim()||'';
         if(name.length<3||description.length<20||!cat||!period||!origin||!condition||price<=0||(v==='verified'&&!ref)){feedback('#manage-artifact-form-message','يرجى إكمال الحقول المطلوبة.');return}
         const upload=$('#artifact-images')?.files[0];if(!old&&!upload){feedback('#manage-artifact-form-message','اختاري صورة للقطعة.');return}
@@ -1505,7 +1529,7 @@ if (cinema) {
           canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
           return canvas.toDataURL('image/jpeg',.78)};
         const photoFiles=[...($('#artifact-images')?.files||[])],docFiles=[...($('#artifact-documents')?.files||[])];
-        if(photoFiles.some(f=>!f.type.startsWith('image/'))||docFiles.some(f=>!['application/pdf','image/png','image/jpeg','image/webp'].includes(f.type))){feedback('#manage-artifact-form-message','الصور والمستندات يجب أن تكون بصيغة صورة أو PDF.');return}
+        if(photoFiles.some(f=>!allowedImage.includes(f.type))||docFiles.some(f=>!['application/pdf','image/png','image/jpeg','image/webp'].includes(f.type))){feedback('#manage-artifact-form-message','الصور والمستندات يجب أن تكون بصيغة صورة أو PDF.');return}
         // LocalStorage quotas are small; 1 MB each is a prototype storage limit, not a product policy.
         if([...photoFiles,...docFiles].some(f=>f.size>1024*1024)){feedback('#manage-artifact-form-message','الحد التجريبي في هذه النسخة 1 ميغابايت لكل ملف.');return}
         const data={id:old?.id||id('artifact'),name,description,price,category:cat,period,origin,condition,verification:v,verificationReference:v==='verified'?ref:'',provenance:$('#artifact-provenance')?.value.trim()||'',conditionNotes:$('#artifact-condition-notes')?.value.trim()||'',sellerId:currentSeller().id,image:old?.image||'',documents:old?.documents||[],created:old?.created||new Date().toISOString()};
