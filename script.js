@@ -1562,8 +1562,20 @@ if (cinema) {
       if(u){value('#profile-full-name',u.name||'');value('#profile-email',u.email||'');value('#profile-phone',u.phone||'');value('#profile-city',u.city||'')}
       const msg=$('#profile-form-message');if(msg){msg.textContent='تم إلغاء التعديلات غير المحفوظة.';msg.hidden=false}
     });
-    $('#profile-logout-button')?.addEventListener('click',()=>{session=null;localStorage.removeItem('alfaw_phase3_session');location.href='login.html'});
+
   }
+  // Consistent sign-out for all roles, including seller and admin dashboards.
+  $('[data-alfaw-logout],#profile-logout-button').forEach(button=>button.addEventListener('click',()=>{
+    session=null;
+    localStorage.removeItem('alfaw_phase3_session');
+    location.replace('login.html');
+  }));
+  // A back/forward cache restore must recheck the session before showing private content.
+  window.addEventListener('pageshow',event=>{
+    if(event.persisted && ($('.profile-page')||$('.seller-dashboard-page')||$('.admin-dashboard-page'))){
+      location.reload();
+    }
+  });
   // SELLER DASHBOARD
   const drawSellerDashboard=()=>{
     if(!$('.seller-dashboard-page')||!requireRole('seller','#seller-dashboard-content','#seller-dashboard-access-message'))return;
