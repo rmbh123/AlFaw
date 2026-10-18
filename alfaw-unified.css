@@ -1460,3 +1460,34 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
   background: #fffaf3;
   box-shadow: 2px 0 8px rgba(0,0,0,.06);
 }
+
+
+/* Visible in-site gateway from shared buyer/seller login to separate admin login. */
+.login-page .alfaw-admin-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 17px;
+  padding: 14px 16px;
+  border: 1px solid rgba(193,157,104,.35);
+  border-radius: 12px;
+  background: rgba(193,157,104,.08);
+}
+.login-page .alfaw-admin-entry-label { font-size: 13px; }
+.login-page .alfaw-admin-entry-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: 1px solid currentColor;
+  border-radius: 9px;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+.login-page .alfaw-admin-entry-button:hover,
+.login-page .alfaw-admin-entry-button:focus-visible {
+  background: rgba(193,157,104,.18);
+}
