@@ -777,12 +777,41 @@ function setupBrowsePage() {
 
   // Navigate from the "Verification" menu.
 
-  if (
-    verificationFilter &&
-    params.get("verification") === "verified"
-  ) {
-    verificationFilter.value = "verified";
+  // Opening browse.html from the navigation resets every filter.
+  // Explicit verification links from verification.html still apply a selected status.
+  if (searchInput) searchInput.value = "";
+  if (categoryFilter) categoryFilter.value = "all";
+  if (priceFilter) priceFilter.value = "all";
+  if (sortFilter) sortFilter.value = "default";
+  if (verificationFilter) {
+    const requestedVerification = params.get("verification");
+    verificationFilter.value = ["verified", "pending", "unverified"].includes(requestedVerification)
+      ? requestedVerification : "all";
   }
+  try { sessionStorage.removeItem("alfaw_browse_verification"); } catch (_) {}
+
+  // A click on the artifacts navbar link must clear filters even when already
+  // on browse.html (when browsers may retain the same page and its controls).
+  const resetBrowseToDefault = () => {
+    if (searchInput) searchInput.value = "";
+    if (categoryFilter) categoryFilter.value = "all";
+    if (verificationFilter) verificationFilter.value = "all";
+    if (priceFilter) priceFilter.value = "all";
+    if (sortFilter) sortFilter.value = "default";
+    browsePageIndex = 1;
+    try { sessionStorage.removeItem("alfaw_browse_verification"); } catch (_) {}
+    sortArtifacts();
+  };
+  document.querySelectorAll('.site-nav a[href="browse.html"]').forEach(link => {
+    link.addEventListener("click", event => {
+      event.preventDefault();
+      if (location.search || location.hash) {
+        history.replaceState(null, "", location.pathname);
+      }
+      resetBrowseToDefault();
+      window.scrollTo({ top: 0, behavior: "auto" });
+    });
+  });
 
   // Navigate from the "Auctions" menu.
 
@@ -824,7 +853,10 @@ function setupBrowsePage() {
   if (verificationFilter) {
     verificationFilter.addEventListener(
       "change",
-      () => { browsePageIndex=1; filterArtifacts(); }
+      () => {
+        browsePageIndex=1;
+        filterArtifacts();
+      }
     );
   }
 
@@ -851,6 +883,7 @@ function setupBrowsePage() {
 
         if (verificationFilter) {
           verificationFilter.value = "all";
+          try { sessionStorage.removeItem("alfaw_browse_verification"); } catch (_) {}
         }
 
         if (priceFilter) priceFilter.value = "all";
@@ -1204,7 +1237,7 @@ if (cinema) {
   const feedback = (s,v) => {const el=$(s);if(el){el.textContent=v;el.hidden=!v}};
   const params = new URLSearchParams(location.search);
   const categories={coins:'العملات التاريخية',pottery:'الفخار',manuscripts:'المخطوطات',jewelry:'الحلي والمجوهرات',weapons:'المقتنيات التقليدية',other:'مقتنيات أخرى'};
-  const verifications={verified:'موثق (بيانات تجريبية)',unverified:'غير موثق',pending:'حالة غير معروفة'};
+  const verifications={verified:'موثق (بيانات تجريبية)',unverified:'غير موثق',pending:'قيد المراجعة'};
   const startingSellers=[
     {id:'ahmed',name:'أحمد العتيبي',city:'الرياض',category:'coins',specialty:'العملات التاريخية',bio:'مهتم بالعملات التاريخية والمقتنيات التراثية.',joined:'2026-09-01'},
     {id:'noura',name:'نورة القحطاني',city:'الرياض',category:'pottery',specialty:'الفخار التراثي',bio:'مهتمة بالفخار والحرف التقليدية.',joined:'2026-09-05'},
@@ -1273,11 +1306,13 @@ if (cinema) {
   const statusName=a=>({upcoming:'قادم',active:'نشط',ended:'منتهٍ'}[status(a)]);
   const highest=a=>a.bids.length?Math.max(...a.bids.map(b=>Number(b.amount))):null;
   const minimum=a=>highest(a)===null?Number(a.startingPrice)+Number(a.increment):highest(a)+Number(a.increment);
+  const rankedBids=a=>[...(a.bids||[])].sort((x,y)=>Number(y.amount)-Number(x.amount)).filter((b,i,list)=>list.findIndex(x=>x.uid===b.uid)===i);
+  const auctionWinner=a=>{if(status(a)!=='ended')return null;const top=rankedBids(a)[0];return top&&(!a.reservePrice||Number(top.amount)>=Number(a.reservePrice))?top:null;};
   const sellerReviews=id=>reviews.filter(r=>r.sellerId===id);
   const rating=id=>{const r=sellerReviews(id);const avg=r.length?r.reduce((s,x)=>s+Number(x.rating),0)/r.length:null;return {count:r.length,avg,trust:avg===null?null:Math.round(avg/5*100)}};
   const requireRole=(role,content,warning)=>{const ok=session?.role===role && (role!=='seller'||!!currentSeller());visible(content,ok);visible(warning,!ok);return ok};
   const notice=(uid,body,url='profile.html')=>{
-    notices.unshift({id:id('notice'),uid,body,url,read:false,created:new Date().toISOString()});persist();if(uid===session?.id)showToast(body,url)
+    notices.unshift({id:id('notice'),uid,body,url,read:false,created:new Date().toISOString()});if(!put('notices',notices)){notices.shift();return false}if(uid===session?.id)showToast(body,url);return true
   };
   const showToast=(message,url)=>{
     const box=document.createElement('div');box.className='alfaw-toast';box.setAttribute('role','status');
@@ -1303,6 +1338,19 @@ if (cinema) {
     {id:'demo-buyer',name:'مشتري تجريبي',email:'buyer@alfaw.demo',role:'buyer',pass:'AlfawDemo!2026'},
     {id:'demo-seller',name:'بائع تجريبي',email:'seller@alfaw.demo',role:'seller',sellerId:'demo-shop',pass:'AlfawDemo!2026'}];
   if(!sellers.some(x=>x.id==='demo-shop')){sellers.push({id:'demo-shop',name:'متجر العرض التجريبي',city:'الرياض',category:'other',specialty:'مقتنيات تاريخية',bio:'حساب توضيحي لمرحلة Sprint 1',joined:new Date().toISOString()});put('sellers',sellers)}
+  // Ensure the built-in demo seller has an owned artifact to exercise edit/delete.
+  // Do not recreate it after the seller archives it.
+  if(!artifacts.some(a=>a.id==='demo-seller-artifact-001')){
+    const demoItem={id:'demo-seller-artifact-001',name:'قطعة تراثية تجريبية',description:'قطعة تراثية توضيحية لتجربة إضافة القطع وتعديلها وحذفها من لوحة البائع.',price:3500,category:'pottery',period:'غير محددة',origin:'المملكة العربية السعودية',condition:'جيدة',image:'pottery.jpg',sellerId:'demo-shop',verification:'unverified',verificationReference:'',documents:[],created:new Date().toISOString(),demo:true};
+    // Only seed once per browser even after deletion.
+    if(localStorage.getItem('alfaw_demo_seller_artifact_seeded')!=='true'){
+      const next=[...artifacts,demoItem];
+      if(put('artifacts',next)){
+        artifacts=next;
+        localStorage.setItem('alfaw_demo_seller_artifact_seeded','true');
+      }
+    }
+  }
   const demoSeeds=demoIdentity.filter(x=>!users.some(u=>u.email===x.email));
   if(demoSeeds.length){demoSeeds.forEach(x=>users.push({id:x.id,name:x.name,email:x.email,role:x.role,sellerId:x.sellerId||null,city:'الرياض',phone:'',joined:new Date().toISOString(),demo:true}));put('users',users)}
   // Seed hashes once; the visible UI never grants Admin registration.
@@ -1312,14 +1360,52 @@ if (cinema) {
   if($('.register-page')){
     const update=()=>{const yes=$('input[name="accountType"]:checked')?.value==='seller';visible('#register-seller-fields',yes);['#register-store-name','#register-seller-bio'].forEach(s=>{if($(s))$(s).disabled=!yes})};
     $$('input[name="accountType"]').forEach(x=>x.addEventListener('change',update));update();
-    $('#register-form')?.addEventListener('submit',async e=>{e.preventDefault();const name=$('#register-full-name')?.value.trim(),email=$('#register-email')?.value.trim().toLowerCase(),pass=$('#register-password')?.value||'',confirmPass=$('#register-confirm-password')?.value||'',role=$('input[name="accountType"]:checked')?.value,city=$('#register-city')?.value||'',phone=$('#register-phone')?.value.trim()||'';
-      if(!name||!email||!email.includes('@')||pass.length<8||pass!==confirmPass||!city||!role||($('#register-terms')&&!$('#register-terms').checked)){feedback('#register-form-message','راجعي الحقول المطلوبة وتطابق كلمتي المرور.');return}
-      if(users.some(x=>x.email===email)){feedback('#register-form-message','هذا البريد موجود مسبقًا.');return}
-      const sid=role==='seller'?id('seller'):null;
-      if(sid)sellers.push({id:sid,name:$('#register-store-name')?.value.trim()||name,city,category:'other',specialty:'مقتنيات تاريخية',bio:$('#register-seller-bio')?.value.trim()||'',joined:new Date().toISOString()});
-      const newUser={id:id('user'),name,email,role,sellerId:sid,city,phone,joined:new Date().toISOString()};
-      try{newUser.passwordSalt=id('salt');newUser.passwordHash=await fingerprint(pass,newUser.passwordSalt)}catch(err){feedback('#register-form-message',err.message);return}
-      users.push(newUser);persist();feedback('#register-form-message','تم إنشاء حساب تجريبي في هذا المتصفح. يمكنك تسجيل الدخول.');setTimeout(()=>location.href='login.html',700)
+    $('#register-form')?.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const form=$('#register-form');
+      const name=$('#register-full-name')?.value.trim()||'';
+      const email=$('#register-email')?.value.trim().toLowerCase()||'';
+      const phone=$('#register-phone')?.value.trim()||'';
+      const city=$('#register-city')?.value||'';
+      const pass=$('#register-password')?.value||'';
+      const confirmPass=$('#register-confirm-password')?.value||'';
+      const role=$('input[name="accountType"]:checked')?.value;
+      const storeName=$('#register-store-name')?.value.trim()||'';
+      const error=(selector,message)=>feedback(selector,message);
+      const fields=['#full-name-error','#register-email-error','#register-phone-error','#register-city-error','#register-store-name-error','#register-password-error','#register-confirm-password-error','#register-terms-error'];
+      fields.forEach(selector=>error(selector,''));
+      error('#register-form-message','');
+      let invalid=false;
+      const check=(condition,selector,message)=>{if(condition){error(selector,message);invalid=true}};
+      check(name.length<2,'#full-name-error','أدخلي الاسم الكامل (حرفان على الأقل).');
+      check(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254,'#register-email-error','أدخلي بريدًا إلكترونيًا صحيحًا.');
+      check(!/^05[0-9]{8}$/.test(phone),'#register-phone-error','رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.');
+      check(!city,'#register-city-error','اختاري المدينة.');
+      check(role!=='buyer'&&role!=='seller','#register-form-message','اختاري نوع الحساب.');
+      check(role==='seller'&&storeName.length<3,'#register-store-name-error','اسم البائع أو المتجر مطلوب (3 أحرف على الأقل).');
+      check(pass.length<8||pass.length>128,'#register-password-error','كلمة المرور يجب أن تكون بين 8 و128 حرفًا.');
+      check(pass!==confirmPass,'#register-confirm-password-error','كلمتا المرور غير متطابقتين.');
+      check(!$('#register-terms')?.checked,'#register-terms-error','يجب الموافقة على الشروط.');
+      check(users.some(x=>String(x.email||'').toLowerCase()===email),'#register-email-error','هذا البريد مسجل مسبقًا.');
+      if(form&&!form.checkValidity()){form.reportValidity();invalid=true}
+      if(invalid){error('#register-form-message','يرجى تصحيح الحقول المحددة قبل إنشاء الحساب.');return}
+      const submit=$('#register-submit-button');
+      if(submit)submit.disabled=true;
+      try{
+        const sid=role==='seller'?id('seller'):null;
+        const newUser={id:id('user'),name,email,role,sellerId:sid,city,phone,joined:new Date().toISOString()};
+        newUser.passwordSalt=id('salt');
+        newUser.passwordHash=await fingerprint(pass,newUser.passwordSalt);
+        const newSeller=sid?{id:sid,name:storeName,city,category:'other',specialty:'مقتنيات تاريخية',bio:$('#register-seller-bio')?.value.trim()||'',joined:new Date().toISOString()}:null;
+        users.push(newUser);
+        if(newSeller)sellers.push(newSeller);
+        persist();
+        error('#register-form-message','تم إنشاء حساب تجريبي في هذا المتصفح. يمكنك تسجيل الدخول.');
+        setTimeout(()=>location.href='login.html',700);
+      }catch(err){
+        error('#register-form-message','تعذر إنشاء الحساب التجريبي. حاولي مرة أخرى.');
+        if(submit)submit.disabled=false;
+      }
     });
   }
   if($('.login-page')){
@@ -1339,10 +1425,10 @@ if (cinema) {
   // INTEGRATE SELLER-CREATED ARTIFACTS INTO THE PUBLIC CATALOGUE (Sprint 1 local demo).
   if ($('.browse-page') && $('#browse-grid')) {
     const grid=$('#browse-grid');
-    const listed=new Set($$('.browse-artifact-card',grid).map(el=>el.querySelector('a[href*="artifact-detail"]')?.href.split('id=')[1]));
+    const listed=new Set($('.browse-artifact-card',grid).map(el=>{const href=el.querySelector('a[href*="artifact-detail"]')?.href;if(!href)return null;try{return new URL(href,location.href).searchParams.get('id')}catch{return null}}).filter(Boolean));
     artifacts.filter(a=>!a.archived&&!listed.has(a.id)).forEach(a=>{
       const item=document.createElement('article');item.className='browse-artifact-card';
-      Object.assign(item.dataset,{name:a.name,category:a.category,verification:a.verification,price:String(a.price)});
+      Object.assign(item.dataset,{name:a.name,category:a.category,verification:a.verification,price:String(a.price),originalIndex:String(grid.querySelectorAll('.browse-artifact-card').length)});
       const ac=auctions.find(z=>z.artifactId===a.id);const current=ac?highest(ac):null;
       item.innerHTML=`<div class="browse-artifact-image"><img src="${escape(a.image||'coin.jpg')}" loading="lazy" alt="${escape(a.name)}"><span class="pending-badge">${escape(verifications[a.verification]||'غير موثق')}</span></div>
       <div class="browse-card-content"><span class="artifact-category">${escape(categories[a.category]||'')}</span><h3>${escape(a.name)}</h3><p class="artifact-description">${escape(a.description)}</p><span class="price-label">${ac?'أعلى عرض':'السعر المبدئي'}</span><strong class="artifact-price">${money(current??a.price)}</strong>
@@ -1355,23 +1441,39 @@ if (cinema) {
       const stamp=card.querySelector('.pending-badge');if(stamp)stamp.textContent=verifications[a.verification]||'غير موثق';
       const ac=auctions.find(z=>z.artifactId===a.id);const strong=card.querySelector('.artifact-price');if(ac&&strong)strong.textContent=money(highest(ac)??a.price);
       const r=rating(a.sellerId),container=card.querySelector('.browse-card-content');if(container){
+        // Sprint 1: show auction context from local demo data, without a backend.
+        const priceLabel=container.querySelector('.price-label');
+        if(priceLabel)priceLabel.textContent=ac?'أعلى مزايدة':'السعر المبدئي';
+        let auctionInfo=container.querySelector('.alfaw-browse-auction-info');
+        if(!auctionInfo){auctionInfo=document.createElement('div');auctionInfo.className='alfaw-browse-auction-info';container.querySelector('.artifact-card-footer')?.before(auctionInfo)}
+        if(ac){
+          const remaining=Date.parse(ac.end)-Date.now();
+          const timeText=status(ac)==='ended'?'انتهى المزاد':status(ac)==='upcoming'?'لم يبدأ بعد':remaining>0?Math.floor(remaining/86400000)+' يوم، '+Math.floor(remaining%86400000/3600000)+' ساعة، '+Math.floor(remaining%3600000/60000)+' دقيقة':'انتهى المزاد';
+          auctionInfo.innerHTML='<span>حالة المزاد: <strong>'+escape(statusName(ac))+'</strong></span><span>الوقت المتبقي: <strong>'+escape(timeText)+'</strong></span>';
+        } else auctionInfo.innerHTML='<span>لا يوجد مزاد مرتبط بهذه القطعة حاليًا</span>';
+
         let trust=container.querySelector('.alfaw-trust');if(!trust){trust=document.createElement('p');trust.className='alfaw-trust';container.querySelector('.artifact-card-footer')?.before(trust)}
         trust.textContent='موثوقية البائع: '+(r.trust===null?'لا توجد تقييمات':r.trust+'%');
       }
     });
-    // Refresh existing native filter and sort controller after the cards are integrated.
+    // Refresh the active deep-linked verification filter after saved artifact states load.
+    const requestedStatus = new URLSearchParams(location.search).get('verification');
+    const statusSelect = document.getElementById('verification-filter');
+    if (statusSelect && ['verified','pending','unverified'].includes(requestedStatus)) {
+      statusSelect.value = requestedStatus;
+    }
     if(typeof sortArtifacts==='function')sortArtifacts();
   }
 
   // NEW PUBLIC SELLER DIRECTORY — older directory uses different selectors.
   if($('.sellers-page')&&$('#seller-search-input')){
-    const render=()=>{const q=$('#seller-search-input')?.value.trim().toLowerCase()||'',cat=$('#seller-category-filter')?.value||'all',sort=$('#seller-sort-filter')?.value||'name';let list=sellers.filter(s=>(s.name+' '+s.city+' '+s.specialty).toLowerCase().includes(q)&&(cat==='all'||cat===s.category));list.sort((a,b)=>sort==='artifacts-high'?artifacts.filter(x=>x.sellerId===b.id).length-artifacts.filter(x=>x.sellerId===a.id).length:sort==='newest'?String(b.joined).localeCompare(a.joined):sort==='trust-high'?(rating(b.id).trust??-1)-(rating(a.id).trust??-1):a.name.localeCompare(b.name,'ar'));const grid=$('#sellers-grid');if(grid)grid.innerHTML=list.map(s=>{const r=rating(s.id);return `<article class="seller-card"><div class="seller-card-cover"></div><div class="seller-card-content"><div class="seller-card-avatar">${escape(s.name[0])}</div><h3>${escape(s.name)}</h3><p>${escape(s.city)} — ${escape(s.specialty)}</p><p>${escape(s.bio)}</p><div class="seller-card-stats"><div><span>Trust Score</span><strong>${r.trust===null?'لا توجد تقييمات':r.trust+'%'}</strong></div><div><span>القطع</span><strong>${artifacts.filter(x=>x.sellerId===s.id).length}</strong></div><div><span>التقييمات</span><strong>${r.count}</strong></div></div><a class="seller-profile-button" href="seller-detail.html?id=${encodeURIComponent(s.id)}">عرض ملف البائع ←</a></div></article>`}).join('');visible('#sellers-empty-state',!list.length);text('#sellers-results-count',list.length+' بائعين')};
+    const render=()=>{const q=$('#seller-search-input')?.value.trim().toLowerCase()||'',cat=$('#seller-category-filter')?.value||'all',sort=$('#seller-sort-filter')?.value||'name';let list=sellers.filter(s=>(s.name+' '+s.city+' '+s.specialty).toLowerCase().includes(q)&&(cat==='all'||cat===s.category));list.sort((a,b)=>sort==='artifacts-high'?artifacts.filter(x=>x.sellerId===b.id&&!x.archived).length-artifacts.filter(x=>x.sellerId===a.id&&!x.archived).length:sort==='newest'?String(b.joined).localeCompare(a.joined):sort==='trust-high'?(rating(b.id).trust??-1)-(rating(a.id).trust??-1):a.name.localeCompare(b.name,'ar'));const grid=$('#sellers-grid');if(grid)grid.innerHTML=list.map(s=>{const r=rating(s.id);return `<article class="seller-card"><div class="seller-card-cover"></div><div class="seller-card-content"><div class="seller-card-avatar">${escape(s.name[0])}</div><h3>${escape(s.name)}</h3><p>${escape(s.city)} — ${escape(s.specialty)}</p><p>${escape(s.bio)}</p><div class="seller-card-stats"><div><span>Trust Score</span><strong>${r.trust===null?'لا توجد تقييمات':r.trust+'%'}</strong></div><div><span>القطع</span><strong>${artifacts.filter(x=>x.sellerId===s.id&&!x.archived).length}</strong></div><div><span>التقييمات</span><strong>${r.count}</strong></div></div><a class="seller-profile-button" href="seller-detail.html?id=${encodeURIComponent(s.id)}">عرض ملف البائع ←</a></div></article>`}).join('');visible('#sellers-empty-state',!list.length);text('#sellers-results-count',list.length+' بائعين')};
     ['#seller-search-input','#seller-category-filter','#seller-sort-filter'].forEach(s=>$(s)?.addEventListener('input',render));$('#seller-search-form')?.addEventListener('submit',e=>{e.preventDefault();render()});$('#clear-seller-filters')?.addEventListener('click',()=>{value('#seller-search-input','');value('#seller-category-filter','all');render()});render();
   }
   if($('.seller-detail-page')&&$('#seller-detail-name')){
     if(params.has('id')&&!seller(params.get('id'))){location.replace('seller-profile.html');return}const s=seller(params.get('id'))||sellers[0];if(s){const r=rating(s.id),items=artifacts.filter(a=>a.sellerId===s.id&&!a.archived),sales=auctions.filter(a=>a.sellerId===s.id);[['#seller-detail-name',s.name],['#seller-breadcrumb-name',s.name],['#seller-detail-avatar',s.name[0]],['#seller-detail-location',s.city],['#seller-detail-specialty',s.specialty],['#seller-detail-biography',s.bio],['#seller-about-description',s.bio],['#seller-about-specialty',s.specialty],['#seller-about-city',s.city],['#seller-about-category',s.specialty],['#seller-about-joined',date(s.joined)],['#seller-detail-artifact-count',items.length],['#seller-detail-auction-count',sales.length],['#seller-detail-review-count',r.count],['#seller-detail-trust-score',r.trust===null?'لا توجد تقييمات':r.trust+'%'],['#seller-trust-percentage',r.trust===null?'—':r.trust+'%'],['#seller-average-rating',r.avg===null?'—':r.avg.toFixed(1)],['#seller-review-total',r.count+' تقييمات']].forEach(([key,v])=>text(key,v));
       if($('#seller-artifacts-grid'))$('#seller-artifacts-grid').innerHTML=items.map(artworkCard).join('');visible('#seller-artifacts-empty',!items.length);
-      if($('#seller-auctions-grid'))$('#seller-auctions-grid').innerHTML=sales.map(a=>{const item=artifact(a.artifactId);return item?`<article class="seller-auction-card"><div class="seller-auction-image"><img src="${escape(item.image)}" alt="${escape(item.name)}"></div><div class="seller-auction-content"><h3>${escape(item.name)}</h3><p>${statusName(a)} — ${money(a.startingPrice)}</p><a href="auction-detail.html?id=${a.id}">تفاصيل المزاد ←</a></div></article>`:''}).join('');visible('#seller-auctions-empty',!sales.length);
+      if($('#seller-auctions-grid'))$('#seller-auctions-grid').innerHTML=sales.map(a=>{const item=artifact(a.artifactId);return item?`<article class="seller-auction-card"><div class="seller-auction-image"><img src="${escape(item.image)}" alt="${escape(item.name)}"></div><div class="seller-auction-content"><h3>${escape(item.name)}</h3><p>${statusName(a)} — ${money(a.startingPrice)}</p><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل المزاد ←</a></div></article>`:''}).join('');visible('#seller-auctions-empty',!sales.length);
       if($('#seller-reviews-list'))$('#seller-reviews-list').innerHTML=r.count?sellerReviews(s.id).map(re=>`<article class="seller-review-card"><strong>${escape(re.buyerName)}</strong> <span>${'★'.repeat(re.rating)}</span><p>${escape(re.comment)}</p></article>`).join(''):'<div class="seller-review-empty">لا توجد تقييمات حتى الآن.</div>';
       for(let n=1;n<=5;n++){const count=sellerReviews(s.id).filter(re=>re.rating===n).length;text('#seller-rating-count-'+n,count);const bar=$('#seller-rating-bar-'+n);if(bar)bar.style.width=r.count?(count/r.count*100)+'%':'0%'}
     }
@@ -1397,42 +1499,52 @@ if (cinema) {
     const a=auction(params.get('id'))||auctions[0];
     const render=()=>{if(!a)return;const item=artifact(a.artifactId),s=seller(a.sellerId),st=status(a),max=highest(a);if(!item)return;[['#auction-detail-title',item.name],['#auction-breadcrumb-name',item.name],['#auction-detail-reference',a.id],['#auction-detail-status',statusName(a)],['#auction-timer-status',statusName(a)],['#auction-starting-price',money(a.startingPrice)],['#auction-highest-bid',max===null?'لا توجد مزايدات':money(max)],['#auction-min-increment',money(a.increment)],['#auction-next-minimum',money(minimum(a))],['#auction-artifact-description',item.description],['#auction-artifact-category',categories[item.category]],['#auction-artifact-origin',item.origin],['#auction-artifact-verification',verifications[item.verification]],['#auction-seller-name',s?.name],['#auction-seller-avatar',s?.name[0]],['#auction-seller-description',s?.bio],['#auction-bids-count',a.bids.length+' مزايدات']].forEach(([k,v])=>text(k,v));const img=$('#auction-artifact-image');if(img){img.src=item.image;img.alt=item.name}const thumbs=$('#auction-detail-thumbnails');if(thumbs){thumbs.querySelectorAll('img').forEach(image=>{image.src=item.image;image.alt=item.name})}const link=$('#auction-artifact-details-link');if(link)link.href='artifact-detail.html?id='+encodeURIComponent(item.id);const slink=$('#auction-seller-link');if(slink&&s)slink.href='seller-detail.html?id='+encodeURIComponent(s.id);value('#bid-auction-id',a.id);const eligible=st==='active'&&session?.role==='buyer';if($('#bid-amount')){$('#bid-amount').disabled=!eligible;$('#bid-amount').min=minimum(a)}if($('#submit-bid-button'))$('#submit-bid-button').disabled=!eligible;
       if($('#auction-bid-history-body'))$('#auction-bid-history-body').innerHTML=a.bids.length?[...a.bids].sort((x,y)=>y.amount-x.amount).map(b=>`<tr><td>${escape(b.bidderName)}</td><td>${money(b.amount)}</td><td>${date(b.created)}</td><td>—</td></tr>`).join(''):'<tr><td colspan="4">لا توجد مزايدات.</td></tr>';
-      const ranked=[...a.bids].sort((x,y)=>y.amount-x.amount).filter((b,i,list)=>list.findIndex(x=>x.uid===b.uid)===i);if($('#auction-ranking-list'))$('#auction-ranking-list').innerHTML=ranked.length?ranked.map((b,i)=>`<div class="auction-ranking-row"><strong>${i+1}</strong> ${escape(b.bidderName)} — ${money(b.amount)}</div>`).join(''):'لا توجد مزايدات بعد.';
-      const winner=st==='ended'&&ranked.length&&(!a.reservePrice||ranked[0].amount>=a.reservePrice)?ranked[0]:null; text('#auction-result-heading',st!=='ended'?'لم ينتهِ المزاد بعد':winner?'انتهى المزاد':'لا يوجد عرض فائز');text('#auction-result-message',winner?'أعلى عرض: '+money(winner.amount):'لا توجد نتيجة فائزة بعد.');visible('#auction-review-section',!!(winner&&winner.uid===session?.id&&!reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)));return winner};
-    render();$('#place-bid-form')?.addEventListener('submit',e=>{e.preventDefault();if(!a||status(a)!=='active'||session?.role!=='buyer'){feedback('#bid-form-message','المزايدة متاحة للمشتري في المزاد النشط فقط.');return}const amount=Number($('#bid-amount')?.value);if(!Number.isInteger(amount)||amount<minimum(a)){feedback('#bid-form-message','الحد الأدنى المقبول للمزايدة: '+money(minimum(a)));return}const prev=[...a.bids].sort((x,y)=>y.amount-x.amount)[0];if(prev?.uid&&prev.uid!==session.id)notice(prev.uid,'تم تجاوز عرضك في المزاد '+a.id,'auction-detail.html?id='+a.id);a.bids.push({id:id('bid'),uid:session.id,bidderName:session.name,amount,created:new Date().toISOString()});persist();render();feedback('#bid-form-message','تم تسجيل المزايدة التجريبية في هذا المتصفح.');showToast('تم تسجيل عرضك: '+money(amount),'auction-detail.html?id='+a.id);value('#bid-amount','')});
-    $('#auction-review-form')?.addEventListener('submit',e=>{e.preventDefault();const winner=render(),score=Number($('#auction-review-rating')?.value);if(!winner||winner.uid!==session?.id||!$('#auction-receipt-confirmed')?.checked||!Number.isInteger(score)||score<1||score>5||reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)){feedback('#auction-review-message','التقييم متاح للفائز مرة واحدة بعد تأكيد الاستلام واختيار تقييم بين 1 و5.');return}reviews.push({id:id('review'),auctionId:a.id,sellerId:a.sellerId,uid:session.id,buyerName:session.name,rating:score,comment:$('#auction-review-comment')?.value||'',created:new Date().toISOString()});persist();render();feedback('#auction-review-message','شكرًا، تم تسجيل تقييمك التجريبي.')} );
+      const ranked=rankedBids(a);if($('#auction-ranking-list'))$('#auction-ranking-list').innerHTML=ranked.length?ranked.map((b,i)=>`<div class="auction-ranking-row"${b.uid===session?.id?' aria-current="true"':''}><strong>${i+1}</strong> ${escape(b.bidderName)}${b.uid===session?.id?' (أنت)':''} — ${money(b.amount)}</div>`).join(''):'لا توجد مزايدات بعد.';
+      const winner=auctionWinner(a); text('#auction-result-heading',st!=='ended'?'لم ينتهِ المزاد بعد':winner?'انتهى المزاد':'لا يوجد عرض فائز');text('#auction-result-message',winner?'أعلى عرض: '+money(winner.amount):'لا توجد نتيجة فائزة بعد.');visible('#auction-review-section',!!(winner&&winner.uid===session?.id&&!reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)));return winner};
+    render();$('#place-bid-form')?.addEventListener('submit',e=>{e.preventDefault();if(!a||status(a)!=='active'||session?.role!=='buyer'){feedback('#bid-form-message','المزايدة متاحة للمشتري في المزاد النشط فقط.');return}const amount=Number($('#bid-amount')?.value);if(!Number.isInteger(amount)||amount<minimum(a)){feedback('#bid-form-message','الحد الأدنى المقبول للمزايدة: '+money(minimum(a)));return}const prev=[...a.bids].sort((x,y)=>y.amount-x.amount)[0];a.bids.push({id:id('bid'),uid:session.id,bidderName:session.name,amount,created:new Date().toISOString()});if(!put('auctions',auctions)){a.bids.pop();feedback('#bid-form-message','تعذر حفظ المزايدة محليًا. تحققي من مساحة التخزين وحاولي مجددًا.');return}if(prev?.uid&&prev.uid!==session.id)notice(prev.uid,'تم تجاوز عرضك في المزاد '+a.id,'auction-detail.html?id='+a.id);render();feedback('#bid-form-message','تم تسجيل المزايدة التجريبية في هذا المتصفح.');showToast('تم تسجيل عرضك: '+money(amount),'auction-detail.html?id='+a.id);value('#bid-amount','')});
+    $('#auction-review-form')?.addEventListener('submit',e=>{e.preventDefault();const winner=render(),score=Number($('#auction-review-rating')?.value);if(!winner||winner.uid!==session?.id||!$('#auction-receipt-confirmed')?.checked||!Number.isInteger(score)||score<1||score>5||reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)){feedback('#auction-review-message','التقييم متاح للفائز مرة واحدة بعد تأكيد الاستلام واختيار تقييم بين 1 و5.');return}reviews.push({id:id('review'),auctionId:a.id,sellerId:a.sellerId,uid:session.id,buyerName:session.name,rating:score,comment:$('#auction-review-comment')?.value||'',created:new Date().toISOString()});if(!put('reviews',reviews)){reviews.pop();feedback('#auction-review-message','تعذر حفظ التقييم محليًا. حاولي مرة أخرى.');return}render();feedback('#auction-review-message','شكرًا، تم تسجيل تقييمك التجريبي.')} );
     const timer=()=>{if(!a||!a.start||!a.end)return;
-      if(status(a)==='ended' && a.bids.length){const top=[...a.bids].sort((x,y)=>y.amount-x.amount)[0];
-        if((!a.reservePrice || top.amount>=a.reservePrice) && !notices.some(n=>n.auctionId===a.id&&n.kind==='won')){
+      const top=auctionWinner(a);
+      if(top && !notices.some(n=>n.auctionId===a.id&&n.kind==='won')){
           const uid=top.uid;notices.unshift({id:id('notice'),uid,body:'تهانينا، فزت بالمزاد '+a.id,
-            url:'auction-detail.html?id='+encodeURIComponent(a.id),auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()});persist();if(uid===session?.id)showToast('تهانينا، فزت بالمزاد '+a.id,'auction-detail.html?id='+a.id);
-        }
+            url:'auction-detail.html?id='+encodeURIComponent(a.id),auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()});if(!put('notices',notices)){notices.shift()}else if(uid===session?.id){showToast('تهانينا، فزت بالمزاد '+a.id,'auction-detail.html?id='+a.id)}
       }const ms=Math.max(0,Date.parse(status(a)==='upcoming'?a.start:a.end)-Date.now()),seconds=Math.floor(ms/1000);text('#auction-days',Math.floor(seconds/86400));text('#auction-hours',Math.floor(seconds%86400/3600));text('#auction-minutes',Math.floor(seconds%3600/60));text('#auction-seconds',seconds%60);if(status(a)!==timer.previous){timer.previous=status(a);render()}};timer();setInterval(timer,1000);
   }
   // PERSONAL PROFILE
   if($('.profile-page')){
     const u=account();visible('#profile-guest-state',!u);visible('#profile-authenticated-content',!!u);
-    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',u.role==='seller'?'بائع':'مشتري'],['#profile-detail-role',u.role==='seller'?'بائع':'مشتري'],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',u.role==='seller');const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>status(a)==='ended'&&a.bids.length&&[...a.bids].sort((x,y)=>y.amount-x.amount)[0].uid===u.id).length);
-      if($('#profile-my-auctions-list'))$('#profile-my-auctions-list').innerHTML=auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).map(a=>`<p><a href="auction-detail.html?id=${a.id}">${escape(artifact(a.artifactId)?.name||a.id)} ←</a></p>`).join('')||'<p>لا توجد مشاركات بعد.</p>';
+    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',u.role==='seller'?'بائع':'مشتري'],['#profile-detail-role',u.role==='seller'?'بائع':'مشتري'],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',u.role==='seller');const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);
+      if($('#profile-my-auctions-list'))$('#profile-my-auctions-list').innerHTML=auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).map(a=>`<p><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">${escape(artifact(a.artifactId)?.name||a.id)} ←</a></p>`).join('')||'<p>لا توجد مشاركات بعد.</p>';
       const myNotices=notices.filter(n=>n.uid===u.id);text('#profile-unread-count',myNotices.filter(n=>!n.read).length);if($('#profile-notifications-list'))$('#profile-notifications-list').innerHTML=myNotices.map(n=>`<p>${escape(n.body)} <a href="${escape(n.url)}">عرض</a></p>`).join('')||'<p>لا توجد إشعارات.</p>';
-      $('#profile-mark-all-read')?.addEventListener('click',()=>{myNotices.forEach(n=>n.read=true);persist();location.reload()});
-      $('#profile-edit-form')?.addEventListener('submit',e=>{e.preventDefault();const name=$('#profile-full-name')?.value.trim(),email=$('#profile-email')?.value.trim().toLowerCase();if(!name||!email?.includes('@')||users.some(x=>x.id!==u.id&&x.email===email)){feedback('#profile-form-message','راجعي الاسم والبريد الإلكتروني.');return}Object.assign(u,{name,email,phone:$('#profile-phone')?.value||'',city:$('#profile-city')?.value||''});session.name=name;put('session',session);persist();text('#profile-display-name',name);feedback('#profile-form-message','تم حفظ بيانات العرض محليًا.')});
+      $('#profile-mark-all-read')?.addEventListener('click',()=>{const previous=myNotices.map(n=>n.read);myNotices.forEach(n=>n.read=true);if(!put('notices',notices)){myNotices.forEach((n,i)=>n.read=previous[i]);feedback('#profile-form-message','تعذر حفظ حالة الإشعارات. حاولي مجددًا.');return}location.reload()});
+      $('#profile-edit-form')?.addEventListener('submit',e=>{e.preventDefault();const name=$('#profile-full-name')?.value.trim(),email=$('#profile-email')?.value.trim().toLowerCase();if(name.length<2||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||users.some(x=>x.id!==u.id&&String(x.email||'').toLowerCase()===email)){feedback('#profile-form-message','تحققي من الاسم والبريد الإلكتروني أو استخدمي بريدًا غير مسجل.');return}const before={name:u.name,email:u.email,phone:u.phone,city:u.city},oldSessionName=session.name;Object.assign(u,{name,email,phone:$('#profile-phone')?.value||'',city:$('#profile-city')?.value||''});if(!put('users',users)){Object.assign(u,before);feedback('#profile-form-message','تعذر حفظ بيانات الحساب محليًا. حاولي مجددًا.');return}session.name=name;if(!put('session',session)){session.name=oldSessionName;Object.assign(u,before);put('users',users);feedback('#profile-form-message','تعذر تحديث الجلسة. حاولي مجددًا.');return}text('#profile-display-name',name);text('#profile-avatar',name[0]);feedback('#profile-form-message','تم حفظ بيانات العرض محليًا.')});
     }
     $$('.profile-tab').forEach(btn=>btn.addEventListener('click',()=>{const target=btn.dataset.profileTab;$$('.profile-tab').forEach(b=>b.classList.toggle('active',b===btn));$$('.profile-panel').forEach(panel=>{panel.hidden=panel.dataset.profilePanel!==target})}));
+    // Sprint 1: make the overview shortcut and cancel action functional.
+    $('#profile-edit-shortcut')?.addEventListener('click',()=>{
+      const tab=$('.profile-tab[data-profile-tab="personal"]');tab?.click();
+      $('#profile-edit-form')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+      $('#profile-full-name')?.focus({preventScroll:true});
+    });
+    $('#profile-cancel-button')?.addEventListener('click',()=>{
+      $('#profile-edit-form')?.reset();
+      if(u){value('#profile-full-name',u.name||'');value('#profile-email',u.email||'');value('#profile-phone',u.phone||'');value('#profile-city',u.city||'')}
+      const msg=$('#profile-form-message');if(msg){msg.textContent='تم إلغاء التعديلات غير المحفوظة.';msg.hidden=false}
+    });
     $('#profile-logout-button')?.addEventListener('click',()=>{session=null;localStorage.removeItem('alfaw_phase3_session');location.href='login.html'});
   }
   // SELLER DASHBOARD
   const drawSellerDashboard=()=>{
     if(!$('.seller-dashboard-page')||!requireRole('seller','#seller-dashboard-content','#seller-dashboard-access-message'))return;
     const s=currentSeller(),owned=artifacts.filter(a=>a.sellerId===s.id&&!a.archived),mine=auctions.filter(a=>a.sellerId===s.id),r=rating(s.id);text('#dashboard-seller-name',s.name);text('#dashboard-total-artifacts',owned.length);text('#dashboard-active-auctions',mine.filter(a=>status(a)==='active').length);text('#dashboard-completed-auctions',mine.filter(a=>status(a)==='ended').length);text('#dashboard-trust-score',r.trust===null?'لا توجد تقييمات':r.trust+'%');text('#dashboard-review-trust',r.trust===null?'—':r.trust+'%');text('#dashboard-average-rating',r.avg===null?'—':r.avg.toFixed(1));text('#dashboard-reviews-count',r.count);if($('#dashboard-public-profile-link'))$('#dashboard-public-profile-link').href='seller-detail.html?id='+s.id;
-    const term=$('#dashboard-artifact-search')?.value.toLowerCase()||'',state=$('#dashboard-artifact-status-filter')?.value||'all';const filtered=owned.filter(a=>a.name.toLowerCase().includes(term)&&(state==='all'||(state==='in-auction'&&auctions.some(x=>x.artifactId===a.id))||(state==='available'&&!auctions.some(x=>x.artifactId===a.id))));
-    if($('#dashboard-artifacts-table-body'))$('#dashboard-artifacts-table-body').innerHTML=filtered.map(a=>`<tr><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td>${auctions.some(x=>x.artifactId===a.id)?'ضمن مزاد':'متاحة'}</td><td><a href="manage-artifact.html?id=${encodeURIComponent(a.id)}">تعديل</a> <button type="button" data-delete-artifact="${escape(a.id)}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد قطع مطابقة.</td></tr>';
-    if($('#dashboard-auctions-table-body'))$('#dashboard-auctions-table-body').innerHTML=mine.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${a.id}">تفاصيل</a></td></tr>`).join('')||'<tr><td colspan="6">لا توجد مزادات.</td></tr>';
+    const term=$('#dashboard-artifact-search')?.value.toLowerCase()||'',state=$('#dashboard-artifact-status-filter')?.value||'all';const artifactState=a=>{const linked=auctions.filter(x=>x.artifactId===a.id);return linked.some(x=>auctionWinner(x))?'sold':linked.some(x=>status(x)!=='ended')?'in-auction':'available'};const filtered=owned.filter(a=>a.name.toLowerCase().includes(term)&&(state==='all'||artifactState(a)===state));
+    if($('#dashboard-artifacts-table-body'))$('#dashboard-artifacts-table-body').innerHTML=filtered.map(a=>`<tr><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td>${({sold:'مكتملة البيع','in-auction':'ضمن مزاد',available:'متاحة'})[artifactState(a)]}</td><td><a class="alfaw-seller-action-link" href="manage-artifact.html?id=${encodeURIComponent(a.id)}">تعديل</a> <button class="alfaw-seller-delete-button" type="button" aria-label="حذف ${escape(a.name)}" data-delete-artifact="${escape(a.id)}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد قطع مطابقة.</td></tr>';
+    if($('#dashboard-auctions-table-body'))$('#dashboard-auctions-table-body').innerHTML=mine.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل</a></td></tr>`).join('')||'<tr><td colspan="6">لا توجد مزادات.</td></tr>';
     if($('#dashboard-reviews-list'))$('#dashboard-reviews-list').innerHTML=sellerReviews(s.id).map(re=>`<p>${escape(re.buyerName)} ${'★'.repeat(re.rating)} — ${escape(re.comment)}</p>`).join('')||'<p>لا توجد تقييمات حتى الآن.</p>';
   };
   if($('.seller-dashboard-page')){
     ['#dashboard-artifact-search','#dashboard-artifact-status-filter'].forEach(s=>$(s)?.addEventListener('input',drawSellerDashboard));
-    $('#dashboard-artifacts-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-artifact]');if(!btn)return;const key=btn.dataset.deleteArtifact;if(artifact(key)?.sellerId!==currentSeller()?.id)return;if(!confirm('هل تريد إزالة هذه القطعة من القوائم النشطة؟'))return;const row=artifact(key);row.archived=true;persist();drawSellerDashboard()});drawSellerDashboard();
+    $('#dashboard-artifacts-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-artifact]');if(!btn)return;const key=btn.dataset.deleteArtifact;if(artifact(key)?.sellerId!==currentSeller()?.id)return;if(!confirm('هل تريد إزالة هذه القطعة من القوائم النشطة؟'))return;const row=artifact(key);row.archived=true;if(!put('artifacts',artifacts)){row.archived=false;feedback('#dashboard-artifacts-message','تعذر حذف القطعة محليًا. حاولي مرة أخرى.');return}feedback('#dashboard-artifacts-message','تمت إزالة القطعة من القوائم النشطة.');drawSellerDashboard()});drawSellerDashboard();
   }
   // ADD / EDIT ARTIFACT
   if($('.manage-artifact-page')&&requireRole('seller','#manage-artifact-content','#manage-artifact-access-message')){
@@ -1444,9 +1556,33 @@ if (cinema) {
       $$('input[name="verificationStatus"]').forEach(r=>r.addEventListener('change',updateVerification));updateVerification();
       const preview=()=>{text('#artifact-live-preview-name',$('#artifact-name')?.value||'اسم القطعة');text('#artifact-live-preview-category',categories[$('#artifact-category')?.value]||'فئة القطعة');text('#artifact-live-preview-description',$('#artifact-description')?.value||'وصف القطعة');text('#artifact-live-preview-price',money($('#artifact-starting-price')?.value));text('#artifact-live-preview-verification',verifications[$('input[name="verificationStatus"]:checked')?.value]||'غير موثق')};
       $$('#manage-artifact-form input,#manage-artifact-form select,#manage-artifact-form textarea').forEach(el=>el.addEventListener('input',preview));preview();
-      $('#artifact-images')?.addEventListener('change',e=>{const area=$('#artifact-images-preview');if(!area)return;area.replaceChildren();[...e.target.files].filter(f=>f.type.startsWith('image/')).forEach(f=>{const img=document.createElement('img');img.alt=f.name;img.src=URL.createObjectURL(f);area.append(img)})});
+      // Preview selection without uploading. Restrict memory use to one thumbnail.
+      const allowedImage=['image/jpeg','image/png','image/webp'];
+      const allowedDoc=['application/pdf','image/jpeg','image/png','image/webp'];
+      let previewURL=null;
+      const fileLabel=(file)=>file.name+' ('+(file.size/1024/1024).toFixed(2)+' MB)';
+      $('#artifact-images')?.addEventListener('change',e=>{
+        const area=$('#artifact-images-preview');if(!area)return;
+        if(previewURL){URL.revokeObjectURL(previewURL);previewURL=null}
+        area.replaceChildren();const files=[...e.target.files];
+        if(!files.length)return;
+        const invalid=files.filter(file=>!allowedImage.includes(file.type)||file.size>1024*1024);
+        if(invalid.length){area.textContent='صيغة الصور المسموحة JPG أو PNG أو WEBP، بحد تجريبي 1 MB لكل صورة.';return}
+        const first=files[0];const img=document.createElement('img');img.alt='معاينة '+first.name;previewURL=URL.createObjectURL(first);img.src=previewURL;img.onload=()=>{if(previewURL===img.src){URL.revokeObjectURL(previewURL);previewURL=null}};
+        area.append(img);
+        const note=document.createElement('p');note.textContent='معاينة: '+fileLabel(first)+(files.length>1?' — سيتم حفظ الصورة الأولى فقط في النسخة التجريبية.':'');area.append(note);
+      });
+      $('#artifact-documents')?.addEventListener('change',e=>{
+        const area=$('#artifact-documents-preview');if(!area)return;area.replaceChildren();
+        const files=[...e.target.files];if(!files.length)return;
+        const bad=files.filter(file=>!allowedDoc.includes(file.type)||file.size>1024*1024);
+        if(bad.length){area.textContent='المستندات المسموحة PDF أو JPG أو PNG أو WEBP، بحد تجريبي 1 MB لكل ملف.';return}
+        const list=document.createElement('ul');list.className='alfaw-upload-doc-list';
+        files.forEach(file=>{const li=document.createElement('li');li.textContent=fileLabel(file);list.append(li)});
+        area.append(list);
+      });
       $('#manage-artifact-form')?.addEventListener('submit',async e=>{e.preventDefault();const name=$('#artifact-name')?.value.trim()||'',description=$('#artifact-description')?.value.trim()||'',price=Number($('#artifact-starting-price')?.value),cat=$('#artifact-category')?.value,period=$('#artifact-period')?.value.trim(),origin=$('#artifact-origin')?.value.trim(),condition=$('#artifact-condition')?.value,v=$('input[name="verificationStatus"]:checked')?.value||'unverified',ref=$('#artifact-verification-reference')?.value.trim()||'';
-        if(name.length<3||description.length<20||!cat||!period||!origin||!condition||price<=0||(v==='verified'&&!ref)){feedback('#manage-artifact-form-message','يرجى إكمال الحقول المطلوبة.');return}
+        if(name.length<3||description.length<20||!cat||!period||!origin||!condition||!Number.isFinite(price)||price<=0||(v==='verified'&&!ref)){feedback('#manage-artifact-form-message','يرجى إكمال الحقول المطلوبة.');return}
         const upload=$('#artifact-images')?.files[0];if(!old&&!upload){feedback('#manage-artifact-form-message','اختاري صورة للقطعة.');return}
         // Browser-local Sprint 1 preview. Avoid sending a false signal of real archival storage.
         const readAsDataURL=file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)});
@@ -1456,7 +1592,7 @@ if (cinema) {
           canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
           return canvas.toDataURL('image/jpeg',.78)};
         const photoFiles=[...($('#artifact-images')?.files||[])],docFiles=[...($('#artifact-documents')?.files||[])];
-        if(photoFiles.some(f=>!f.type.startsWith('image/'))||docFiles.some(f=>!['application/pdf','image/png','image/jpeg','image/webp'].includes(f.type))){feedback('#manage-artifact-form-message','الصور والمستندات يجب أن تكون بصيغة صورة أو PDF.');return}
+        if(photoFiles.some(f=>!allowedImage.includes(f.type))||docFiles.some(f=>!['application/pdf','image/png','image/jpeg','image/webp'].includes(f.type))){feedback('#manage-artifact-form-message','الصور والمستندات يجب أن تكون بصيغة صورة أو PDF.');return}
         // LocalStorage quotas are small; 1 MB each is a prototype storage limit, not a product policy.
         if([...photoFiles,...docFiles].some(f=>f.size>1024*1024)){feedback('#manage-artifact-form-message','الحد التجريبي في هذه النسخة 1 ميغابايت لكل ملف.');return}
         const data={id:old?.id||id('artifact'),name,description,price,category:cat,period,origin,condition,verification:v,verificationReference:v==='verified'?ref:'',provenance:$('#artifact-provenance')?.value.trim()||'',conditionNotes:$('#artifact-condition-notes')?.value.trim()||'',sellerId:currentSeller().id,image:old?.image||'',documents:old?.documents||[],created:old?.created||new Date().toISOString()};
@@ -1464,8 +1600,14 @@ if (cinema) {
           if(photoFiles.length)data.image=await compress(photoFiles[0]);
           if(docFiles.length)data.documents=await Promise.all(docFiles.map(async file=>({name:file.name,type:file.type,url:await readAsDataURL(file)})));
           const existing=old?artifacts.findIndex(x=>x.id===old.id):-1;
+          const previous=existing>=0?artifacts[existing]:null;
           if(existing>=0)artifacts[existing]=data;else artifacts.push(data);
-          if(!put('artifacts',artifacts)){feedback('#manage-artifact-form-message','تعذر حفظ الملفات محليًا، جرّبي ملفًا أصغر.');return}
+          if(!put('artifacts',artifacts)){
+            // Roll back in-memory changes if browser storage is full.
+            if(existing>=0)artifacts[existing]=previous;else artifacts.pop();
+            feedback('#manage-artifact-form-message','تعذر حفظ الملفات محليًا، جرّبي ملفًا أصغر.');
+            return;
+          }
           persist();feedback('#manage-artifact-form-message','تم حفظ بيانات القطعة والصورة للتجربة في هذا المتصفح فقط.');setTimeout(()=>location.href='seller-dashboard.html',950);
         }catch(err){feedback('#manage-artifact-form-message','تعذر قراءة الملفات المرفوعة. جرّبي صورة أصغر.');}
       });
@@ -1474,22 +1616,22 @@ if (cinema) {
   // CREATE / MANAGE AUCTIONS
   const drawManageAuctions=()=>{
     if(!$('.manage-auctions-page')||!requireRole('seller','#manage-auctions-content','#manage-auctions-access-message'))return;
-    const s=currentSeller(),mine=auctions.filter(a=>a.sellerId===s.id);text('#manage-auctions-total',mine.length);['active','upcoming','ended'].forEach(k=>text('#manage-auctions-'+k,mine.filter(a=>status(a)===k).length));const select=$('#auction-artifact-select');if(select&&!select.dataset.loaded){artifacts.filter(a=>a.sellerId===s.id&&!a.archived&&!auctions.some(x=>x.artifactId===a.id)).forEach(a=>select.add(new Option(a.name,a.id)));select.dataset.loaded='1'}const term=$('#manage-auctions-search')?.value.toLowerCase()||'',filter=$('#manage-auctions-status-filter')?.value||'all',list=mine.filter(a=>(a.id+' '+(artifact(a.artifactId)?.name||'')).toLowerCase().includes(term)&&(filter==='all'||status(a)===filter));if($('#manage-auctions-table-body'))$('#manage-auctions-table-body').innerHTML=list.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${date(a.start)}</td><td>${date(a.end)}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${a.id}">عرض</a> ${status(a)==='upcoming'&&!a.bids.length?`<button data-delete-auction="${escape(a.id)}">حذف</button>`:''}</td></tr>`).join('')||'<tr><td colspan="8">لا توجد مزادات.</td></tr>';
+    const s=currentSeller(),mine=auctions.filter(a=>a.sellerId===s.id);text('#manage-auctions-total',mine.length);['active','upcoming','ended'].forEach(k=>text('#manage-auctions-'+k,mine.filter(a=>status(a)===k).length));const select=$('#auction-artifact-select');if(select&&!select.dataset.loaded){artifacts.filter(a=>a.sellerId===s.id&&!a.archived&&!auctions.some(x=>x.artifactId===a.id)).forEach(a=>select.add(new Option(a.name,a.id)));select.dataset.loaded='1'}const term=$('#manage-auctions-search')?.value.toLowerCase()||'',filter=$('#manage-auctions-status-filter')?.value||'all',list=mine.filter(a=>(a.id+' '+(artifact(a.artifactId)?.name||'')).toLowerCase().includes(term)&&(filter==='all'||status(a)===filter));if($('#manage-auctions-table-body'))$('#manage-auctions-table-body').innerHTML=list.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${date(a.start)}</td><td>${date(a.end)}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">عرض</a> ${status(a)==='upcoming'&&!a.bids.length?`<button data-delete-auction="${escape(a.id)}">حذف</button>`:''}</td></tr>`).join('')||'<tr><td colspan="8">لا توجد مزادات.</td></tr>';
   };
   if($('.manage-auctions-page')){
     $('#auction-artifact-select')?.addEventListener('change',()=>{const a=artifact($('#auction-artifact-select').value);visible('#selected-auction-artifact',!!a);if(a){value('#auction-starting-price-input',a.price);text('#auction-preview-artifact',a.name);text('#selected-auction-artifact-name',a.name);text('#selected-auction-artifact-category',categories[a.category]);if($('#selected-auction-artifact-image'))$('#selected-auction-artifact-image').src=a.image}});
     [['#auction-starting-price-input','#auction-preview-starting-price',true],['#auction-min-increment-input','#auction-preview-increment',true],['#auction-start-date','#auction-preview-start',false],['#auction-end-date','#auction-preview-end',false]].forEach(([from,to,isMoney])=>$(from)?.addEventListener('input',()=>text(to,isMoney?money($(from).value):date($(from).value))));
-    $('#manage-auction-form')?.addEventListener('submit',e=>{e.preventDefault();const s=currentSeller();if(!s)return;const key=$('#auction-artifact-select')?.value,a=artifact(key),start=$('#auction-start-date')?.value,end=$('#auction-end-date')?.value,startingPrice=Number($('#auction-starting-price-input')?.value),increment=Number($('#auction-min-increment-input')?.value),reserveInput=$('#auction-reserve-price-input')?.value,reservePrice=reserveInput?Number(reserveInput):null;if(!a||a.sellerId!==s.id||auctions.some(x=>x.artifactId===key)||startingPrice<=0||increment<=0||!start||!end||Date.parse(start)<=Date.now()||Date.parse(end)<=Date.parse(start)||(reservePrice!==null&&reservePrice<startingPrice)){feedback('#manage-auction-form-message','راجعي اختيار القطعة والسعر وموعد البداية والنهاية.');return}auctions.push({id:id('auction'),artifactId:key,sellerId:s.id,startingPrice,increment,reservePrice,start,end,notes:$('#auction-notes')?.value||'',bids:[],created:new Date().toISOString()});persist();feedback('#manage-auction-form-message','تم حفظ المزاد في المتصفح.');setTimeout(()=>location.reload(),700)});
+    $('#manage-auction-form')?.addEventListener('submit',e=>{e.preventDefault();const s=currentSeller();if(!s)return;const key=$('#auction-artifact-select')?.value,a=artifact(key),start=$('#auction-start-date')?.value,end=$('#auction-end-date')?.value,startingPrice=Number($('#auction-starting-price-input')?.value),increment=Number($('#auction-min-increment-input')?.value),reserveInput=$('#auction-reserve-price-input')?.value,reservePrice=reserveInput?Number(reserveInput):null;if(!a||a.sellerId!==s.id||auctions.some(x=>x.artifactId===key)||!Number.isFinite(startingPrice)||startingPrice<=0||!Number.isFinite(increment)||increment<=0||(reservePrice!==null&&!Number.isFinite(reservePrice))||!start||!end||!Number.isFinite(Date.parse(start))||!Number.isFinite(Date.parse(end))||Date.parse(start)<=Date.now()||Date.parse(end)<=Date.parse(start)||(reservePrice!==null&&reservePrice<startingPrice)){feedback('#manage-auction-form-message','راجعي اختيار القطعة والسعر وموعد البداية والنهاية.');return}auctions.push({id:id('auction'),artifactId:key,sellerId:s.id,startingPrice,increment,reservePrice,start,end,notes:$('#auction-notes')?.value||'',bids:[],created:new Date().toISOString()});if(!put('auctions',auctions)){auctions.pop();feedback('#manage-auction-form-message','تعذر حفظ المزاد محليًا، تأكدي من توفر مساحة التخزين وحاولي مرة أخرى.');return}feedback('#manage-auction-form-message','تم حفظ المزاد في المتصفح.');setTimeout(()=>location.reload(),700)});
     ['#manage-auctions-search','#manage-auctions-status-filter'].forEach(s=>$(s)?.addEventListener('input',drawManageAuctions));
-    $('#manage-auctions-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-auction]');if(!btn)return;const a=auction(btn.dataset.deleteAuction);if(!a||a.sellerId!==currentSeller()?.id||status(a)!=='upcoming'||a.bids.length)return;if(!confirm('هل تريد حذف المزاد؟'))return;auctions=auctions.filter(x=>x.id!==a.id);persist();location.reload()});drawManageAuctions();
+    $('#manage-auctions-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-auction]');if(!btn)return;const a=auction(btn.dataset.deleteAuction);if(!a||a.sellerId!==currentSeller()?.id||status(a)!=='upcoming'||a.bids.length)return;if(!confirm('هل تريد حذف المزاد؟'))return;const originalAuctions=auctions;auctions=auctions.filter(x=>x.id!==a.id);if(!put('auctions',auctions)){auctions=originalAuctions;feedback('#manage-auctions-list-message','تعذر حذف المزاد من التخزين المحلي.');return}location.reload()});drawManageAuctions();
   }
   // ADMIN MONITORING — READ ONLY. No hardcoded admin login is added.
   const drawAdmin=()=>{
     if(!$('.admin-dashboard-page')||!requireRole('admin','#admin-dashboard-content','#admin-dashboard-access-message'))return;
     text('#admin-total-users',users.length);text('#admin-total-artifacts',artifacts.length);text('#admin-total-auctions',auctions.length);text('#admin-total-bids',auctions.reduce((sum,a)=>sum+a.bids.length,0));['active','upcoming','ended'].forEach(k=>text('#admin-'+k+'-auctions',auctions.filter(a=>status(a)===k).length));['verified','unverified','pending'].forEach(k=>text('#admin-'+k+'-artifacts',artifacts.filter(a=>a.verification===k).length));['buyer','seller','admin'].forEach(k=>text('#admin-'+({buyer:'buyers',seller:'sellers',admin:'admins'}[k])+'-count',users.filter(u=>u.role===k).length));
     const q=$('#admin-users-search')?.value.toLowerCase()||'',role=$('#admin-users-role-filter')?.value||'all',filteredUsers=users.filter(u=>(u.name+' '+u.email).toLowerCase().includes(q)&&(role==='all'||u.role===role));if($('#admin-users-table-body'))$('#admin-users-table-body').innerHTML=filteredUsers.map(u=>`<tr><td>${escape(u.id)}</td><td>${escape(u.name)}</td><td>${escape(u.email)}</td><td>${escape(u.role)}</td><td>${escape(u.city)}</td><td>${date(u.joined)}</td><td><button type="button" class="alfaw-admin-view" data-view-user="${escape(u.id)}">عرض</button></td></tr>`).join('')||'<tr><td colspan="7">لا توجد نتائج.</td></tr>';
-    const aq=$('#admin-artifacts-search')?.value.toLowerCase()||'',vf=$('#admin-artifacts-verification-filter')?.value||'all',filteredArtifacts=artifacts.filter(a=>(a.name+' '+a.id).toLowerCase().includes(aq)&&(vf==='all'||a.verification===vf));if($('#admin-artifacts-table-body'))$('#admin-artifacts-table-body').innerHTML=filteredArtifacts.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td><a href="artifact-detail.html?id=${a.id}">عرض</a></td></tr>`).join('')||'<tr><td colspan="7">لا توجد نتائج.</td></tr>';
-    const z=$('#admin-auctions-search')?.value.toLowerCase()||'',f=$('#admin-auctions-status-filter')?.value||'all',filteredAuctions=auctions.filter(a=>(a.id+' '+(artifact(a.artifactId)?.name||'')).toLowerCase().includes(z)&&(f==='all'||status(a)===f));if($('#admin-auctions-table-body'))$('#admin-auctions-table-body').innerHTML=filteredAuctions.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${date(a.start)}</td><td>${date(a.end)}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${a.id}">عرض</a></td></tr>`).join('')||'<tr><td colspan="9">لا توجد نتائج.</td></tr>';
+    const aq=$('#admin-artifacts-search')?.value.toLowerCase()||'',vf=$('#admin-artifacts-verification-filter')?.value||'all',filteredArtifacts=artifacts.filter(a=>(a.name+' '+a.id).toLowerCase().includes(aq)&&(vf==='all'||a.verification===vf));if($('#admin-artifacts-table-body'))$('#admin-artifacts-table-body').innerHTML=filteredArtifacts.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td><a href="artifact-detail.html?id=${encodeURIComponent(a.id)}">عرض</a></td></tr>`).join('')||'<tr><td colspan="7">لا توجد نتائج.</td></tr>';
+    const z=$('#admin-auctions-search')?.value.toLowerCase()||'',f=$('#admin-auctions-status-filter')?.value||'all',filteredAuctions=auctions.filter(a=>(a.id+' '+(artifact(a.artifactId)?.name||'')).toLowerCase().includes(z)&&(f==='all'||status(a)===f));if($('#admin-auctions-table-body'))$('#admin-auctions-table-body').innerHTML=filteredAuctions.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${date(a.start)}</td><td>${date(a.end)}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">عرض</a></td></tr>`).join('')||'<tr><td colspan="9">لا توجد نتائج.</td></tr>';
     const bq=$('#admin-bids-search')?.value.toLowerCase()||'',af=$('#admin-bids-auction-filter')?.value||'all',allBids=auctions.flatMap(a=>a.bids.map(b=>({...b,auctionId:a.id}))).filter(b=>(b.auctionId+' '+b.bidderName).toLowerCase().includes(bq)&&(af==='all'||af===b.auctionId));if($('#admin-bids-table-body'))$('#admin-bids-table-body').innerHTML=allBids.map(b=>`<tr><td>${escape(b.id)}</td><td>${escape(b.auctionId)}</td><td>${escape(artifact(auction(b.auctionId)?.artifactId)?.name||'')}</td><td>${escape(b.bidderName)}</td><td>${money(b.amount)}</td><td>${date(b.created)}</td><td><a href="auction-detail.html?id=${b.auctionId}">عرض</a></td></tr>`).join('')||'<tr><td colspan="7">لا توجد عروض.</td></tr>';
   };
   if($('.admin-dashboard-page')){
@@ -1614,7 +1756,16 @@ if (cinema) {
 
 // Header session indicator. Actual authentication and multi-user state require a backend.
 (() => {
-  const session=(()=>{try{return JSON.parse(localStorage.getItem('alfaw_phase3_session')||'null')}catch{return null}})();
+  const session=(()=>{
+    try {
+      const value=JSON.parse(localStorage.getItem('alfaw_phase3_session')||'null');
+      const users=JSON.parse(localStorage.getItem('alfaw_phase3_users')||'[]');
+      if(!value||!Array.isArray(users))return null;
+      const user=users.find(u=>u.id===value.id);
+      return user&&user.role===value.role&&user.sellerId===value.sellerId
+        ? value : null;
+    } catch { return null; }
+  })();
   if(!session)return;
   document.querySelectorAll('.site-nav a[href="login.html"],.header-actions a[href="login.html"]').forEach(link=>{
     link.href=session.role==='seller'?'seller-dashboard.html':session.role==='admin'?'admin-dashboard.html':'profile.html';

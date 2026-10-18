@@ -3608,3 +3608,21 @@ img {
 .alfaw-trust{font-size:12px;line-height:1.8;color:#bda076;margin-block:10px!important}
 .alfaw-receipt{display:flex;gap:9px;align-items:start;line-height:1.8;margin:15px 0;cursor:pointer}
 .alfaw-receipt input{margin-top:6px;accent-color:#b39154;min-width:18px;min-height:18px}
+
+
+/* Home introduction: heritage typography and matching premium card styling.
+   Keep the original tag padding, font-size and layout dimensions. */
+.home-page .intro-copy > p {
+  font-family: var(--font-heritage);
+  font-synthesis: none;
+  font-weight: 400;
+}
+.home-page .hero-tags span {
+  font-family: var(--font-heritage);
+  font-synthesis: none;
+  font-weight: 400;
+  background: linear-gradient(135deg, rgba(66, 41, 25, .96), rgba(33, 18, 10, .96));
+  color: var(--paper);
+  border: 1px solid rgba(184, 155, 115, .65);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .05);
+}

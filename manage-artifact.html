@@ -10,11 +10,14 @@
         content="إضافة وتعديل القطع الأثرية والمقتنيات التاريخية وإدارة معلوماتها وصورها ووثائقها عبر منصة ألفاو.">
 
   <title>إضافة وتعديل قطعة أثرية | ألفاو</title>
+  <link rel="icon" type="image/x-icon" href="./favicon.ico?v=8">
+  <link rel="icon" type="image/png" sizes="64x64" href="./alfaw-logo.png?v=8">
+  <link rel="apple-touch-icon" href="./alfaw-logo.png?v=8">
 
   <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
-  <link rel="stylesheet" href="alfaw-unified.css">
-  <script src="alfaw-ui.js" defer></script>
+  <script src="script.js?v=artifact-upload-preview-20261018" defer></script>
+  <link rel="stylesheet" href="alfaw-unified.css?v=heritage-motion-20261018">
+  <script src="alfaw-ui.js?v=heritage-motion-20261018" defer></script>
 </head>
 
 <body class="manage-artifact-page">
@@ -26,7 +29,7 @@
 
 <header class="site-header" data-site-header>
   <a class="site-logo" href="index.html" aria-label="ألفاو — العودة للرئيسية">
-    <span class="site-logo-mark" aria-hidden="true">✦</span>
+    <span class="site-logo-mark" aria-hidden="true"><img src="alfaw-logo.png" alt="" class="alfaw-logo-image"></span>
     <span class="site-logo-name">ألفاو<small>حكاية إرث</small></span>
   </a>
   <nav class="site-nav" id="site-navigation" aria-label="التنقل الرئيسي">
@@ -35,7 +38,6 @@
       <a href="auctions.html">المزادات</a>
       <a href="verification.html">التوثيق</a>
       <a href="seller-profile.html" aria-current="page">البائعون</a>
-      <a href="auctions.html#bidding-guide">دليل المزايدة</a>
   </nav>
   <div class="header-actions">
     <a class="header-login" href="login.html" id="site-account-link">دخول <span aria-hidden="true">↗</span></a>
@@ -451,7 +453,7 @@
                   </span>
 
                   <small>
-                    يمكنك اختيار أكثر من صورة.
+                    يمكنك اختيار أكثر من صورة للمعاينة، لكن تُحفظ الصورة الأولى فقط في النسخة التجريبية (بحد 1 MB).
                   </small>
 
                 </label>
@@ -640,7 +642,7 @@
                   </span>
 
                   <small>
-                    يمكنك اختيار أكثر من مستند.
+                    يمكنك اختيار أكثر من مستند (بحد 1 MB لكل ملف في النسخة التجريبية).
                   </small>
 
                 </label>
