@@ -1642,3 +1642,10 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .register-page .password-rule {display:block;color:#e3a4a4;font-size:13px;line-height:1.7;transition:color .2s ease;}
 .register-page .password-rule[data-met="true"] {color:#abd7af;}
 @media(max-width:540px){.register-page .password-input-wrapper .toggle-password {min-width:64px;padding:8px 10px;}}
+
+/* Keep both password inputs aligned; show their rules in a separate full-width row. */
+.register-page .register-fields-grid:has(#register-password) {align-items:start;}
+.register-page .register-fields-grid:has(#register-password) > .register-field {align-self:start;}
+.register-page .register-fields-grid:has(#register-password) .password-input-wrapper {min-height:54px;}
+.register-page .register-password-rules-wide {margin:10px 0 0;width:100%;box-sizing:border-box;gap:8px;}
+.register-page .register-password-rules-wide .password-rule {line-height:1.8;}
