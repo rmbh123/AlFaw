@@ -1568,7 +1568,7 @@ if (cinema) {
         area.append(list);
       });
       $('#manage-artifact-form')?.addEventListener('submit',async e=>{e.preventDefault();const name=$('#artifact-name')?.value.trim()||'',description=$('#artifact-description')?.value.trim()||'',price=Number($('#artifact-starting-price')?.value),cat=$('#artifact-category')?.value,period=$('#artifact-period')?.value.trim(),origin=$('#artifact-origin')?.value.trim(),condition=$('#artifact-condition')?.value,v=$('input[name="verificationStatus"]:checked')?.value||'unverified',ref=$('#artifact-verification-reference')?.value.trim()||'';
-        if(name.length<3||description.length<20||!cat||!period||!origin||!condition||price<=0||(v==='verified'&&!ref)){feedback('#manage-artifact-form-message','يرجى إكمال الحقول المطلوبة.');return}
+        if(name.length<3||description.length<20||!cat||!period||!origin||!condition||!Number.isFinite(price)||price<=0||(v==='verified'&&!ref)){feedback('#manage-artifact-form-message','يرجى إكمال الحقول المطلوبة.');return}
         const upload=$('#artifact-images')?.files[0];if(!old&&!upload){feedback('#manage-artifact-form-message','اختاري صورة للقطعة.');return}
         // Browser-local Sprint 1 preview. Avoid sending a false signal of real archival storage.
         const readAsDataURL=file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)});
@@ -1586,8 +1586,14 @@ if (cinema) {
           if(photoFiles.length)data.image=await compress(photoFiles[0]);
           if(docFiles.length)data.documents=await Promise.all(docFiles.map(async file=>({name:file.name,type:file.type,url:await readAsDataURL(file)})));
           const existing=old?artifacts.findIndex(x=>x.id===old.id):-1;
+          const previous=existing>=0?artifacts[existing]:null;
           if(existing>=0)artifacts[existing]=data;else artifacts.push(data);
-          if(!put('artifacts',artifacts)){feedback('#manage-artifact-form-message','تعذر حفظ الملفات محليًا، جرّبي ملفًا أصغر.');return}
+          if(!put('artifacts',artifacts)){
+            // Roll back in-memory changes if browser storage is full.
+            if(existing>=0)artifacts[existing]=previous;else artifacts.pop();
+            feedback('#manage-artifact-form-message','تعذر حفظ الملفات محليًا، جرّبي ملفًا أصغر.');
+            return;
+          }
           persist();feedback('#manage-artifact-form-message','تم حفظ بيانات القطعة والصورة للتجربة في هذا المتصفح فقط.');setTimeout(()=>location.href='seller-dashboard.html',950);
         }catch(err){feedback('#manage-artifact-form-message','تعذر قراءة الملفات المرفوعة. جرّبي صورة أصغر.');}
       });
