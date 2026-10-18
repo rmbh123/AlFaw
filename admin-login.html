@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+        content="بوابة دخول مسؤولي منصة ألفاو لمراقبة الحسابات والمقتنيات والمزادات.">
+
+  <title>دخول الإدارة | ألفاو</title>
+  <link rel="icon" type="image/x-icon" href="./favicon.ico?v=8">
+  <link rel="icon" type="image/png" sizes="64x64" href="./alfaw-logo.png?v=8">
+  <link rel="apple-touch-icon" href="./alfaw-logo.png?v=8">
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="alfaw-unified.css?v=heritage-motion-20261018">
+  <script src="alfaw-ui.js?v=heritage-motion-20261018" defer></script>
+</head>
+
+<body class="login-page admin-login-page">
+<div class="alfaw-sprint-note" role="note">نموذج واجهات Sprint 1 — بيانات تجريبية محلية، دون ربط بقاعدة بيانات أو توثيق رسمي فعلي.</div>
+
+
+ 
+<!-- HEADER -->
+
+<header class="site-header" data-site-header>
+  <a class="site-logo" href="index.html" aria-label="ألفاو — العودة للرئيسية">
+    <span class="site-logo-mark" aria-hidden="true"><img src="alfaw-logo.png" alt="" class="alfaw-logo-image"></span>
+    <span class="site-logo-name">ألفاو<small>حكاية إرث</small></span>
+  </a>
+  <nav class="site-nav" id="site-navigation" aria-label="التنقل الرئيسي">
+      <a href="index.html">الرئيسية</a>
+      <a href="browse.html">القطع الأثرية</a>
+      <a href="auctions.html">المزادات</a>
+      <a href="verification.html">التوثيق</a>
+      <a href="seller-profile.html">البائعون</a>
+  </nav>
+  <div class="header-actions">
+    <a class="header-login" href="login.html" id="site-account-link">دخول <span aria-hidden="true">↗</span></a>
+    <button class="site-menu-toggle" type="button" aria-label="فتح قائمة التنقل" aria-controls="site-navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+
+  <main class="login-main">
+
+    <!-- INTRO -->
+
+    <section class="login-intro">
+
+      <p class="section-label">
+        بوابة مسؤولي ألفاو
+      </p>
+
+      <h1>
+        مرحبًا بك في
+        <span>ألفاو</span>
+      </h1>
+
+      <p>
+        صفحة مخصصة للمسؤولين المصرّح لهم بمراقبة المنصة.
+      </p>
+
+    </section>
+
+    <!-- LOGIN LAYOUT -->
+
+    <section class="login-layout">
+
+      <!-- LOGIN FORM -->
+
+      <div class="login-form-card">
+
+        <div class="login-form-heading">
+
+          <p class="section-label">
+            بوابة الإدارة
+          </p>
+
+          <h2>تسجيل دخول المسؤول</h2>
+
+          <p>
+            أدخل بيانات حسابك
+            للمتابعة.
+          </p>
+
+        </div>
+
+        <form
+          id="login-form"
+          class="login-form"
+          novalidate
+        >
+
+          <!-- EMAIL -->
+
+          <div class="login-field">
+
+            <label for="login-email">
+              البريد الإلكتروني
+            </label>
+
+            <input
+              type="email"
+              id="login-email"
+              name="email"
+              placeholder="example@email.com"
+              autocomplete="email"
+              maxlength="254"
+              required
+              dir="ltr"
+              aria-describedby="login-email-error"
+            >
+
+            <small
+              id="login-email-error"
+              class="field-error"
+              aria-live="polite"
+            ></small>
+
+          </div>
+
+          <!-- PASSWORD -->
+
+          <div class="login-field">
+
+            <label for="login-password">
+              كلمة المرور
+            </label>
+
+            <div class="password-input-wrapper">
+
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                placeholder="أدخل كلمة المرور"
+                autocomplete="current-password"
+                required
+                aria-describedby="login-password-error"
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                data-password-target="login-password"
+                aria-label="إظهار كلمة المرور"
+                aria-pressed="false"
+              >
+                إظهار
+              </button>
+
+            </div>
+
+            <small
+              id="login-password-error"
+              class="field-error"
+              aria-live="polite"
+            ></small>
+
+          </div>
+
+          <!-- OPTIONS -->
+
+          <div class="login-options">
+
+            <label class="login-remember">
+
+              <input
+                type="checkbox"
+                id="remember-me"
+                name="rememberMe"
+              >
+
+              <span>
+                تذكر بريدي الإلكتروني
+              </span>
+
+            </label>
+
+          </div>
+
+          <!-- STATUS MESSAGE -->
+
+          <div
+            id="login-form-message"
+            class="login-form-message"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></div>
+
+          <!-- SUBMIT -->
+
+          <button
+            type="submit"
+            id="login-submit-button"
+            class="login-submit-button"
+          >
+            تسجيل الدخول
+            <span aria-hidden="true">←</span>
+          </button>
+
+          <!-- CREATE ACCOUNT -->
+
+          <div class="login-register-section">
+
+            <p>
+              هل أنت مشتري أو بائع؟
+            </p>
+
+            <a
+              href="login.html"
+              class="login-register-button"
+            >
+              الدخول من بوابة المستخدمين
+            </a>
+
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- BRAND PANEL -->
+
+      <aside class="login-side-panel">
+
+        <div
+          class="login-side-decoration"
+          aria-hidden="true"
+        >
+
+          <div class="login-decoration-ring"></div>
+
+          <div class="login-decoration-inner-ring"></div>
+
+          <span class="login-decoration-word">
+            الفاو
+          </span>
+
+        </div>
+
+        <div class="login-side-content">
+
+          <p class="section-label">
+            من إرث الماضي
+          </p>
+
+          <h2>
+            التاريخ يجمعنا
+            <span>من جديد</span>
+          </h2>
+
+          <p>
+            اكتشف المقتنيات التراثية،
+            وتابع مزاداتك، وتعرّف على
+            البائعين من خلال منصة ألفاو.
+          </p>
+
+          <div class="login-feature-list">
+
+            <div class="login-feature-item">
+
+              <span
+                class="login-feature-icon"
+                aria-hidden="true"
+              >
+                ◈
+              </span>
+
+              <div>
+                <h3>مقتنيات تاريخية</h3>
+
+                <p>
+                  تصفّح القطع وتعرّف
+                  على معلوماتها التاريخية.
+                </p>
+              </div>
+
+            </div>
+
+            <div class="login-feature-item">
+
+              <span
+                class="login-feature-icon"
+                aria-hidden="true"
+              >
+                ◇
+              </span>
+
+              <div>
+                <h3>مزادات ألفاو</h3>
+
+                <p>
+                  استعرض المزادات وتابع
+                  العروض وترتيب المزايدين.
+                </p>
+              </div>
+
+            </div>
+
+            <div class="login-feature-item">
+
+              <span
+                class="login-feature-icon"
+                aria-hidden="true"
+              >
+                ✦
+              </span>
+
+              <div>
+                <h3>حسابك الشخصي</h3>
+
+                <p>
+                  أدر معلوماتك وتابع
+                  أنشطتك على المنصة.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <blockquote class="login-side-quote">
+            من إرث الماضي، نصنع صلة بالمستقبل.
+          </blockquote>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+    <!-- EXTRA LINKS -->
+
+    <section class="login-explore-section">
+
+      <div class="login-explore-heading">
+
+        <p class="section-label">
+          اكتشف ألفاو
+        </p>
+
+        <h2>
+          يمكنك استكشاف التراث قبل التسجيل
+        </h2>
+
+        <p>
+          تصفّح المقتنيات والمزادات
+          وتعرّف على البائعين.
+        </p>
+
+      </div>
+
+      <div class="login-explore-grid">
+
+        <a
+          href="browse.html"
+          class="login-explore-card"
+        >
+
+          <span aria-hidden="true">◈</span>
+
+          <h3>القطع الأثرية</h3>
+
+          <p>
+            اكتشف المقتنيات التاريخية
+            والمعلومات المرتبطة بها.
+          </p>
+
+          <strong>استكشف ←</strong>
+
+        </a>
+
+        <a
+          href="auctions.html"
+          class="login-explore-card"
+        >
+
+          <span aria-hidden="true">◇</span>
+
+          <h3>المزادات</h3>
+
+          <p>
+            تعرّف على المزادات
+            والقطع المتاحة للاستعراض.
+          </p>
+
+          <strong>استكشف ←</strong>
+
+        </a>
+
+        <a
+          href="seller-profile.html"
+          class="login-explore-card"
+        >
+
+          <span aria-hidden="true">✦</span>
+
+          <h3>البائعون</h3>
+
+          <p>
+            اطّلع على ملفات البائعين
+            ومقتنياتهم وتقييماتهم.
+          </p>
+
+          <strong>استكشف ←</strong>
+
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="alfaw-footer">
+
+    <h2>ألفاو</h2>
+
+    <p>
+      من إرث الماضي، نصنع صلة بالمستقبل.
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">الرئيسية</a>
+
+      <a href="browse.html">القطع الأثرية</a>
+
+      <a href="auctions.html">المزادات</a>
+
+      <a href="verification.html">التوثيق</a>
+
+      <a href="seller-profile.html">البائعون</a>
+
+    </div>
+
+    <p class="copyright">
+      © 2026 ألفاو — جميع الحقوق محفوظة
+    </p>
+
+  </footer>
+
+</body>
+</html>
