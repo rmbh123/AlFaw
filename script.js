@@ -1576,6 +1576,17 @@ if (cinema) {
       location.reload();
     }
   });
+  // Sprint 0 bidding guide: dismiss and reopen in place.
+  if($('.auctions-page')){
+    const toggle=$('#alfaw-guide-toggle'),body=$('#alfaw-guide-body');
+    toggle?.addEventListener('click',()=>{
+      if(!body)return;
+      const expanded=toggle.getAttribute('aria-expanded')==='true';
+      body.hidden=expanded;
+      toggle.setAttribute('aria-expanded',String(!expanded));
+      toggle.textContent=expanded?'إظهار شرح الدليل':'إخفاء شرح الدليل';
+    });
+  }
   // SELLER DASHBOARD
   const drawSellerDashboard=()=>{
     if(!$('.seller-dashboard-page')||!requireRole('seller','#seller-dashboard-content','#seller-dashboard-access-message'))return;
