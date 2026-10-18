@@ -1399,7 +1399,18 @@ if (cinema) {
         const newSeller=sid?{id:sid,name:storeName,city,category:'other',specialty:'مقتنيات تاريخية',bio:$('#register-seller-bio')?.value.trim()||'',joined:new Date().toISOString()}:null;
         users.push(newUser);
         if(newSeller)sellers.push(newSeller);
-        persist();
+        // Do not report success unless both local records are saved.
+        // Roll back the new records on a failed write.
+        const savedUsers=put('users',users);
+        const savedSeller=!newSeller||put('sellers',sellers);
+        if(!savedUsers||!savedSeller){
+          users.pop();
+          if(newSeller)sellers.pop();
+          // Best-effort rollback if one local write succeeded.
+          if(savedUsers)put('users',users);
+          if(newSeller&&savedSeller)put('sellers',sellers);
+          throw Error('Local registration storage failed');
+        }
         error('#register-form-message','تم إنشاء حساب تجريبي في هذا المتصفح. يمكنك تسجيل الدخول.');
         setTimeout(()=>location.href='login.html',700);
       }catch(err){
