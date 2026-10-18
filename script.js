@@ -1468,6 +1468,17 @@ if (cinema) {
       $('#profile-edit-form')?.addEventListener('submit',e=>{e.preventDefault();const name=$('#profile-full-name')?.value.trim(),email=$('#profile-email')?.value.trim().toLowerCase();if(!name||!email?.includes('@')||users.some(x=>x.id!==u.id&&x.email===email)){feedback('#profile-form-message','راجعي الاسم والبريد الإلكتروني.');return}Object.assign(u,{name,email,phone:$('#profile-phone')?.value||'',city:$('#profile-city')?.value||''});session.name=name;put('session',session);persist();text('#profile-display-name',name);feedback('#profile-form-message','تم حفظ بيانات العرض محليًا.')});
     }
     $$('.profile-tab').forEach(btn=>btn.addEventListener('click',()=>{const target=btn.dataset.profileTab;$$('.profile-tab').forEach(b=>b.classList.toggle('active',b===btn));$$('.profile-panel').forEach(panel=>{panel.hidden=panel.dataset.profilePanel!==target})}));
+    // Sprint 1: make the overview shortcut and cancel action functional.
+    $('#profile-edit-shortcut')?.addEventListener('click',()=>{
+      const tab=$('.profile-tab[data-profile-tab="personal"]');tab?.click();
+      $('#profile-edit-form')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+      $('#profile-full-name')?.focus({preventScroll:true});
+    });
+    $('#profile-cancel-button')?.addEventListener('click',()=>{
+      $('#profile-edit-form')?.reset();
+      if(u){value('#profile-full-name',u.name||'');value('#profile-email',u.email||'');value('#profile-phone',u.phone||'');value('#profile-city',u.city||'')}
+      const msg=$('#profile-form-message');if(msg){msg.textContent='تم إلغاء التعديلات غير المحفوظة.';msg.hidden=false}
+    });
     $('#profile-logout-button')?.addEventListener('click',()=>{session=null;localStorage.removeItem('alfaw_phase3_session');location.href='login.html'});
   }
   // SELLER DASHBOARD
