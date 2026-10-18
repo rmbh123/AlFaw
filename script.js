@@ -1358,6 +1358,23 @@ if (cinema) {
     if(u&&!u.passwordHash){u.passwordSalt='alfaw-sprint1-'+x.id;u.passwordHash=await fingerprint(x.pass,u.passwordSalt)}}))
       .then(()=>put('users',users)).catch(console.warn);
   if($('.register-page')){
+    const hasPasswordSymbol=value=>/[^\\p{L}\\p{N}\\s]/u.test(value);
+    const updatePasswordRules=()=>{
+      const password=$('#register-password')?.value||'';
+      const confirmation=$('#register-confirm-password')?.value||'';
+      const setRule=(selector,met)=>{
+        const element=$(selector);
+        if(!element)return;
+        element.dataset.met=String(met);
+        element.textContent=(met?'✓ ':'○ ')+element.textContent.replace(/^[✓○]\\s*/, '');
+      };
+      setRule('#password-rule-length',password.length>=8&&password.length<=128);
+      setRule('#password-rule-symbol',hasPasswordSymbol(password));
+      setRule('#password-rule-match',confirmation.length>0&&password===confirmation);
+    };
+    ['#register-password','#register-confirm-password'].forEach(selector=>$(selector)?.addEventListener('input',updatePasswordRules));
+    updatePasswordRules();
+
     const update=()=>{const yes=$('input[name="accountType"]:checked')?.value==='seller';visible('#register-seller-fields',yes);['#register-store-name','#register-seller-bio'].forEach(s=>{if($(s))$(s).disabled=!yes})};
     $$('input[name="accountType"]').forEach(x=>x.addEventListener('change',update));update();
     $('#register-form')?.addEventListener('submit',async e=>{
@@ -1384,6 +1401,7 @@ if (cinema) {
       check(role!=='buyer'&&role!=='seller','#register-form-message','اختاري نوع الحساب.');
       check(role==='seller'&&storeName.length<3,'#register-store-name-error','اسم البائع أو المتجر مطلوب (3 أحرف على الأقل).');
       check(pass.length<8||pass.length>128,'#register-password-error','كلمة المرور يجب أن تكون بين 8 و128 حرفًا.');
+      check(!hasPasswordSymbol(pass),'#register-password-error','يجب أن تحتوي كلمة المرور على رمز خاص مثل ! أو @ أو #.');
       check(pass!==confirmPass,'#register-confirm-password-error','كلمتا المرور غير متطابقتين.');
       check(!$('#register-terms')?.checked,'#register-terms-error','يجب الموافقة على الشروط.');
       check(users.some(x=>String(x.email||'').toLowerCase()===email),'#register-email-error','هذا البريد مسجل مسبقًا.');
