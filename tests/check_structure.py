@@ -30,6 +30,11 @@ for js_file in js_files:
     )
     if result.returncode:
         errors.append(f'{js_file.relative_to(ROOT)}: {result.stderr.strip()}')
+auction_test = subprocess.run(['node', str(ROOT/'tests'/'check_auction_rules.cjs')], capture_output=True, text=True)
+if auction_test.returncode:
+    errors.append('Auction-rule tests failed: '+auction_test.stderr.strip())
+else:
+    print(auction_test.stdout.strip())
 print(f'Checked {len(pages)} HTML files, {len(js_files)} JavaScript files, static paths, duplicate IDs and RTL')
 if errors:
     print('FAIL:')
