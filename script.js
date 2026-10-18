@@ -1516,11 +1516,24 @@ if (cinema) {
   }
   // ARTIFACT DETAIL — dynamically update only matching new IDs.
   if($('.artifact-detail-page')){
-    if(params.has('id')&&!artifact(params.get('id'))){location.replace('browse.html');return}const a=artifact(params.get('id'))||artifacts[0];if(a){const s=seller(a.sellerId),aAuction=auctions.find(x=>x.artifactId===a.id);[['#artifact-breadcrumb-name',a.name],['#artifact-detail-title',a.name],['#artifact-detail-category',categories[a.category]],['#artifact-detail-summary',a.description],['#artifact-detail-price',money(a.price)],['#artifact-period',a.period],['#artifact-origin',a.origin],['#artifact-condition',a.condition],['#artifact-full-description',a.description],['#artifact-provenance-description',a.provenance],['#artifact-detail-verification-status',verifications[a.verification]],['#artifact-verification-reference',a.verificationReference||'غير متوفر'],['#artifact-seller-name',s?.name],['#artifact-seller-display-name',s?.name],['#artifact-seller-avatar',s?.name[0]],['#artifact-seller-description',s?.bio],['#artifact-seller-trust',rating(a.sellerId).trust===null?'لا توجد تقييمات':rating(a.sellerId).trust+'%']].forEach(([key,v])=>text(key,v));const image=$('#artifact-main-photo');if(image){image.src=a.image;image.alt=a.name}const sellerLink=$('#artifact-seller-profile-link');if(sellerLink&&s)sellerLink.href='seller-detail.html?id='+encodeURIComponent(s.id);const auctionLink=$('#artifact-auction-link');if(auctionLink)auctionLink.href=aAuction?'auction-detail.html?id='+encodeURIComponent(aAuction.id):'auctions.html';if(a.documents?.length){
-        const host=$('#artifact-document-list')||document.createElement('div');host.id='artifact-document-list';
-        host.className='alfaw-documents';host.innerHTML='<strong>المستندات المتاحة للقطعة</strong>';
-        a.documents.forEach(d=>{const link=document.createElement('a');link.href=d.url;link.target='_blank';link.rel='noopener';link.textContent=d.name;host.append(link)});
-        if(!host.isConnected)$('#artifact-provenance-description')?.insertAdjacentElement('afterend',host);
+    if(params.has('id')&&!artifact(params.get('id'))){location.replace('browse.html');return}const a=artifact(params.get('id'))||artifacts[0];if(a){const s=seller(a.sellerId),aAuction=auctions.find(x=>x.artifactId===a.id);[['#artifact-breadcrumb-name',a.name],['#artifact-detail-title',a.name],['#artifact-detail-category',categories[a.category]],['#artifact-detail-summary',a.description],['#artifact-detail-price',money(a.price)],['#artifact-period',a.period],['#artifact-origin',a.origin],['#artifact-condition',a.condition],['#artifact-full-description',a.description],['#artifact-provenance-description',a.provenance],['#artifact-detail-verification-status',verifications[a.verification]],['#artifact-verification-reference',a.verificationReference||'غير متوفر'],['#artifact-seller-name',s?.name],['#artifact-seller-display-name',s?.name],['#artifact-seller-avatar',s?.name[0]],['#artifact-seller-description',s?.bio],['#artifact-seller-trust',rating(a.sellerId).trust===null?'لا توجد تقييمات':rating(a.sellerId).trust+'%']].forEach(([key,v])=>text(key,v));const image=$('#artifact-main-photo');if(image){image.src=a.image;image.alt=a.name}const sellerLink=$('#artifact-seller-profile-link');if(sellerLink&&s)sellerLink.href='seller-detail.html?id='+encodeURIComponent(s.id);const auctionLink=$('#artifact-auction-link');if(auctionLink)auctionLink.href=aAuction?'auction-detail.html?id='+encodeURIComponent(aAuction.id):'auctions.html';const documentsHost=$('#artifact-document-list');
+      if(documentsHost){
+        documentsHost.replaceChildren();
+        if(a.documents?.length){
+          const heading=document.createElement('strong');heading.textContent='المستندات المتاحة للقطعة';documentsHost.append(heading);
+          a.documents.forEach(d=>{
+            const link=document.createElement('a');
+            link.href=d.url;
+            link.target='_blank';
+            link.rel='noopener noreferrer';
+            link.textContent=d.name;
+            documentsHost.append(link);
+          });
+        }else{
+          const empty=document.createElement('p');
+          empty.textContent='لا توجد مستندات متاحة لهذه القطعة.';
+          documentsHost.append(empty);
+        }
       }
       }
   }
