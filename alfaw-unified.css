@@ -1421,3 +1421,42 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 /* Readable, lightweight file-selection feedback in the artifact form. */
 .manage-artifact-page .alfaw-upload-doc-list {margin:10px 0;padding-inline-start:22px;color:#edd7b9;font-size:13px;line-height:2;overflow-wrap:anywhere}
 .manage-artifact-page .manage-images-preview p {font-size:12px;line-height:1.7;color:#dfc49a;margin:8px 0}
+
+
+/* Sprint 1: keep seller artifact edit/delete actions visible and distinguishable. */
+.seller-dashboard-page #dashboard-artifacts-table-body td:last-child {
+  white-space: nowrap;
+}
+.seller-dashboard-page .alfaw-seller-action-link,
+.seller-dashboard-page .alfaw-seller-delete-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  margin: 3px;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.seller-dashboard-page .alfaw-seller-action-link {
+  border: 1px solid currentColor;
+}
+.seller-dashboard-page .alfaw-seller-delete-button {
+  border: 1px solid #a04437;
+  color: #9c342b;
+  background: #fff7f5;
+}
+.seller-dashboard-page .alfaw-seller-delete-button:hover {
+  background: #fbe6e2;
+}
+.seller-dashboard-page #dashboard-artifacts .dashboard-table th:last-child,
+.seller-dashboard-page #dashboard-artifacts .dashboard-table td:last-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #fffaf3;
+  box-shadow: 2px 0 8px rgba(0,0,0,.06);
+}
