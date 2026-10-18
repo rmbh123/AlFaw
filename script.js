@@ -1336,6 +1336,19 @@ if (cinema) {
     {id:'demo-buyer',name:'مشتري تجريبي',email:'buyer@alfaw.demo',role:'buyer',pass:'AlfawDemo!2026'},
     {id:'demo-seller',name:'بائع تجريبي',email:'seller@alfaw.demo',role:'seller',sellerId:'demo-shop',pass:'AlfawDemo!2026'}];
   if(!sellers.some(x=>x.id==='demo-shop')){sellers.push({id:'demo-shop',name:'متجر العرض التجريبي',city:'الرياض',category:'other',specialty:'مقتنيات تاريخية',bio:'حساب توضيحي لمرحلة Sprint 1',joined:new Date().toISOString()});put('sellers',sellers)}
+  // Ensure the built-in demo seller has an owned artifact to exercise edit/delete.
+  // Do not recreate it after the seller archives it.
+  if(!artifacts.some(a=>a.id==='demo-seller-artifact-001')){
+    const demoItem={id:'demo-seller-artifact-001',name:'قطعة تراثية تجريبية',description:'قطعة تراثية توضيحية لتجربة إضافة القطع وتعديلها وحذفها من لوحة البائع.',price:3500,category:'pottery',period:'غير محددة',origin:'المملكة العربية السعودية',condition:'جيدة',image:'pottery.jpg',sellerId:'demo-shop',verification:'unverified',verificationReference:'',documents:[],created:new Date().toISOString(),demo:true};
+    // Only seed once per browser even after deletion.
+    if(localStorage.getItem('alfaw_demo_seller_artifact_seeded')!=='true'){
+      const next=[...artifacts,demoItem];
+      if(put('artifacts',next)){
+        artifacts=next;
+        localStorage.setItem('alfaw_demo_seller_artifact_seeded','true');
+      }
+    }
+  }
   const demoSeeds=demoIdentity.filter(x=>!users.some(u=>u.email===x.email));
   if(demoSeeds.length){demoSeeds.forEach(x=>users.push({id:x.id,name:x.name,email:x.email,role:x.role,sellerId:x.sellerId||null,city:'الرياض',phone:'',joined:new Date().toISOString(),demo:true}));put('users',users)}
   // Seed hashes once; the visible UI never grants Admin registration.
@@ -1524,13 +1537,13 @@ if (cinema) {
     if(!$('.seller-dashboard-page')||!requireRole('seller','#seller-dashboard-content','#seller-dashboard-access-message'))return;
     const s=currentSeller(),owned=artifacts.filter(a=>a.sellerId===s.id&&!a.archived),mine=auctions.filter(a=>a.sellerId===s.id),r=rating(s.id);text('#dashboard-seller-name',s.name);text('#dashboard-total-artifacts',owned.length);text('#dashboard-active-auctions',mine.filter(a=>status(a)==='active').length);text('#dashboard-completed-auctions',mine.filter(a=>status(a)==='ended').length);text('#dashboard-trust-score',r.trust===null?'لا توجد تقييمات':r.trust+'%');text('#dashboard-review-trust',r.trust===null?'—':r.trust+'%');text('#dashboard-average-rating',r.avg===null?'—':r.avg.toFixed(1));text('#dashboard-reviews-count',r.count);if($('#dashboard-public-profile-link'))$('#dashboard-public-profile-link').href='seller-detail.html?id='+s.id;
     const term=$('#dashboard-artifact-search')?.value.toLowerCase()||'',state=$('#dashboard-artifact-status-filter')?.value||'all';const filtered=owned.filter(a=>a.name.toLowerCase().includes(term)&&(state==='all'||(state==='in-auction'&&auctions.some(x=>x.artifactId===a.id))||(state==='available'&&!auctions.some(x=>x.artifactId===a.id))));
-    if($('#dashboard-artifacts-table-body'))$('#dashboard-artifacts-table-body').innerHTML=filtered.map(a=>`<tr><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td>${auctions.some(x=>x.artifactId===a.id)?'ضمن مزاد':'متاحة'}</td><td><a href="manage-artifact.html?id=${encodeURIComponent(a.id)}">تعديل</a> <button type="button" data-delete-artifact="${escape(a.id)}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد قطع مطابقة.</td></tr>';
+    if($('#dashboard-artifacts-table-body'))$('#dashboard-artifacts-table-body').innerHTML=filtered.map(a=>`<tr><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td>${auctions.some(x=>x.artifactId===a.id)?'ضمن مزاد':'متاحة'}</td><td><a class="alfaw-seller-action-link" href="manage-artifact.html?id=${encodeURIComponent(a.id)}">تعديل</a> <button class="alfaw-seller-delete-button" type="button" aria-label="حذف ${escape(a.name)}" data-delete-artifact="${escape(a.id)}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6">لا توجد قطع مطابقة.</td></tr>';
     if($('#dashboard-auctions-table-body'))$('#dashboard-auctions-table-body').innerHTML=mine.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${a.id}">تفاصيل</a></td></tr>`).join('')||'<tr><td colspan="6">لا توجد مزادات.</td></tr>';
     if($('#dashboard-reviews-list'))$('#dashboard-reviews-list').innerHTML=sellerReviews(s.id).map(re=>`<p>${escape(re.buyerName)} ${'★'.repeat(re.rating)} — ${escape(re.comment)}</p>`).join('')||'<p>لا توجد تقييمات حتى الآن.</p>';
   };
   if($('.seller-dashboard-page')){
     ['#dashboard-artifact-search','#dashboard-artifact-status-filter'].forEach(s=>$(s)?.addEventListener('input',drawSellerDashboard));
-    $('#dashboard-artifacts-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-artifact]');if(!btn)return;const key=btn.dataset.deleteArtifact;if(artifact(key)?.sellerId!==currentSeller()?.id)return;if(!confirm('هل تريد إزالة هذه القطعة من القوائم النشطة؟'))return;const row=artifact(key);row.archived=true;persist();drawSellerDashboard()});drawSellerDashboard();
+    $('#dashboard-artifacts-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-artifact]');if(!btn)return;const key=btn.dataset.deleteArtifact;if(artifact(key)?.sellerId!==currentSeller()?.id)return;if(!confirm('هل تريد إزالة هذه القطعة من القوائم النشطة؟'))return;const row=artifact(key);row.archived=true;if(!put('artifacts',artifacts)){row.archived=false;feedback('#dashboard-artifacts-message','تعذر حذف القطعة محليًا. حاولي مرة أخرى.');return}feedback('#dashboard-artifacts-message','تمت إزالة القطعة من القوائم النشطة.');drawSellerDashboard()});drawSellerDashboard();
   }
   // ADD / EDIT ARTIFACT
   if($('.manage-artifact-page')&&requireRole('seller','#manage-artifact-content','#manage-artifact-access-message')){
