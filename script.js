@@ -1308,6 +1308,20 @@ if (cinema) {
   const minimum=a=>highest(a)===null?Number(a.startingPrice)+Number(a.increment):highest(a)+Number(a.increment);
   const rankedBids=a=>[...(a.bids||[])].sort((x,y)=>Number(y.amount)-Number(x.amount)).filter((b,i,list)=>list.findIndex(x=>x.uid===b.uid)===i);
   const auctionWinner=a=>{if(status(a)!=='ended')return null;const top=rankedBids(a)[0];return top&&(!a.reservePrice||Number(top.amount)>=Number(a.reservePrice))?top:null;};
+  // Create one local winner notification for each completed auction, regardless of the page opened.
+  const syncWinnerNotices=()=>{
+    const pending=auctions.filter(a=>auctionWinner(a)&&!notices.some(n=>n.auctionId===a.id&&n.kind==='won'));
+    if(!pending.length)return;
+    const created=pending.map(a=>({
+      id:id('notice'),uid:auctionWinner(a).uid,
+      body:'تهانينا، فزت بالمزاد '+a.id,
+      url:'auction-detail.html?id='+encodeURIComponent(a.id),
+      auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()
+    }));
+    notices.unshift(...created);
+    if(!put('notices',notices)){notices.splice(0,created.length);return}
+  };
+  syncWinnerNotices();
   const sellerReviews=id=>reviews.filter(r=>r.sellerId===id);
   const rating=id=>{const r=sellerReviews(id);const avg=r.length?r.reduce((s,x)=>s+Number(x.rating),0)/r.length:null;return {count:r.length,avg,trust:avg===null?null:Math.round(avg/5*100)}};
   const requireRole=(role,content,warning)=>{const ok=session?.role===role && (role!=='seller'||!!currentSeller());visible(content,ok);visible(warning,!ok);return ok};
@@ -1554,11 +1568,8 @@ if (cinema) {
     render();$('#place-bid-form')?.addEventListener('submit',e=>{e.preventDefault();if(!a||status(a)!=='active'||session?.role!=='buyer'){feedback('#bid-form-message','المزايدة متاحة للمشتري في المزاد النشط فقط.');return}const amount=Number($('#bid-amount')?.value);if(!Number.isInteger(amount)||amount<minimum(a)){feedback('#bid-form-message','الحد الأدنى المقبول للمزايدة: '+money(minimum(a)));return}const prev=[...a.bids].sort((x,y)=>y.amount-x.amount)[0];a.bids.push({id:id('bid'),uid:session.id,bidderName:session.name,amount,created:new Date().toISOString()});if(!put('auctions',auctions)){a.bids.pop();feedback('#bid-form-message','تعذر حفظ المزايدة محليًا. تحققي من مساحة التخزين وحاولي مجددًا.');return}if(prev?.uid&&prev.uid!==session.id)notice(prev.uid,'تم تجاوز عرضك في المزاد '+a.id,'auction-detail.html?id='+a.id);render();feedback('#bid-form-message','تم تسجيل المزايدة التجريبية في هذا المتصفح.');showToast('تم تسجيل عرضك: '+money(amount),'auction-detail.html?id='+a.id);value('#bid-amount','')});
     $('#auction-review-form')?.addEventListener('submit',e=>{e.preventDefault();const winner=render(),score=Number($('#auction-review-rating')?.value);if(!winner||winner.uid!==session?.id||!$('#auction-receipt-confirmed')?.checked||!Number.isInteger(score)||score<1||score>5||reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)){feedback('#auction-review-message','التقييم متاح للفائز مرة واحدة بعد تأكيد الاستلام واختيار تقييم بين 1 و5.');return}reviews.push({id:id('review'),auctionId:a.id,sellerId:a.sellerId,uid:session.id,buyerName:session.name,rating:score,comment:$('#auction-review-comment')?.value||'',created:new Date().toISOString()});if(!put('reviews',reviews)){reviews.pop();feedback('#auction-review-message','تعذر حفظ التقييم محليًا. حاولي مرة أخرى.');return}render();feedback('#auction-review-message','شكرًا، تم تسجيل تقييمك التجريبي.')} );
     const timer=()=>{if(!a||!a.start||!a.end)return;
-      const top=auctionWinner(a);
-      if(top && !notices.some(n=>n.auctionId===a.id&&n.kind==='won')){
-          const uid=top.uid;notices.unshift({id:id('notice'),uid,body:'تهانينا، فزت بالمزاد '+a.id,
-            url:'auction-detail.html?id='+encodeURIComponent(a.id),auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()});if(!put('notices',notices)){notices.shift()}else if(uid===session?.id){showToast('تهانينا، فزت بالمزاد '+a.id,'auction-detail.html?id='+a.id)}
-      }const ms=Math.max(0,Date.parse(status(a)==='upcoming'?a.start:a.end)-Date.now()),seconds=Math.floor(ms/1000);text('#auction-days',Math.floor(seconds/86400));text('#auction-hours',Math.floor(seconds%86400/3600));text('#auction-minutes',Math.floor(seconds%3600/60));text('#auction-seconds',seconds%60);if(status(a)!==timer.previous){timer.previous=status(a);render()}};timer();setInterval(timer,1000);
+      syncWinnerNotices();
+      const ms=Math.max(0,Date.parse(status(a)==='upcoming'?a.start:a.end)-Date.now()),seconds=Math.floor(ms/1000);text('#auction-days',Math.floor(seconds/86400));text('#auction-hours',Math.floor(seconds%86400/3600));text('#auction-minutes',Math.floor(seconds%3600/60));text('#auction-seconds',seconds%60);if(status(a)!==timer.previous){timer.previous=status(a);render()}};timer();setInterval(timer,1000);
   }
   // PERSONAL PROFILE
   if($('.profile-page')){
