@@ -21,9 +21,16 @@ for f in pages:
         target=link.split('?',1)[0].split('#',1)[0]
         if target and not (ROOT/target).exists():errors.append(f'{f.name}: missing {target}')
 if not (ROOT/'README.md').exists() or not (ROOT/'AUTHORS').exists():errors.append('Missing README/AUTHORS')
-result=subprocess.run(['node','--check',str(ROOT/'script.js')],capture_output=True,text=True)
-if result.returncode:errors.append(result.stderr)
-print(f'Checked {len(pages)} HTML files, static paths, duplicate IDs, RTL and JS syntax')
+js_files = sorted(ROOT.rglob('*.js'))
+for js_file in js_files:
+    result = subprocess.run(
+        ['node', '--check', str(js_file)],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode:
+        errors.append(f'{js_file.relative_to(ROOT)}: {result.stderr.strip()}')
+print(f'Checked {len(pages)} HTML files, {len(js_files)} JavaScript files, static paths, duplicate IDs and RTL')
 if errors:
     print('FAIL:')
     for error in errors:print(' -',error)
