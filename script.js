@@ -1650,7 +1650,7 @@ if (cinema) {
   };
   if($('.seller-dashboard-page')){
     ['#dashboard-artifact-search','#dashboard-artifact-status-filter'].forEach(s=>$(s)?.addEventListener('input',drawSellerDashboard));
-    $('#dashboard-artifacts-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-artifact]');if(!btn)return;const key=btn.dataset.deleteArtifact;if(artifact(key)?.sellerId!==currentSeller()?.id)return;if(!confirm('هل تريد إزالة هذه القطعة من القوائم النشطة؟'))return;const row=artifact(key);row.archived=true;if(!put('artifacts',artifacts)){row.archived=false;feedback('#dashboard-artifacts-message','تعذر حذف القطعة محليًا. حاولي مرة أخرى.');return}feedback('#dashboard-artifacts-message','تمت إزالة القطعة من القوائم النشطة.');drawSellerDashboard()});drawSellerDashboard();
+    $('#dashboard-artifacts-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-artifact]');if(!btn)return;const key=btn.dataset.deleteArtifact;if(artifact(key)?.sellerId!==currentSeller()?.id)return;if(!confirm('هل تريد إزالة هذه القطعة من القوائم النشطة؟'))return;const row=artifact(key);if(auctions.some(a=>a.artifactId===key&&status(a)!=='ended')){feedback('#dashboard-artifacts-message','لا يمكن حذف قطعة مرتبطة بمزاد نشط أو قادم. انتظري انتهاء المزاد أولًا.');return}row.archived=true;if(!put('artifacts',artifacts)){row.archived=false;feedback('#dashboard-artifacts-message','تعذر حذف القطعة محليًا. حاولي مرة أخرى.');return}feedback('#dashboard-artifacts-message','تمت إزالة القطعة من القوائم النشطة.');drawSellerDashboard()});drawSellerDashboard();
   }
   // ADD / EDIT ARTIFACT
   if($('.manage-artifact-page')&&requireRole('seller','#manage-artifact-content','#manage-artifact-access-message')){
