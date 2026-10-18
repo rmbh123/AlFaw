@@ -1395,7 +1395,7 @@ if (cinema) {
       let invalid=false;
       const check=(condition,selector,message)=>{if(condition){error(selector,message);invalid=true}};
       check(name.length<2,'#full-name-error','أدخلي الاسم الكامل (حرفان على الأقل).');
-      check(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254,'#register-email-error','أدخلي بريدًا إلكترونيًا صحيحًا.');
+      check(!/^[^\s@]+@gmail\.com$/i.test(email)||email.length>254,'#register-email-error','يجب إدخال بريد Gmail صحيح ينتهي بـ @gmail.com.');
       check(!/^05[0-9]{8}$/.test(phone),'#register-phone-error','رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.');
       check(!city,'#register-city-error','اختاري المدينة.');
       check(role!=='buyer'&&role!=='seller','#register-form-message','اختاري نوع الحساب.');
