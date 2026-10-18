@@ -1649,3 +1649,18 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .register-page .register-fields-grid:has(#register-password) .password-input-wrapper {min-height:54px;}
 .register-page .register-password-rules-wide {margin:10px 0 0;width:100%;box-sizing:border-box;gap:8px;}
 .register-page .register-password-rules-wide .password-rule {line-height:1.8;}
+
+/* Registration validation: reserve error lines to avoid form jumping. */
+.register-page .register-fields-grid {align-items:start;}
+.register-page .register-field {align-content:start;}
+.register-page .register-field > .field-error {
+  display:block;
+  min-height:2.9em;
+  line-height:1.45;
+  font-size:12px;
+  box-sizing:border-box;
+}
+.register-page .register-field > .field-error:empty {visibility:hidden;}
+.register-page .register-fields-grid:has(#register-password) > .register-field > .field-error {
+  min-height:2.9em;
+}
