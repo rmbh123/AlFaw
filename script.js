@@ -1345,14 +1345,52 @@ if (cinema) {
   if($('.register-page')){
     const update=()=>{const yes=$('input[name="accountType"]:checked')?.value==='seller';visible('#register-seller-fields',yes);['#register-store-name','#register-seller-bio'].forEach(s=>{if($(s))$(s).disabled=!yes})};
     $$('input[name="accountType"]').forEach(x=>x.addEventListener('change',update));update();
-    $('#register-form')?.addEventListener('submit',async e=>{e.preventDefault();const name=$('#register-full-name')?.value.trim(),email=$('#register-email')?.value.trim().toLowerCase(),pass=$('#register-password')?.value||'',confirmPass=$('#register-confirm-password')?.value||'',role=$('input[name="accountType"]:checked')?.value,city=$('#register-city')?.value||'',phone=$('#register-phone')?.value.trim()||'';
-      if(!name||!email||!email.includes('@')||pass.length<8||pass!==confirmPass||!city||!role||($('#register-terms')&&!$('#register-terms').checked)){feedback('#register-form-message','راجعي الحقول المطلوبة وتطابق كلمتي المرور.');return}
-      if(users.some(x=>x.email===email)){feedback('#register-form-message','هذا البريد موجود مسبقًا.');return}
-      const sid=role==='seller'?id('seller'):null;
-      if(sid)sellers.push({id:sid,name:$('#register-store-name')?.value.trim()||name,city,category:'other',specialty:'مقتنيات تاريخية',bio:$('#register-seller-bio')?.value.trim()||'',joined:new Date().toISOString()});
-      const newUser={id:id('user'),name,email,role,sellerId:sid,city,phone,joined:new Date().toISOString()};
-      try{newUser.passwordSalt=id('salt');newUser.passwordHash=await fingerprint(pass,newUser.passwordSalt)}catch(err){feedback('#register-form-message',err.message);return}
-      users.push(newUser);persist();feedback('#register-form-message','تم إنشاء حساب تجريبي في هذا المتصفح. يمكنك تسجيل الدخول.');setTimeout(()=>location.href='login.html',700)
+    $('#register-form')?.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const form=$('#register-form');
+      const name=$('#register-full-name')?.value.trim()||'';
+      const email=$('#register-email')?.value.trim().toLowerCase()||'';
+      const phone=$('#register-phone')?.value.trim()||'';
+      const city=$('#register-city')?.value||'';
+      const pass=$('#register-password')?.value||'';
+      const confirmPass=$('#register-confirm-password')?.value||'';
+      const role=$('input[name="accountType"]:checked')?.value;
+      const storeName=$('#register-store-name')?.value.trim()||'';
+      const error=(selector,message)=>feedback(selector,message);
+      const fields=['#full-name-error','#register-email-error','#register-phone-error','#register-city-error','#register-store-name-error','#register-password-error','#register-confirm-password-error','#register-terms-error'];
+      fields.forEach(selector=>error(selector,''));
+      error('#register-form-message','');
+      let invalid=false;
+      const check=(condition,selector,message)=>{if(condition){error(selector,message);invalid=true}};
+      check(name.length<2,'#full-name-error','أدخلي الاسم الكامل (حرفان على الأقل).');
+      check(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254,'#register-email-error','أدخلي بريدًا إلكترونيًا صحيحًا.');
+      check(!/^05[0-9]{8}$/.test(phone),'#register-phone-error','رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.');
+      check(!city,'#register-city-error','اختاري المدينة.');
+      check(role!=='buyer'&&role!=='seller','#register-form-message','اختاري نوع الحساب.');
+      check(role==='seller'&&storeName.length<3,'#register-store-name-error','اسم البائع أو المتجر مطلوب (3 أحرف على الأقل).');
+      check(pass.length<8||pass.length>128,'#register-password-error','كلمة المرور يجب أن تكون بين 8 و128 حرفًا.');
+      check(pass!==confirmPass,'#register-confirm-password-error','كلمتا المرور غير متطابقتين.');
+      check(!$('#register-terms')?.checked,'#register-terms-error','يجب الموافقة على الشروط.');
+      check(users.some(x=>String(x.email||'').toLowerCase()===email),'#register-email-error','هذا البريد مسجل مسبقًا.');
+      if(form&&!form.checkValidity()){form.reportValidity();invalid=true}
+      if(invalid){error('#register-form-message','يرجى تصحيح الحقول المحددة قبل إنشاء الحساب.');return}
+      const submit=$('#register-submit-button');
+      if(submit)submit.disabled=true;
+      try{
+        const sid=role==='seller'?id('seller'):null;
+        const newUser={id:id('user'),name,email,role,sellerId:sid,city,phone,joined:new Date().toISOString()};
+        newUser.passwordSalt=id('salt');
+        newUser.passwordHash=await fingerprint(pass,newUser.passwordSalt);
+        const newSeller=sid?{id:sid,name:storeName,city,category:'other',specialty:'مقتنيات تاريخية',bio:$('#register-seller-bio')?.value.trim()||'',joined:new Date().toISOString()}:null;
+        users.push(newUser);
+        if(newSeller)sellers.push(newSeller);
+        persist();
+        error('#register-form-message','تم إنشاء حساب تجريبي في هذا المتصفح. يمكنك تسجيل الدخول.');
+        setTimeout(()=>location.href='login.html',700);
+      }catch(err){
+        error('#register-form-message','تعذر إنشاء الحساب التجريبي. حاولي مرة أخرى.');
+        if(submit)submit.disabled=false;
+      }
     });
   }
   if($('.login-page')){
