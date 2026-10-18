@@ -1570,3 +1570,50 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
   .register-page .register-account-type {padding:14px;}
   .register-page .account-type-content {min-height:94px;}
 }
+
+/* Registration role cards: responsive, animated selection glow. */
+.register-page .account-type-option {
+  isolation: isolate;
+  transform: scale(1);
+  transition: transform .34s cubic-bezier(.2,.8,.2,1), filter .34s ease;
+  will-change: transform;
+}
+.register-page .account-type-content {
+  position: relative;
+  overflow: hidden;
+  transition: background .32s ease, border-color .32s ease, box-shadow .32s ease, transform .32s ease;
+}
+.register-page .account-type-content::after {
+  content:"";
+  position:absolute;
+  inset:-65%;
+  z-index:-1;
+  pointer-events:none;
+  opacity:0;
+  background:radial-gradient(circle at 50% 50%,rgba(239,191,113,.2) 0%,rgba(239,191,113,.07) 34%,transparent 65%);
+  transition:opacity .34s ease;
+}
+.register-page .account-type-option:has(input:checked) {
+  transform:translateY(-6px) scale(1.035);
+  z-index:2;
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.2));
+}
+.register-page .account-type-option:has(input:checked) .account-type-content {
+  border-color:#efc78d;
+  background:linear-gradient(145deg,rgba(202,151,84,.26),rgba(106,63,33,.22));
+  box-shadow:0 0 0 2px rgba(234,182,103,.34),0 0 25px rgba(242,187,99,.24),inset 0 0 22px rgba(235,180,92,.09);
+}
+.register-page .account-type-option:has(input:checked) .account-type-content::after {opacity:1;}
+.register-page .account-type-option:not(:has(input:checked)) {transform:scale(.985);filter:none;}
+.register-page .account-type-option:hover:not(:has(input:checked)) {transform:translateY(-3px) scale(1.015);}
+.register-page .account-type-option:hover:not(:has(input:checked)) .account-type-content {
+  border-color:rgba(239,191,113,.65);
+  box-shadow:0 0 18px rgba(239,191,113,.13);
+}
+.register-page .account-type-option:active {transform:scale(.99);}
+@media(max-width:540px) {
+  .register-page .account-type-option:has(input:checked) {transform:translateY(-2px) scale(1.012);}
+}
+@media(prefers-reduced-motion:reduce) {
+  .register-page .account-type-option,.register-page .account-type-content,.register-page .account-type-content::after {transition:none!important;animation:none!important;}
+}
