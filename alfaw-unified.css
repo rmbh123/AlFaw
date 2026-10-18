@@ -1669,3 +1669,8 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .alfaw-dashboard-logout-wrap {display:flex;justify-content:flex-end;margin:2px 0 18px;}
 .alfaw-dashboard-logout {min-height:42px;padding:9px 18px;border:1px solid rgba(201,168,120,.55);border-radius:12px;background:rgba(201,168,120,.10);color:#e5c79f;font:600 14px/1.5 var(--font-body);cursor:pointer;}
 .alfaw-dashboard-logout:hover,.alfaw-dashboard-logout:focus-visible {background:rgba(201,168,120,.22);outline-offset:3px;}
+
+/* Bidding guide hide/reopen control. */
+.auctions-page .alfaw-guide-toggle{margin-top:18px;padding:10px 22px;border:1px solid rgba(201,168,120,.65);border-radius:12px;background:rgba(201,168,120,.14);color:#e7ccaa;font:600 14px/1.5 var(--font-body);cursor:pointer}
+.auctions-page .alfaw-guide-toggle:hover,.auctions-page .alfaw-guide-toggle:focus-visible{background:rgba(201,168,120,.26)}
+.auctions-page #alfaw-guide-body[hidden]{display:none!important}
