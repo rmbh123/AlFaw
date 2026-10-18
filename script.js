@@ -1736,7 +1736,16 @@ if (cinema) {
 
 // Header session indicator. Actual authentication and multi-user state require a backend.
 (() => {
-  const session=(()=>{try{return JSON.parse(localStorage.getItem('alfaw_phase3_session')||'null')}catch{return null}})();
+  const session=(()=>{
+    try {
+      const value=JSON.parse(localStorage.getItem('alfaw_phase3_session')||'null');
+      const users=JSON.parse(localStorage.getItem('alfaw_phase3_users')||'[]');
+      if(!value||!Array.isArray(users))return null;
+      const user=users.find(u=>u.id===value.id);
+      return user&&user.role===value.role&&user.sellerId===value.sellerId
+        ? value : null;
+    } catch { return null; }
+  })();
   if(!session)return;
   document.querySelectorAll('.site-nav a[href="login.html"],.header-actions a[href="login.html"]').forEach(link=>{
     link.href=session.role==='seller'?'seller-dashboard.html':session.role==='admin'?'admin-dashboard.html':'profile.html';
