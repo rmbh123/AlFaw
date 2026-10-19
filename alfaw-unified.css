@@ -1820,7 +1820,7 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .seller-dashboard-page .dashboard-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-block:28px}
 .seller-dashboard-page .dashboard-summary-card{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:10px;min-height:145px;padding:22px;border:1px solid rgba(207,166,104,.35);border-radius:17px;background:linear-gradient(145deg,#372419,#281910);box-shadow:0 8px 22px #0002}
 .seller-dashboard-page .dashboard-summary-card strong{font-size:clamp(1.3rem,2.5vw,1.8rem);color:#f0cb8c}
-.seller-dashboard-page .dashboard-layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:24px;align-items:start}
+.seller-dashboard-page .dashboard-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start}
 .seller-dashboard-page .dashboard-sidebar{position:sticky;top:110px;padding:23px 16px;border:1px solid rgba(208,164,101,.35);border-radius:20px;background:#2b1b12}
 .seller-dashboard-page .dashboard-sidebar-heading{padding:0 11px 18px;border-bottom:1px solid rgba(208,164,101,.2);margin-bottom:14px}
 .seller-dashboard-page .dashboard-side-nav{display:flex;flex-direction:column;gap:7px}
