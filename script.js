@@ -1673,7 +1673,7 @@ if (cinema) {
       if(myAuctionList){
         myAuctionList.replaceChildren();
         const joined=isSellerProfile?auctions.filter(a=>a.sellerId===u.sellerId):auctions.filter(a=>(a.bids||[]).some(b=>b.uid===u.id));
-        if(!joined.length){const empty=document.createElement('p');empty.textContent='لا توجد مشاركات بعد.';myAuctionList.append(empty)}
+        if(!joined.length){const empty=document.createElement('p');empty.textContent=isSellerProfile?'لم تنشئي مزادات بعد.':'لا توجد مشاركات بعد.';myAuctionList.append(empty)}
         joined.forEach(a=>{
           const own=isSellerProfile?null:a.bids.filter(b=>b.uid===u.id).sort((x,y)=>Number(y.amount)-Number(x.amount))[0];
           const item=artifact(a.artifactId);
@@ -1696,6 +1696,19 @@ if (cinema) {
         mine.sort((x,y)=>Date.parse(y.b.created)-Date.parse(x.b.created));
         if(!mine.length){const empty=document.createElement('p');empty.textContent='لا توجد فواتير مزايدات تجريبية بعد.';invoiceArea.append(empty)}
         mine.forEach(({auctionRecord,b})=>invoiceArea.append(makeReceiptButton(auctionRecord,b)));
+      }
+      if(isSellerProfile){
+        const reviewsArea=$('#profile-reviews-list');
+        const mySellerReviews=reviews.filter(r=>r.sellerId===u.sellerId);
+        const summary=rating(u.sellerId);
+        if(reviewsArea){
+          reviewsArea.replaceChildren();
+          const heading=document.createElement('p');heading.className='alfaw-seller-review-summary';
+          heading.textContent='تقييم المشترين: '+(summary.avg===null?'لا توجد تقييمات':summary.avg.toFixed(1)+' / 5')+' · Trust Score: '+(summary.trust===null?'غير متاح':summary.trust+'%');
+          reviewsArea.append(heading);
+          if(!mySellerReviews.length){const empty=document.createElement('p');empty.textContent='لم تستلم تقييمات من المشترين بعد.';reviewsArea.append(empty)}
+          mySellerReviews.forEach(r=>{const card=document.createElement('article');card.className='alfaw-seller-review-card';const title=document.createElement('strong');title.textContent=(r.buyerName||'مشتري')+' — '+Number(r.rating)+'/5';const note=document.createElement('p');note.textContent=r.comment||'دون تعليق';card.append(title,note);reviewsArea.append(card)});
+        }
       }
       const myNotices=notices.filter(n=>n.uid===u.id);text('#profile-unread-count',myNotices.filter(n=>!n.read).length);if($('#profile-notifications-list'))$('#profile-notifications-list').innerHTML=myNotices.map(n=>`<p>${escape(n.body)} <a href="${escape(n.url)}">عرض</a></p>`).join('')||'<p>لا توجد إشعارات.</p>';
       $('#profile-mark-all-read')?.addEventListener('click',()=>{const previous=myNotices.map(n=>n.read);myNotices.forEach(n=>n.read=true);if(!put('notices',notices)){myNotices.forEach((n,i)=>n.read=previous[i]);feedback('#profile-form-message','تعذر حفظ حالة الإشعارات. حاولي مجددًا.');return}location.reload()});
