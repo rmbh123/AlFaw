@@ -1443,8 +1443,30 @@ if (cinema) {
           if(newSeller&&savedSeller)put('sellers',sellers);
           throw Error('Local registration storage failed');
         }
-        error('#register-form-message','تم إنشاء حساب تجريبي في هذا المتصفح. يمكنك تسجيل الدخول.');
-        setTimeout(()=>location.href='login.html?registered=1',2500);
+        error('#register-form-message','تم إنشاء حسابك بنجاح.');
+        const oldSuccess=$('#alfaw-registration-success');
+        if(oldSuccess)oldSuccess.remove();
+        const success=document.createElement('div');
+        success.id='alfaw-registration-success';
+        success.className='alfaw-registration-success';
+        success.setAttribute('role','alertdialog');
+        success.setAttribute('aria-modal','true');
+        success.setAttribute('aria-labelledby','alfaw-registration-success-heading');
+        const panel=document.createElement('div');
+        panel.className='alfaw-registration-success-panel';
+        const heading=document.createElement('h2');
+        heading.id='alfaw-registration-success-heading';
+        heading.textContent='تم إنشاء حسابك بنجاح ✓';
+        const description=document.createElement('p');
+        description.textContent='حسابك جاهز الآن. يمكنك تسجيل الدخول بالبريد الإلكتروني وكلمة المرور اللذين سجلتِ بهما.';
+        const action=document.createElement('a');
+        action.href='login.html?registered=1';
+        action.className='alfaw-registration-success-action';
+        action.textContent='الانتقال لتسجيل الدخول ←';
+        panel.append(heading,description,action);
+        success.append(panel);
+        document.body.append(success);
+        action.focus();
       }catch(err){
         error('#register-form-message','تعذر إنشاء الحساب التجريبي. حاولي مرة أخرى.');
         if(submit)submit.disabled=false;
