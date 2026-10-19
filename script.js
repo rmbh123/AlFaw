@@ -1292,7 +1292,16 @@ if (cinema) {
       a.start = template.start; a.end = template.end; repairedDemoSchedule = true;
     }
   });
-  if (addedDefaultAuctions || repairedDemoSchedule || !localStorage.getItem('alfaw_phase3_auctions')) put('auctions', auctions);
+  // Keep one seeded demonstration auction open for Phase 3 testing, even in browsers
+  // that saved the original seed schedule days ago. Never alter user-created auctions.
+  let refreshedDemoAuction = false;
+  const demoLiveAuction = auctions.find(a => a.id === 'auction-004' && a.artifactId === 'artifact-001' && a.sellerId === 'ahmed');
+  if (demoLiveAuction && (!Number.isFinite(Date.parse(demoLiveAuction.start)) || !Number.isFinite(Date.parse(demoLiveAuction.end)) || Date.parse(demoLiveAuction.end) <= Date.now())) {
+    demoLiveAuction.start = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    demoLiveAuction.end = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    refreshedDemoAuction = true;
+  }
+  if (addedDefaultAuctions || repairedDemoSchedule || refreshedDemoAuction || !localStorage.getItem('alfaw_phase3_auctions')) put('auctions', auctions);
   if(!localStorage.getItem('alfaw_phase3_artifacts')) put('artifacts',artifacts);
   if(!localStorage.getItem('alfaw_phase3_sellers')) put('sellers',sellers);
   const persist=()=>{put('sellers',sellers);put('artifacts',artifacts);put('auctions',auctions);put('users',users);put('reviews',reviews);put('notices',notices)};
