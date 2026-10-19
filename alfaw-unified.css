@@ -1718,3 +1718,67 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .auction-detail-page .alfaw-bid-input-wrap>span{flex:none;padding:9px 12px;border:1px solid rgba(205,168,108,.23);border-radius:10px;background:rgba(205,168,108,.12);color:#f2dcc0;font-weight:700;white-space:nowrap}
 .auction-detail-page #bid-minimum-hint{margin:10px 0 14px;line-height:1.8;color:#e9d1ac}
 @media(max-width:600px){.auction-detail-page .alfaw-bid-input-wrap{min-height:56px;padding:7px 9px}.auction-detail-page .alfaw-bid-input-wrap .alfaw-bid-input{font-size:1rem}}
+
+/* Auction details: bidding panel and typography polish */
+.auction-detail-page .auction-bid-form-section{padding:clamp(20px,3vw,32px);border:1px solid rgba(205,168,108,.33);border-radius:20px;background:linear-gradient(140deg,rgba(98,63,36,.20),rgba(29,16,9,.25));box-shadow:0 14px 28px rgba(0,0,0,.1)}
+.auction-detail-page .auction-bid-heading{margin-bottom:20px}
+.auction-detail-page .auction-bid-heading .section-label{font-family:inherit;color:#daba80;letter-spacing:0}
+.auction-detail-page .auction-bid-heading h2{color:#f6e1bd;font-family:inherit;font-size:clamp(1.5rem,2.3vw,2rem);line-height:1.6;margin:7px 0}
+.auction-detail-page .auction-bid-heading>p:last-child{font-family:inherit;color:#e1caae;line-height:1.95;max-width:48ch}
+.auction-detail-page #submit-bid-button{display:flex;justify-content:center;align-items:center;gap:12px;width:100%;min-height:54px;margin:16px 0 10px;padding:13px 22px;border:1px solid #d3ac70;border-radius:13px;background:linear-gradient(125deg,#b99157,#dbb77b);color:#29180d;font-family:inherit;font-size:1.08rem;font-weight:750;box-shadow:0 8px 20px rgba(0,0,0,.2);transition:background .18s,box-shadow .18s,transform .18s}
+.auction-detail-page #submit-bid-button:not(:disabled):hover{background:linear-gradient(125deg,#d0a76c,#efd09c);box-shadow:0 12px 25px rgba(0,0,0,.24);transform:translateY(-1px)}
+.auction-detail-page #submit-bid-button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.auction-detail-page .auction-bidding-requirements{margin-top:22px;padding-top:18px;border-top:1px solid rgba(205,168,108,.22);font-family:inherit}
+.auction-detail-page .auction-bidding-requirements h3{font-family:inherit;font-weight:700;color:#f1d8b1;font-size:1.25rem;line-height:1.6;margin:0 0 12px}
+.auction-detail-page .auction-bidding-requirements ul,.auction-detail-page .auction-bidding-requirements li{font-family:inherit!important;font-weight:400;color:#e9d6bd;line-height:1.95}
+@media(max-width:600px){.auction-detail-page .auction-bid-form-section{padding:19px 15px}.auction-detail-page #submit-bid-button{min-height:52px;font-size:1rem}}
+
+/* Profile overview: coherent heritage identity card */
+.profile-page .profile-overview{margin:22px 0 30px}
+.profile-page .profile-overview-card{position:relative;overflow:hidden;border:1px solid rgba(214,177,119,.38);border-radius:22px;background:linear-gradient(115deg,#3a261a 0%,#281910 68%,#342215 100%);box-shadow:0 14px 40px rgba(0,0,0,.2)}
+.profile-page .profile-cover-decoration{display:none}
+.profile-page .profile-overview-body{display:grid;grid-template-columns:84px minmax(0,1fr) auto;align-items:center;gap:22px;padding:clamp(22px,3vw,38px);direction:rtl}
+.profile-page .profile-avatar{display:grid;place-items:center;width:80px;height:80px;border-radius:50%;border:2px solid rgba(225,190,133,.6);background:#5b3e27;color:#f8e6c7;font-family:inherit;font-size:2rem}
+.profile-page .profile-overview-info{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.profile-page .profile-overview-info .section-label{margin:0;color:#d6b57d;font-size:.9rem;line-height:1.6}
+.profile-page #profile-display-name{margin:0;font-family:inherit;color:#fff1d9;font-size:clamp(1.55rem,2.4vw,2.15rem);line-height:1.5;overflow-wrap:anywhere}
+.profile-page .profile-role-badge{display:inline-block;padding:5px 14px;border:1px solid rgba(211,172,112,.5);border-radius:50px;background:rgba(211,172,112,.13);color:#f1d5a8;font-family:inherit;font-size:.9rem}
+.profile-page #profile-display-city{margin:0;color:#d9c4ab;font-size:.95rem;direction:auto}
+.profile-page .profile-overview-actions{display:flex;gap:12px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.profile-page .profile-overview-actions button{appearance:none;min-height:46px;padding:11px 19px;border-radius:12px;font-family:inherit;font-size:.97rem;font-weight:700;line-height:1.4;cursor:pointer;white-space:nowrap;transition:background .2s,transform .2s,border-color .2s}
+.profile-page #profile-edit-shortcut{border:1px solid #caa370;background:#b98d55;color:#29190e}
+.profile-page #profile-edit-shortcut:hover{background:#dbb57d;transform:translateY(-1px)}
+.profile-page #profile-logout-button{border:1px solid rgba(207,168,109,.6);background:rgba(41,25,14,.6);color:#f4ddbc}
+.profile-page #profile-logout-button:hover{background:#543822;transform:translateY(-1px)}
+.profile-page .profile-overview-actions button:focus-visible{outline:2px solid #f1cc8c;outline-offset:3px}
+@media(max-width:860px){.profile-page .profile-overview-body{grid-template-columns:72px minmax(0,1fr)}.profile-page .profile-avatar{width:68px;height:68px}.profile-page .profile-overview-actions{grid-column:1/-1;justify-content:stretch}.profile-page .profile-overview-actions button{flex:1}}
+@media(max-width:440px){.profile-page .profile-overview-body{padding:20px 16px;column-gap:14px}.profile-page .profile-overview-actions{flex-direction:column}.profile-page .profile-overview-actions button{width:100%}}
+
+/* Profile form — consistent Arabic heritage typography, refined controls and gold membership card */
+.profile-page .profile-sidebar,.profile-page .profile-panels,.profile-page .profile-edit-form,.profile-page .profile-edit-form input,.profile-page .profile-edit-form select,.profile-page .profile-edit-form button,.profile-page .profile-tabs button{font-family:inherit!important}
+.profile-page .profile-field label{font-family:inherit!important;color:#f0ddbd;font-size:1rem;font-weight:650;line-height:1.8}
+.profile-page .profile-edit-form input,.profile-page .profile-edit-form select{min-height:50px;border:1px solid rgba(210,170,108,.5);border-radius:11px;background:#2a1b12;color:#f7e8d0;padding:11px 14px;font-size:1rem;box-shadow:none}
+.profile-page .profile-edit-form input:focus,.profile-page .profile-edit-form select:focus{outline:2px solid rgba(217,181,124,.48);outline-offset:1px;border-color:#d4ad76}
+.profile-page .profile-account-details{margin:24px 0;padding:clamp(19px,3vw,30px);border:1px solid #d6ad6e;border-radius:18px;background:linear-gradient(130deg,#b7894d 0%,#e4c18a 48%,#b68a50 100%);box-shadow:0 12px 32px rgba(0,0,0,.18);color:#332011}
+.profile-page .profile-account-details h3{font-family:inherit!important;margin:0 0 18px;color:#392311;font-size:1.34rem;font-weight:800}
+.profile-page .profile-account-details-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.profile-page .profile-account-details-grid>div{min-width:0;padding:15px;border-radius:12px;border:1px solid rgba(92,59,26,.2);background:rgba(255,249,236,.34);display:flex;flex-direction:column;gap:7px}
+.profile-page .profile-account-details-grid span{color:#543719;font-family:inherit!important;font-size:.9rem;font-weight:650}
+.profile-page .profile-account-details-grid strong{color:#2e1e11;font-family:inherit!important;font-size:1rem;font-weight:750;line-height:1.65;overflow-wrap:anywhere;direction:auto}
+.profile-page .profile-form-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}
+.profile-page #profile-save-button,.profile-page #profile-cancel-button{appearance:none;min-height:49px;padding:12px 22px;border-radius:12px;font-family:inherit!important;font-size:1rem;font-weight:700;line-height:1.5;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
+.profile-page #profile-save-button{border:1px solid #dcbb7e;background:linear-gradient(120deg,#b78d55,#dfbb7e);color:#2f1d0e}
+.profile-page #profile-save-button:hover{background:#ebca92;transform:translateY(-1px)}
+.profile-page #profile-cancel-button{border:1px solid #b68f58;background:#352316;color:#f0dbbb}
+.profile-page #profile-cancel-button:hover{background:#55391f;transform:translateY(-1px)}
+.profile-page .profile-tabs .profile-tab{font-family:inherit!important;font-size:1rem;line-height:1.7}
+@media(max-width:750px){.profile-page .profile-account-details-grid{grid-template-columns:1fr}.profile-page .profile-form-actions button{flex:1}}
+@media(max-width:440px){.profile-page .profile-form-actions{flex-direction:column}.profile-page .profile-form-actions button{width:100%}}
+
+/* Profile panel navigation and notification actions */
+.profile-page .profile-explore-auctions-button{display:inline-flex;align-items:center;justify-content:center;width:fit-content;min-height:49px;margin-top:20px;padding:11px 24px;border:1px solid #d9b376;border-radius:12px;background:linear-gradient(125deg,#ac7c43,#d6ab70);color:#29180d!important;font-family:inherit;font-size:1rem;font-weight:700;text-decoration:none;transition:transform .2s,background .2s}
+.profile-page .profile-explore-auctions-button:hover{background:#e8c48d;transform:translateY(-1px)}
+.profile-page #profile-mark-all-read{appearance:none;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:11px 22px;border:1px solid #d8b276;border-radius:12px;background:linear-gradient(125deg,#ad8049,#dbb478);color:#2b1a10;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer;transition:background .2s,transform .2s}
+.profile-page #profile-mark-all-read:hover{background:#edc991;transform:translateY(-1px)}
+.profile-page #profile-mark-all-read:focus-visible,.profile-page .profile-explore-auctions-button:focus-visible{outline:2px solid #f4d39c;outline-offset:3px}
+@media(max-width:520px){.profile-page .profile-explore-auctions-button,.profile-page #profile-mark-all-read{width:100%}}
