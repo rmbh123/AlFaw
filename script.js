@@ -1292,7 +1292,16 @@ if (cinema) {
       a.start = template.start; a.end = template.end; repairedDemoSchedule = true;
     }
   });
-  if (addedDefaultAuctions || repairedDemoSchedule || !localStorage.getItem('alfaw_phase3_auctions')) put('auctions', auctions);
+  // Keep one seeded demonstration auction open for Phase 3 testing, even in browsers
+  // that saved the original seed schedule days ago. Never alter user-created auctions.
+  let refreshedDemoAuction = false;
+  const demoLiveAuction = auctions.find(a => a.id === 'auction-004' && a.artifactId === 'artifact-001' && a.sellerId === 'ahmed');
+  if (demoLiveAuction && (!Number.isFinite(Date.parse(demoLiveAuction.start)) || !Number.isFinite(Date.parse(demoLiveAuction.end)) || Date.parse(demoLiveAuction.end) <= Date.now())) {
+    demoLiveAuction.start = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    demoLiveAuction.end = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    refreshedDemoAuction = true;
+  }
+  if (addedDefaultAuctions || repairedDemoSchedule || refreshedDemoAuction || !localStorage.getItem('alfaw_phase3_auctions')) put('auctions', auctions);
   if(!localStorage.getItem('alfaw_phase3_artifacts')) put('artifacts',artifacts);
   if(!localStorage.getItem('alfaw_phase3_sellers')) put('sellers',sellers);
   const persist=()=>{put('sellers',sellers);put('artifacts',artifacts);put('auctions',auctions);put('users',users);put('reviews',reviews);put('notices',notices)};
@@ -1547,7 +1556,7 @@ if (cinema) {
   if($('.seller-detail-page')&&$('#seller-detail-name')){
     if(params.has('id')&&!seller(params.get('id'))){location.replace('seller-profile.html');return}const s=seller(params.get('id'))||sellers[0];if(s){const r=rating(s.id),items=artifacts.filter(a=>a.sellerId===s.id&&!a.archived),sales=auctions.filter(a=>a.sellerId===s.id);[['#seller-detail-name',s.name],['#seller-breadcrumb-name',s.name],['#seller-detail-avatar',s.name[0]],['#seller-detail-location',s.city],['#seller-detail-specialty',s.specialty],['#seller-detail-biography',s.bio],['#seller-about-description',s.bio],['#seller-about-specialty',s.specialty],['#seller-about-city',s.city],['#seller-about-category',s.specialty],['#seller-about-joined',date(s.joined)],['#seller-detail-artifact-count',items.length],['#seller-detail-auction-count',sales.length],['#seller-detail-review-count',r.count],['#seller-detail-trust-score',r.trust===null?'لا توجد تقييمات':r.trust+'%'],['#seller-trust-percentage',r.trust===null?'—':r.trust+'%'],['#seller-average-rating',r.avg===null?'—':r.avg.toFixed(1)],['#seller-review-total',r.count+' تقييمات']].forEach(([key,v])=>text(key,v));
       if($('#seller-artifacts-grid'))$('#seller-artifacts-grid').innerHTML=items.map(artworkCard).join('');visible('#seller-artifacts-empty',!items.length);
-      if($('#seller-auctions-grid'))$('#seller-auctions-grid').innerHTML=sales.map(a=>{const item=artifact(a.artifactId);return item?`<article class="seller-auction-card"><div class="seller-auction-image"><img src="${escape(item.image)}" alt="${escape(item.name)}"></div><div class="seller-auction-content"><h3>${escape(item.name)}</h3><p>${statusName(a)} — ${money(a.startingPrice)}</p><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل المزاد ←</a></div></article>`:''}).join('');visible('#seller-auctions-empty',!sales.length);
+      if($('#seller-auctions-grid'))$('#seller-auctions-grid').innerHTML=sales.map(a=>{const item=artifact(a.artifactId);return item?`<article class="seller-auction-card"><div class="seller-auction-image"><img src="${escape(item.image)}" alt="${escape(item.name)}"></div><div class="seller-auction-content"><h3>${escape(item.name)}</h3><p>حالة المزاد: ${statusName(a)} — ${money(a.startingPrice)}</p><p>${status(a)==='active'?'المزايدة متاحة الآن للمشترين المسجلين. الحد الأدنى للعرض: '+money(minimum(a)):status(a)==='upcoming'?'المزايدة لم تبدأ بعد. يبدأ المزاد: '+date(a.start):'انتهى المزاد ولا يقبل مزايدات جديدة.'}</p><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">${status(a)==='active'?'عرض المزاد والمزايدة ←':'عرض تفاصيل المزاد ←'}</a></div></article>`:''}).join('');visible('#seller-auctions-empty',!sales.length);
       if($('#seller-reviews-list'))$('#seller-reviews-list').innerHTML=r.count?sellerReviews(s.id).map(re=>`<article class="seller-review-card"><strong>${escape(re.buyerName)}</strong> <span>${'★'.repeat(re.rating)}</span><p>${escape(re.comment)}</p></article>`).join(''):'<div class="seller-review-empty">لا توجد تقييمات حتى الآن.</div>';
       for(let n=1;n<=5;n++){const count=sellerReviews(s.id).filter(re=>re.rating===n).length;text('#seller-rating-count-'+n,count);const bar=$('#seller-rating-bar-'+n);if(bar)bar.style.width=r.count?(count/r.count*100)+'%':'0%'}
     }
