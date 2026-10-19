@@ -1641,6 +1641,7 @@ if (cinema) {
     const u=account();visible('#profile-guest-state',!u);visible('#profile-authenticated-content',!!u);
     if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',u.role==='seller'?'بائع':'مشتري'],['#profile-detail-role',u.role==='seller'?'بائع':'مشتري'],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',u.role==='seller');
       const isSellerProfile=u.role==='seller';
+      if(isSellerProfile)$('[data-seller-label]').forEach(el=>{el.textContent=el.dataset.sellerLabel});
       $('.seller-profile-only').forEach(el=>{if(el.classList.contains('profile-tab'))el.hidden=!isSellerProfile});
       $('.buyer-profile-only').forEach(el=>{el.hidden=isSellerProfile});
       if(isSellerProfile){
