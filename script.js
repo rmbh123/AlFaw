@@ -1668,7 +1668,7 @@ if (cinema) {
             links.append(view,edit);details.append(title,state,price,links);card.append(img,details);artifactArea.append(card);
           });
         }
-      }const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);
+      }if(!isSellerProfile){const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);}
       const myAuctionList=$('#profile-my-auctions-list');
       if(myAuctionList){
         myAuctionList.replaceChildren();
