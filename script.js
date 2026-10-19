@@ -1409,7 +1409,7 @@ if (cinema) {
       let invalid=false;
       const check=(condition,selector,message)=>{if(condition){error(selector,message);invalid=true}};
       check(name.length<2,'#full-name-error','أدخلي الاسم الكامل (حرفان على الأقل).');
-      check(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254,'#register-email-error','أدخلي بريدًا إلكترونيًا صحيحًا.');
+      check(!/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,}$/i.test(email)||email.includes('..')||email.length>254,'#register-email-error','أدخلي بريدًا إلكترونيًا صحيحًا مثل name@example.com.');
       check(!/^05[0-9]{8}$/.test(phone),'#register-phone-error','رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.');
       check(!city,'#register-city-error','اختاري المدينة.');
       check(role!=='buyer'&&role!=='seller','#register-form-message','اختاري نوع الحساب.');
@@ -1444,7 +1444,7 @@ if (cinema) {
           throw Error('Local registration storage failed');
         }
         error('#register-form-message','تم إنشاء حساب تجريبي في هذا المتصفح. يمكنك تسجيل الدخول.');
-        setTimeout(()=>location.href='login.html',700);
+        setTimeout(()=>location.href='login.html?registered=1',2500);
       }catch(err){
         error('#register-form-message','تعذر إنشاء الحساب التجريبي. حاولي مرة أخرى.');
         if(submit)submit.disabled=false;
@@ -1452,6 +1452,7 @@ if (cinema) {
     });
   }
   if($('.login-page')||$('.admin-login-page')){
+    if($('.login-page')&&params.get('registered')==='1')feedback('#login-form-message','تم إنشاء حسابك بنجاح. سجّلي الدخول بالبريد وكلمة المرور اللذين اخترتهما.');
     $('#login-form')?.addEventListener('submit',async e=>{e.preventDefault();
       const email=$('#login-email')?.value.trim().toLowerCase(),pass=$('#login-password')?.value||'';
       const u=users.find(x=>x.email===email);
