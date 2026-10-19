@@ -1718,3 +1718,17 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .auction-detail-page .alfaw-bid-input-wrap>span{flex:none;padding:9px 12px;border:1px solid rgba(205,168,108,.23);border-radius:10px;background:rgba(205,168,108,.12);color:#f2dcc0;font-weight:700;white-space:nowrap}
 .auction-detail-page #bid-minimum-hint{margin:10px 0 14px;line-height:1.8;color:#e9d1ac}
 @media(max-width:600px){.auction-detail-page .alfaw-bid-input-wrap{min-height:56px;padding:7px 9px}.auction-detail-page .alfaw-bid-input-wrap .alfaw-bid-input{font-size:1rem}}
+
+/* Auction details: bidding panel and typography polish */
+.auction-detail-page .auction-bid-form-section{padding:clamp(20px,3vw,32px);border:1px solid rgba(205,168,108,.33);border-radius:20px;background:linear-gradient(140deg,rgba(98,63,36,.20),rgba(29,16,9,.25));box-shadow:0 14px 28px rgba(0,0,0,.1)}
+.auction-detail-page .auction-bid-heading{margin-bottom:20px}
+.auction-detail-page .auction-bid-heading .section-label{font-family:inherit;color:#daba80;letter-spacing:0}
+.auction-detail-page .auction-bid-heading h2{color:#f6e1bd;font-family:inherit;font-size:clamp(1.5rem,2.3vw,2rem);line-height:1.6;margin:7px 0}
+.auction-detail-page .auction-bid-heading>p:last-child{font-family:inherit;color:#e1caae;line-height:1.95;max-width:48ch}
+.auction-detail-page #submit-bid-button{display:flex;justify-content:center;align-items:center;gap:12px;width:100%;min-height:54px;margin:16px 0 10px;padding:13px 22px;border:1px solid #d3ac70;border-radius:13px;background:linear-gradient(125deg,#b99157,#dbb77b);color:#29180d;font-family:inherit;font-size:1.08rem;font-weight:750;box-shadow:0 8px 20px rgba(0,0,0,.2);transition:background .18s,box-shadow .18s,transform .18s}
+.auction-detail-page #submit-bid-button:not(:disabled):hover{background:linear-gradient(125deg,#d0a76c,#efd09c);box-shadow:0 12px 25px rgba(0,0,0,.24);transform:translateY(-1px)}
+.auction-detail-page #submit-bid-button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.auction-detail-page .auction-bidding-requirements{margin-top:22px;padding-top:18px;border-top:1px solid rgba(205,168,108,.22);font-family:inherit}
+.auction-detail-page .auction-bidding-requirements h3{font-family:inherit;font-weight:700;color:#f1d8b1;font-size:1.25rem;line-height:1.6;margin:0 0 12px}
+.auction-detail-page .auction-bidding-requirements ul,.auction-detail-page .auction-bidding-requirements li{font-family:inherit!important;font-weight:400;color:#e9d6bd;line-height:1.95}
+@media(max-width:600px){.auction-detail-page .auction-bid-form-section{padding:19px 15px}.auction-detail-page #submit-bid-button{min-height:52px;font-size:1rem}}
