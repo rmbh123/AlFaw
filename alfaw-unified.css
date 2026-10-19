@@ -1688,3 +1688,11 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .alfaw-receipt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
 .alfaw-receipt-actions button{padding:10px 15px;border:1px solid #966e43;border-radius:9px;background:#5c422b;color:white;cursor:pointer}
 @media print{body>*{visibility:hidden!important}.alfaw-receipt-overlay,.alfaw-receipt-overlay *{visibility:visible!important}.alfaw-receipt-overlay{position:absolute;inset:0;background:white}.alfaw-receipt-modal{box-shadow:none;max-height:none;overflow:visible;border:0}.alfaw-receipt-actions{display:none!important}}
+
+/* Persistent registration confirmation, legible on mobile and desktop. */
+.alfaw-registration-success{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,12,7,.83)}
+.alfaw-registration-success-panel{width:min(100%,470px);padding:clamp(24px,5vw,38px);border:1px solid #b99a6a;border-radius:18px;background:#fff8ea;color:#372617;text-align:center;box-shadow:0 20px 70px #0008}
+.alfaw-registration-success-panel h2{margin:0 0 15px;font-size:clamp(21px,5vw,29px);color:#4e331f}
+.alfaw-registration-success-panel p{margin:0 0 25px;line-height:1.9}
+.alfaw-registration-success-action{display:block;padding:14px 20px;border-radius:10px;background:#6c492b;color:#fff8e8!important;text-decoration:none;font-weight:700}
+.alfaw-registration-success-action:focus-visible{outline:3px solid #ae814e;outline-offset:3px}
