@@ -1753,3 +1753,24 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .profile-page .profile-overview-actions button:focus-visible{outline:2px solid #f1cc8c;outline-offset:3px}
 @media(max-width:860px){.profile-page .profile-overview-body{grid-template-columns:72px minmax(0,1fr)}.profile-page .profile-avatar{width:68px;height:68px}.profile-page .profile-overview-actions{grid-column:1/-1;justify-content:stretch}.profile-page .profile-overview-actions button{flex:1}}
 @media(max-width:440px){.profile-page .profile-overview-body{padding:20px 16px;column-gap:14px}.profile-page .profile-overview-actions{flex-direction:column}.profile-page .profile-overview-actions button{width:100%}}
+
+/* Profile form — consistent Arabic heritage typography, refined controls and gold membership card */
+.profile-page .profile-sidebar,.profile-page .profile-panels,.profile-page .profile-edit-form,.profile-page .profile-edit-form input,.profile-page .profile-edit-form select,.profile-page .profile-edit-form button,.profile-page .profile-tabs button{font-family:inherit!important}
+.profile-page .profile-field label{font-family:inherit!important;color:#f0ddbd;font-size:1rem;font-weight:650;line-height:1.8}
+.profile-page .profile-edit-form input,.profile-page .profile-edit-form select{min-height:50px;border:1px solid rgba(210,170,108,.5);border-radius:11px;background:#2a1b12;color:#f7e8d0;padding:11px 14px;font-size:1rem;box-shadow:none}
+.profile-page .profile-edit-form input:focus,.profile-page .profile-edit-form select:focus{outline:2px solid rgba(217,181,124,.48);outline-offset:1px;border-color:#d4ad76}
+.profile-page .profile-account-details{margin:24px 0;padding:clamp(19px,3vw,30px);border:1px solid #d6ad6e;border-radius:18px;background:linear-gradient(130deg,#b7894d 0%,#e4c18a 48%,#b68a50 100%);box-shadow:0 12px 32px rgba(0,0,0,.18);color:#332011}
+.profile-page .profile-account-details h3{font-family:inherit!important;margin:0 0 18px;color:#392311;font-size:1.34rem;font-weight:800}
+.profile-page .profile-account-details-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.profile-page .profile-account-details-grid>div{min-width:0;padding:15px;border-radius:12px;border:1px solid rgba(92,59,26,.2);background:rgba(255,249,236,.34);display:flex;flex-direction:column;gap:7px}
+.profile-page .profile-account-details-grid span{color:#543719;font-family:inherit!important;font-size:.9rem;font-weight:650}
+.profile-page .profile-account-details-grid strong{color:#2e1e11;font-family:inherit!important;font-size:1rem;font-weight:750;line-height:1.65;overflow-wrap:anywhere;direction:auto}
+.profile-page .profile-form-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}
+.profile-page #profile-save-button,.profile-page #profile-cancel-button{appearance:none;min-height:49px;padding:12px 22px;border-radius:12px;font:700 1rem/1.5 inherit;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
+.profile-page #profile-save-button{border:1px solid #dcbb7e;background:linear-gradient(120deg,#b78d55,#dfbb7e);color:#2f1d0e}
+.profile-page #profile-save-button:hover{background:#ebca92;transform:translateY(-1px)}
+.profile-page #profile-cancel-button{border:1px solid #b68f58;background:#352316;color:#f0dbbb}
+.profile-page #profile-cancel-button:hover{background:#55391f;transform:translateY(-1px)}
+.profile-page .profile-tabs .profile-tab{font-family:inherit!important;font-size:1rem;line-height:1.7}
+@media(max-width:750px){.profile-page .profile-account-details-grid{grid-template-columns:1fr}.profile-page .profile-form-actions button{flex:1}}
+@media(max-width:440px){.profile-page .profile-form-actions{flex-direction:column}.profile-page .profile-form-actions button{width:100%}}
