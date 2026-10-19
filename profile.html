@@ -16,7 +16,7 @@
 
   <link rel="stylesheet" href="styles.css">
   <script src="script.js?v=buyer-final-20261019" defer></script>
-  <link rel="stylesheet" href="alfaw-unified.css?v=profile-panels-20261019">
+  <link rel="stylesheet" href="alfaw-unified.css?v=seller-account-20261019">
   <script src="alfaw-ui.js?v=heritage-motion-20261018" defer></script>
 </head>
 
@@ -269,6 +269,8 @@
               المعلومات الشخصية
             </button>
 
+            <button type="button" class="profile-tab seller-profile-only" data-profile-tab="artifacts" aria-controls="profile-panel-artifacts" aria-selected="false" hidden><span aria-hidden="true">◈</span> مقتنياتي</button>
+
             <button
               type="button"
               class="profile-tab"
@@ -280,7 +282,7 @@
               مزاداتي
             </button>
 
-            <button type="button" class="profile-tab" data-profile-tab="invoices" aria-controls="profile-panel-invoices" aria-selected="false"><span aria-hidden="true">▤</span> فواتيري</button>
+            <button type="button" class="profile-tab buyer-profile-only" data-profile-tab="invoices" aria-controls="profile-panel-invoices" aria-selected="false"><span aria-hidden="true">▤</span> فواتيري</button>
 
             <button
               type="button"
@@ -540,6 +542,9 @@
 
           </section>
 
+          <!-- SELLER ARTIFACTS -->
+          <section id="profile-panel-artifacts" class="profile-panel seller-profile-only" data-profile-panel="artifacts" aria-labelledby="profile-artifacts-heading" hidden><div class="profile-panel-heading"><div><h2 id="profile-artifacts-heading">مقتنياتي</h2></div><a class="profile-explore-auctions-button" href="manage-artifact.html">إضافة قطعة جديدة ←</a></div><div id="profile-seller-artifacts-list" class="profile-auctions-list"></div></section>
+
           <!-- MY AUCTIONS -->
 
           <section
@@ -592,7 +597,7 @@
           </section>
 
           <!-- MY BID RECEIPTS -->
-          <section id="profile-panel-invoices" class="profile-panel" data-profile-panel="invoices" aria-labelledby="profile-invoices-heading" hidden><div class="profile-panel-heading"><div><h2 id="profile-invoices-heading">فواتيري</h2></div></div><p>هذه إيصالات مزايدات تجريبية وليست فواتير دفع أو إثبات شراء.</p><div id="profile-invoices-list" class="profile-auctions-list"></div></section>
+          <section id="profile-panel-invoices" class="profile-panel buyer-profile-only" data-profile-panel="invoices" aria-labelledby="profile-invoices-heading" hidden><div class="profile-panel-heading"><div><h2 id="profile-invoices-heading">فواتيري</h2></div></div><p>هذه إيصالات مزايدات تجريبية وليست فواتير دفع أو إثبات شراء.</p><div id="profile-invoices-list" class="profile-auctions-list"></div></section>
 
           <!-- NOTIFICATIONS -->
 
