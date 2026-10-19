@@ -1709,3 +1709,12 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .alfaw-my-auction-actions a{display:inline-flex;padding:11px 15px;border:1px solid #b58b54;border-radius:10px;color:#fbe5c4;text-decoration:none}
 .alfaw-my-auction-actions .alfaw-receipt-button{flex:1;width:auto;margin:0;max-width:none}
 @media(max-width:480px){.alfaw-my-auction-image{height:190px}.alfaw-my-auction-actions{flex-direction:column;align-items:stretch}.alfaw-my-auction-actions a{text-align:center;justify-content:center}.alfaw-my-auction-actions .alfaw-receipt-button{width:100%}}
+
+/* Clear, accessible bid amount entry — no quick amount suggestions */
+.auction-detail-page .alfaw-bid-input-wrap{display:flex;align-items:center;width:100%;min-height:62px;padding:8px 12px;gap:12px;border:1px solid rgba(205,168,108,.45);border-radius:15px;background:linear-gradient(145deg,#392518,#25160f);transition:border-color .2s,box-shadow .2s}
+.auction-detail-page .alfaw-bid-input-wrap:focus-within{border-color:#d8b27b;box-shadow:0 0 0 3px rgba(216,178,123,.17)}
+.auction-detail-page .alfaw-bid-input-wrap .alfaw-bid-input{flex:1;min-width:0;width:100%;border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important;color:#fff2dc!important;font:inherit;font-size:1.12rem;text-align:right}
+.auction-detail-page .alfaw-bid-input-wrap .alfaw-bid-input::placeholder{color:rgba(255,236,210,.6)}
+.auction-detail-page .alfaw-bid-input-wrap>span{flex:none;padding:9px 12px;border:1px solid rgba(205,168,108,.23);border-radius:10px;background:rgba(205,168,108,.12);color:#f2dcc0;font-weight:700;white-space:nowrap}
+.auction-detail-page #bid-minimum-hint{margin:10px 0 14px;line-height:1.8;color:#e9d1ac}
+@media(max-width:600px){.auction-detail-page .alfaw-bid-input-wrap{min-height:56px;padding:7px 9px}.auction-detail-page .alfaw-bid-input-wrap .alfaw-bid-input{font-size:1rem}}
