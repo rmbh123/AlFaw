@@ -2021,7 +2021,7 @@ if (cinema) {
   })();
   if(!session)return;
   document.querySelectorAll('.site-nav a[href="login.html"],.header-actions a[href="login.html"]').forEach(link=>{
-    link.href=session.role==='seller'?'seller-dashboard.html':session.role==='admin'?'admin-dashboard.html':'profile.html';
-    link.textContent=session.role==='seller'?'لوحة البائع':session.role==='admin'?'لوحة المسؤول':'حسابي';
+    link.href=session.role==='admin'?'admin-dashboard.html':'profile.html';
+    link.textContent=session.role==='admin'?'لوحة المسؤول':'حسابي';
   });
 })();
