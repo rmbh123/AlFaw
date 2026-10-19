@@ -65,8 +65,11 @@
           link.href = 'seller-dashboard.html';
           link.className = 'seller-navbar-dashboard';
           link.textContent = 'لوحة البائع';
-          const actions = header.querySelector('.header-actions');
-          if(actions)actions.insertBefore(link,accountLink);
+          const navigation = header.querySelector('#site-navigation');
+          if(navigation){
+            navigation.append(link);
+            if(location.pathname.endsWith('/seller-dashboard.html'))link.setAttribute('aria-current','page');
+          }
         }
       }
     } catch (_) { /* Browser storage may be disabled. */ }
