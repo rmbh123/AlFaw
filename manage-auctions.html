@@ -15,6 +15,32 @@
   <link rel="apple-touch-icon" href="./alfaw-logo.png?v=8">
 
   <link rel="stylesheet" href="styles.css">
+  <!-- Gregorian date picker; native date-time inputs remain as offline fallback. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof flatpickr !== 'function') return;
+      ['auction-start-date', 'auction-end-date'].forEach(function (id) {
+        var input = document.getElementById(id);
+        if (!input) return;
+        input.type = 'text';
+        input.placeholder = 'YYYY-MM-DD HH:mm (ميلادي)';
+        input.setAttribute('inputmode', 'none');
+        flatpickr(input, {
+          enableTime: true,
+          time_24hr: true,
+          dateFormat: 'Y-m-d\\TH:i',
+          altInput: true,
+          altFormat: 'Y-m-d H:i',
+          allowInput: false,
+          locale: 'default',
+          disableMobile: true,
+          minuteIncrement: 5
+        });
+      });
+    });
+  </script>
   <script src="script.js" defer></script>
   <link rel="stylesheet" href="alfaw-unified.css?v=seller-navbar-20261019">
   <script src="alfaw-ui.js?v=seller-navbar-20261019" defer></script>
@@ -430,6 +456,7 @@
                     type="datetime-local"
                     id="auction-start-date"
                     name="startDate"
+                    lang="en-US"
                     required
                     aria-describedby="auction-start-date-error"
                   >
@@ -452,6 +479,7 @@
                     type="datetime-local"
                     id="auction-end-date"
                     name="endDate"
+                    lang="en-US"
                     required
                     aria-describedby="auction-end-date-error"
                   >
