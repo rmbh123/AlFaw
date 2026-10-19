@@ -1766,7 +1766,7 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .profile-page .profile-account-details-grid span{color:#543719;font-family:inherit!important;font-size:.9rem;font-weight:650}
 .profile-page .profile-account-details-grid strong{color:#2e1e11;font-family:inherit!important;font-size:1rem;font-weight:750;line-height:1.65;overflow-wrap:anywhere;direction:auto}
 .profile-page .profile-form-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}
-.profile-page #profile-save-button,.profile-page #profile-cancel-button{appearance:none;min-height:49px;padding:12px 22px;border-radius:12px;font:700 1rem/1.5 inherit;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
+.profile-page #profile-save-button,.profile-page #profile-cancel-button{appearance:none;min-height:49px;padding:12px 22px;border-radius:12px;font-family:inherit!important;font-size:1rem;font-weight:700;line-height:1.5;cursor:pointer;transition:background .2s,transform .2s,border-color .2s}
 .profile-page #profile-save-button{border:1px solid #dcbb7e;background:linear-gradient(120deg,#b78d55,#dfbb7e);color:#2f1d0e}
 .profile-page #profile-save-button:hover{background:#ebca92;transform:translateY(-1px)}
 .profile-page #profile-cancel-button{border:1px solid #b68f58;background:#352316;color:#f0dbbb}
