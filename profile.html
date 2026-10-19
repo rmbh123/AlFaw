@@ -15,9 +15,9 @@
   <link rel="apple-touch-icon" href="./alfaw-logo.png?v=8">
 
   <link rel="stylesheet" href="styles.css">
-  <script src="script.js?v=buyer-final-20261019" defer></script>
-  <link rel="stylesheet" href="alfaw-unified.css?v=profile-panels-20261019">
-  <script src="alfaw-ui.js?v=heritage-motion-20261018" defer></script>
+  <script src="script.js?v=seller-profile-20261019" defer></script>
+  <link rel="stylesheet" href="alfaw-unified.css?v=seller-navbar-20261019">
+  <script src="alfaw-ui.js?v=seller-navbar-20261019" defer></script>
 </head>
 
 <body class="profile-page">
@@ -192,7 +192,7 @@
 
           <strong id="profile-auctions-count">0</strong>
 
-          <span>مزادات شاركت فيها</span>
+          <span data-seller-label="مزادات أنشأتها">مزادات شاركت فيها</span>
 
         </div>
 
@@ -204,7 +204,7 @@
 
           <strong id="profile-bids-count">0</strong>
 
-          <span>مزايدات مقدمة</span>
+          <span data-seller-label="العروض المستلمة">مزايدات مقدمة</span>
 
         </div>
 
@@ -216,7 +216,7 @@
 
           <strong id="profile-wins-count">0</strong>
 
-          <span>مزادات فزت بها</span>
+          <span data-seller-label="مزادات مكتملة بعرض فائز">مزادات فزت بها</span>
 
         </div>
 
@@ -228,7 +228,7 @@
 
           <strong id="profile-reviews-count">0</strong>
 
-          <span>تقييمات أرسلتها</span>
+          <span data-seller-label="تقييمات المشترين">تقييمات أرسلتها</span>
 
         </div>
 
@@ -269,6 +269,8 @@
               المعلومات الشخصية
             </button>
 
+            <button type="button" class="profile-tab seller-profile-only" data-profile-tab="artifacts" aria-controls="profile-panel-artifacts" aria-selected="false" hidden><span aria-hidden="true">◈</span> مقتنياتي</button>
+
             <button
               type="button"
               class="profile-tab"
@@ -280,7 +282,7 @@
               مزاداتي
             </button>
 
-            <button type="button" class="profile-tab" data-profile-tab="invoices" aria-controls="profile-panel-invoices" aria-selected="false"><span aria-hidden="true">▤</span> فواتيري</button>
+            <button type="button" class="profile-tab buyer-profile-only" data-profile-tab="invoices" aria-controls="profile-panel-invoices" aria-selected="false"><span aria-hidden="true">▤</span> فواتيري</button>
 
             <button
               type="button"
@@ -306,7 +308,7 @@
               aria-selected="false"
             >
               <span aria-hidden="true">☆</span>
-              تقييماتي
+              <span id="profile-reviews-tab-label">تقييماتي</span>
             </button>
 
           </nav>
@@ -540,6 +542,9 @@
 
           </section>
 
+          <!-- SELLER ARTIFACTS -->
+          <section id="profile-panel-artifacts" class="profile-panel seller-profile-only" data-profile-panel="artifacts" aria-labelledby="profile-artifacts-heading" hidden><div class="profile-panel-heading"><div><h2 id="profile-artifacts-heading">مقتنياتي</h2></div><a class="profile-explore-auctions-button" href="manage-artifact.html">إضافة قطعة جديدة ←</a></div><div id="profile-seller-artifacts-list" class="profile-auctions-list"></div></section>
+
           <!-- MY AUCTIONS -->
 
           <section
@@ -592,7 +597,7 @@
           </section>
 
           <!-- MY BID RECEIPTS -->
-          <section id="profile-panel-invoices" class="profile-panel" data-profile-panel="invoices" aria-labelledby="profile-invoices-heading" hidden><div class="profile-panel-heading"><div><h2 id="profile-invoices-heading">فواتيري</h2></div></div><p>هذه إيصالات مزايدات تجريبية وليست فواتير دفع أو إثبات شراء.</p><div id="profile-invoices-list" class="profile-auctions-list"></div></section>
+          <section id="profile-panel-invoices" class="profile-panel buyer-profile-only" data-profile-panel="invoices" aria-labelledby="profile-invoices-heading" hidden><div class="profile-panel-heading"><div><h2 id="profile-invoices-heading">فواتيري</h2></div></div><p>هذه إيصالات مزايدات تجريبية وليست فواتير دفع أو إثبات شراء.</p><div id="profile-invoices-list" class="profile-auctions-list"></div></section>
 
           <!-- NOTIFICATIONS -->
 
@@ -662,7 +667,7 @@
               <div>
                 
 
-                <h2 id="profile-reviews-heading">
+                <h2 id="profile-reviews-heading" data-seller-label="تقييمات المشترين">
                   تقييماتي
                 </h2>
               </div>
