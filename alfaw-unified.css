@@ -1774,3 +1774,11 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .profile-page .profile-tabs .profile-tab{font-family:inherit!important;font-size:1rem;line-height:1.7}
 @media(max-width:750px){.profile-page .profile-account-details-grid{grid-template-columns:1fr}.profile-page .profile-form-actions button{flex:1}}
 @media(max-width:440px){.profile-page .profile-form-actions{flex-direction:column}.profile-page .profile-form-actions button{width:100%}}
+
+/* Profile panel navigation and notification actions */
+.profile-page .profile-explore-auctions-button{display:inline-flex;align-items:center;justify-content:center;width:fit-content;min-height:49px;margin-top:20px;padding:11px 24px;border:1px solid #d9b376;border-radius:12px;background:linear-gradient(125deg,#ac7c43,#d6ab70);color:#29180d!important;font-family:inherit;font-size:1rem;font-weight:700;text-decoration:none;transition:transform .2s,background .2s}
+.profile-page .profile-explore-auctions-button:hover{background:#e8c48d;transform:translateY(-1px)}
+.profile-page #profile-mark-all-read{appearance:none;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:11px 22px;border:1px solid #d8b276;border-radius:12px;background:linear-gradient(125deg,#ad8049,#dbb478);color:#2b1a10;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer;transition:background .2s,transform .2s}
+.profile-page #profile-mark-all-read:hover{background:#edc991;transform:translateY(-1px)}
+.profile-page #profile-mark-all-read:focus-visible,.profile-page .profile-explore-auctions-button:focus-visible{outline:2px solid #f4d39c;outline-offset:3px}
+@media(max-width:520px){.profile-page .profile-explore-auctions-button,.profile-page #profile-mark-all-read{width:100%}}
