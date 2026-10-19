@@ -1558,6 +1558,34 @@ if (cinema) {
       }
       }
   }
+  // Bid receipts are local, informational records — not payment invoices.
+  const receiptMarkup=(auctionRecord,bid)=>{
+    const item=artifact(auctionRecord.artifactId);
+    return '<section class="alfaw-receipt" dir="rtl"><h2>إيصال مزايدة تجريبية — ألفاو</h2>'+
+      '<p>رقم المزايدة: <strong>'+escape(bid.id)+'</strong></p>'+
+      '<p>المزاد: '+escape(auctionRecord.id)+'</p>'+
+      '<p>القطعة: '+escape(item?.name||auctionRecord.artifactId)+'</p>'+
+      '<p>اسم المزايد: '+escape(bid.bidderName||'')+'</p>'+
+      '<p>مبلغ العرض: <strong>'+money(bid.amount)+'</strong></p>'+
+      '<p>التاريخ: '+escape(new Date(bid.created).toLocaleString('ar-SA'))+'</p>'+
+      '<p class="alfaw-receipt-note">هذا إيصال تسجيل عرض تجريبي فقط، وليس فاتورة دفع أو إثبات فوز أو شراء.</p></section>';
+  };
+  const showBidReceipt=(auctionRecord,bid)=>{
+    const overlay=document.createElement('div');overlay.className='alfaw-receipt-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','إيصال المزايدة');
+    const content=document.createElement('div');content.className='alfaw-receipt-modal';
+    content.innerHTML=receiptMarkup(auctionRecord,bid);
+    const buttons=document.createElement('div');buttons.className='alfaw-receipt-actions';
+    const print=document.createElement('button');print.type='button';print.textContent='طباعة الإيصال';print.addEventListener('click',()=>window.print());
+    const close=document.createElement('button');close.type='button';close.textContent='إغلاق';close.addEventListener('click',()=>overlay.remove());
+    buttons.append(print,close);content.append(buttons);overlay.append(content);
+    overlay.addEventListener('click',event=>{if(event.target===overlay)overlay.remove()});
+    document.body.append(overlay);close.focus();
+  };
+  const makeReceiptButton=(auctionRecord,bid)=>{
+    const button=document.createElement('button');button.type='button';button.className='alfaw-receipt-button';
+    button.textContent='اضغط هنا لعرض الفاتورة — '+money(bid.amount);
+    button.addEventListener('click',()=>showBidReceipt(auctionRecord,bid));return button;
+  };
   // AUCTION DETAIL — shared local bids. A non-scheduled auction cannot be bid on.
   if($('.auction-detail-page')){
     if(params.has('id')&&!auction(params.get('id'))){location.replace('auctions.html');return}
@@ -1566,7 +1594,16 @@ if (cinema) {
       if($('#auction-bid-history-body'))$('#auction-bid-history-body').innerHTML=a.bids.length?[...a.bids].sort((x,y)=>Date.parse(y.created)-Date.parse(x.created)).map(b=>`<tr><td>${escape(b.bidderName)}</td><td>${money(b.amount)}</td><td>${date(b.created)}</td><td>${Number.isFinite(Date.parse(b.created))?new Date(b.created).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'}):'—'}</td></tr>`).join(''):'<tr><td colspan="4">لا توجد مزايدات.</td></tr>';
       const ranked=rankedBids(a);if($('#auction-ranking-list'))$('#auction-ranking-list').innerHTML=ranked.length?ranked.map((b,i)=>`<div class="auction-ranking-row"${b.uid===session?.id?' aria-current="true"':''}><strong>${i+1}</strong> ${escape(b.bidderName)}${b.uid===session?.id?' (أنت)':''} — ${money(b.amount)}</div>`).join(''):'لا توجد مزايدات بعد.';
       const winner=auctionWinner(a); text('#auction-result-heading',st!=='ended'?'لم ينتهِ المزاد بعد':winner?'انتهى المزاد':'لا يوجد عرض فائز');text('#auction-result-message',winner?'أعلى عرض: '+money(winner.amount):'لا توجد نتيجة فائزة بعد.');visible('#auction-review-section',!!(winner&&winner.uid===session?.id&&!reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)));return winner};
-    render();$('#place-bid-form')?.addEventListener('submit',e=>{e.preventDefault();if(!a||status(a)!=='active'||session?.role!=='buyer'){feedback('#bid-form-message','المزايدة متاحة للمشتري في المزاد النشط فقط.');return}const amount=Number($('#bid-amount')?.value);if(!Number.isInteger(amount)||amount<minimum(a)){feedback('#bid-form-message','الحد الأدنى المقبول للمزايدة: '+money(minimum(a)));return}const prev=[...a.bids].sort((x,y)=>y.amount-x.amount)[0];a.bids.push({id:id('bid'),uid:session.id,bidderName:session.name,amount,created:new Date().toISOString()});if(!put('auctions',auctions)){a.bids.pop();feedback('#bid-form-message','تعذر حفظ المزايدة محليًا. تحققي من مساحة التخزين وحاولي مجددًا.');return}if(prev?.uid&&prev.uid!==session.id)notice(prev.uid,'تم تجاوز عرضك في المزاد '+a.id,'auction-detail.html?id='+a.id);render();feedback('#bid-form-message','تم تسجيل المزايدة التجريبية في هذا المتصفح.');showToast('تم تسجيل عرضك: '+money(amount),'auction-detail.html?id='+a.id);value('#bid-amount','')});
+    render();
+    const displayMyReceipts=()=>{
+      const area=$('#auction-my-receipts');if(!area)return;
+      area.replaceChildren();
+      if(!session?.id)return;
+      const bids=(a.bids||[]).filter(b=>b.uid===session.id);
+      if(bids.length){const heading=document.createElement('p');heading.textContent='إيصالات عروضك في هذا المزاد';area.append(heading);bids.forEach(b=>area.append(makeReceiptButton(a,b)))}
+    };
+    displayMyReceipts();
+    $('#place-bid-form')?.addEventListener('submit',e=>{e.preventDefault();if(!a||status(a)!=='active'||session?.role!=='buyer'){feedback('#bid-form-message','المزايدة متاحة للمشتري في المزاد النشط فقط.');return}const amount=Number($('#bid-amount')?.value);if(!Number.isInteger(amount)||amount<minimum(a)){feedback('#bid-form-message','الحد الأدنى المقبول للمزايدة: '+money(minimum(a)));return}const prev=[...a.bids].sort((x,y)=>y.amount-x.amount)[0];a.bids.push({id:id('bid'),uid:session.id,bidderName:session.name,amount,created:new Date().toISOString()});if(!put('auctions',auctions)){a.bids.pop();feedback('#bid-form-message','تعذر حفظ المزايدة محليًا. تحققي من مساحة التخزين وحاولي مجددًا.');return}if(prev?.uid&&prev.uid!==session.id)notice(prev.uid,'تم تجاوز عرضك في المزاد '+a.id,'auction-detail.html?id='+a.id);render();displayMyReceipts();feedback('#bid-form-message','تم تسجيل المزايدة التجريبية في هذا المتصفح. اضغطي زر عرض الفاتورة أسفل المزايدة للاطلاع على الإيصال.');showToast('تم تسجيل عرضك: '+money(amount),'auction-detail.html?id='+a.id);value('#bid-amount','')});
     $('#auction-review-form')?.addEventListener('submit',e=>{e.preventDefault();const winner=render(),score=Number($('#auction-review-rating')?.value);if(!winner||winner.uid!==session?.id||!$('#auction-receipt-confirmed')?.checked||!Number.isInteger(score)||score<1||score>5||reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)){feedback('#auction-review-message','التقييم متاح للفائز مرة واحدة بعد تأكيد الاستلام واختيار تقييم بين 1 و5.');return}reviews.push({id:id('review'),auctionId:a.id,sellerId:a.sellerId,uid:session.id,buyerName:session.name,rating:score,comment:$('#auction-review-comment')?.value||'',created:new Date().toISOString()});if(!put('reviews',reviews)){reviews.pop();feedback('#auction-review-message','تعذر حفظ التقييم محليًا. حاولي مرة أخرى.');return}render();feedback('#auction-review-message','شكرًا، تم تسجيل تقييمك التجريبي.')} );
     const timer=()=>{if(!a||!a.start||!a.end)return;
       syncWinnerNotices();
@@ -1577,6 +1614,14 @@ if (cinema) {
     const u=account();visible('#profile-guest-state',!u);visible('#profile-authenticated-content',!!u);
     if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',u.role==='seller'?'بائع':'مشتري'],['#profile-detail-role',u.role==='seller'?'بائع':'مشتري'],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',u.role==='seller');const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);
       if($('#profile-my-auctions-list'))$('#profile-my-auctions-list').innerHTML=auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).map(a=>`<p><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">${escape(artifact(a.artifactId)?.name||a.id)} ←</a></p>`).join('')||'<p>لا توجد مشاركات بعد.</p>';
+      const invoiceArea=$('#profile-invoices-list');
+      if(invoiceArea){
+        invoiceArea.replaceChildren();
+        const mine=auctions.flatMap(auctionRecord=>(auctionRecord.bids||[]).filter(b=>b.uid===u.id).map(b=>({auctionRecord,b})));
+        mine.sort((x,y)=>Date.parse(y.b.created)-Date.parse(x.b.created));
+        if(!mine.length){const empty=document.createElement('p');empty.textContent='لا توجد فواتير مزايدات تجريبية بعد.';invoiceArea.append(empty)}
+        mine.forEach(({auctionRecord,b})=>invoiceArea.append(makeReceiptButton(auctionRecord,b)));
+      }
       const myNotices=notices.filter(n=>n.uid===u.id);text('#profile-unread-count',myNotices.filter(n=>!n.read).length);if($('#profile-notifications-list'))$('#profile-notifications-list').innerHTML=myNotices.map(n=>`<p>${escape(n.body)} <a href="${escape(n.url)}">عرض</a></p>`).join('')||'<p>لا توجد إشعارات.</p>';
       $('#profile-mark-all-read')?.addEventListener('click',()=>{const previous=myNotices.map(n=>n.read);myNotices.forEach(n=>n.read=true);if(!put('notices',notices)){myNotices.forEach((n,i)=>n.read=previous[i]);feedback('#profile-form-message','تعذر حفظ حالة الإشعارات. حاولي مجددًا.');return}location.reload()});
       $('#profile-edit-form')?.addEventListener('submit',e=>{
