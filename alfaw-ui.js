@@ -52,7 +52,7 @@
   // Keep the account action correct even on informational pages that do not
   // load the auction/account application script.
   const accountLink = header?.querySelector('#site-account-link');
-  if (accountLink?.getAttribute('href') === 'login.html') {
+  if (accountLink) {
     try {
       const session = JSON.parse(localStorage.getItem('alfaw_phase3_session') || 'null');
       if (session?.role) {
