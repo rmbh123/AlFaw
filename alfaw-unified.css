@@ -1782,3 +1782,12 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .profile-page #profile-mark-all-read:hover{background:#edc991;transform:translateY(-1px)}
 .profile-page #profile-mark-all-read:focus-visible,.profile-page .profile-explore-auctions-button:focus-visible{outline:2px solid #f4d39c;outline-offset:3px}
 @media(max-width:520px){.profile-page .profile-explore-auctions-button,.profile-page #profile-mark-all-read{width:100%}}
+
+/* Dedicated Seller dashboard link next to the shared My Account link */
+.site-header .seller-navbar-dashboard{display:inline-flex;align-items:center;justify-content:center;padding:10px 17px;border:1px solid rgba(210,173,111,.67);border-radius:28px;background:rgba(194,148,85,.18);color:#efcea0;text-decoration:none;font-family:inherit;font-size:.91rem;font-weight:700;white-space:nowrap;transition:background .2s}
+.site-header .seller-navbar-dashboard:hover{background:rgba(194,148,85,.35)}
+.site-header .seller-navbar-dashboard:focus-visible{outline:2px solid #eac18c;outline-offset:3px}
+.profile-page .alfaw-seller-review-summary{padding:14px 18px;border:1px solid rgba(214,173,105,.44);border-radius:12px;background:rgba(171,122,64,.12);color:#f5d5a1;font-family:inherit;font-weight:700}
+.profile-page .alfaw-seller-review-card{padding:14px 18px;margin:12px 0;border:1px solid rgba(210,169,104,.3);border-radius:12px;background:rgba(28,17,11,.55);color:#e9d8be}
+.profile-page .alfaw-seller-review-card p{margin:9px 0 0;color:#d6c0a1}
+@media(max-width:920px){.site-header .seller-navbar-dashboard{padding:9px 12px;font-size:.85rem}}
