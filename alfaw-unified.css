@@ -1796,3 +1796,15 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .site-header .site-nav .seller-navbar-dashboard{display:inline-flex;align-items:center;justify-content:center;padding:inherit;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:none}
 .site-header .site-nav .seller-navbar-dashboard:hover{background:transparent;color:#eac28a}
 .site-header .site-nav .seller-navbar-dashboard[aria-current="page"]{color:#edc790}
+
+/* Seller account buyer reviews — spacious score cards and clear empty state */
+.profile-page .alfaw-seller-reviews-layout{display:flex;flex-direction:column;gap:22px}
+.profile-page .alfaw-seller-rating-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.profile-page .alfaw-seller-rating-stat{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:22px 14px;border:1px solid rgba(210,169,104,.47);border-radius:16px;background:linear-gradient(145deg,#49301f,#2c1c13);text-align:center}
+.profile-page .alfaw-seller-rating-stat span{color:#e0c59e;font-family:inherit;font-size:.88rem;line-height:1.6}
+.profile-page .alfaw-seller-rating-stat strong{color:#f9dfb2;font-family:inherit;font-size:clamp(1.15rem,2.1vw,1.55rem);line-height:1.4;overflow-wrap:anywhere}
+.profile-page .alfaw-seller-reviews-empty{display:flex;align-items:center;flex-direction:column;justify-content:center;text-align:center;gap:10px;padding:35px 20px;border:1px dashed rgba(211,170,108,.42);border-radius:18px;background:rgba(30,19,12,.4)}
+.profile-page .alfaw-seller-reviews-empty-icon{font-size:2.2rem;line-height:1;color:#dcb983}
+.profile-page .alfaw-seller-reviews-empty h3{margin:0;font-family:inherit;font-weight:700;color:#f1d6ad;font-size:1.18rem}
+.profile-page .alfaw-seller-reviews-empty p{margin:0;max-width:48ch;font-family:inherit;line-height:1.8;color:#d6c3a7}
+@media(max-width:600px){.profile-page .alfaw-seller-rating-stats{grid-template-columns:1fr}.profile-page .alfaw-seller-rating-stat{padding:16px}}
