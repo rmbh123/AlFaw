@@ -1705,10 +1705,12 @@ if (cinema) {
         const summary=rating(u.sellerId);
         if(reviewsArea){
           reviewsArea.replaceChildren();
-          const heading=document.createElement('p');heading.className='alfaw-seller-review-summary';
-          heading.textContent='تقييم المشترين: '+(summary.avg===null?'لا توجد تقييمات':summary.avg.toFixed(1)+' / 5')+' · Trust Score: '+(summary.trust===null?'غير متاح':summary.trust+'%');
-          reviewsArea.append(heading);
-          if(!mySellerReviews.length){const empty=document.createElement('p');empty.textContent='لم تستلم تقييمات من المشترين بعد.';reviewsArea.append(empty)}
+          reviewsArea.classList.add('alfaw-seller-reviews-layout');
+          const summaryRow=document.createElement('div');summaryRow.className='alfaw-seller-rating-stats';
+          const makeStat=(title,value)=>{const card=document.createElement('div');card.className='alfaw-seller-rating-stat';const label=document.createElement('span');label.textContent=title;const number=document.createElement('strong');number.textContent=value;card.append(label,number);return card};
+          summaryRow.append(makeStat('متوسط تقييم المشترين',summary.avg===null?'—':summary.avg.toFixed(1)+' / 5'),makeStat('Trust Score',summary.trust===null?'غير متاح':summary.trust+'%'),makeStat('عدد التقييمات',String(summary.count)));
+          reviewsArea.append(summaryRow);
+          if(!mySellerReviews.length){const empty=document.createElement('div');empty.className='alfaw-seller-reviews-empty';const mark=document.createElement('span');mark.className='alfaw-seller-reviews-empty-icon';mark.setAttribute('aria-hidden','true');mark.textContent='☆';const heading=document.createElement('h3');heading.textContent='لا توجد تقييمات بعد';const description=document.createElement('p');description.textContent='ستظهر هنا تقييمات المشترين بعد اكتمال المزادات المؤهلة للتقييم.';empty.append(mark,heading,description);reviewsArea.append(empty)}
           mySellerReviews.forEach(r=>{const card=document.createElement('article');card.className='alfaw-seller-review-card';const title=document.createElement('strong');title.textContent=(r.buyerName||'مشتري')+' — '+Number(r.rating)+'/5';const note=document.createElement('p');note.textContent=r.comment||'دون تعليق';card.append(title,note);reviewsArea.append(card)});
         }
       }
