@@ -1633,13 +1633,33 @@ if (cinema) {
     $('#auction-review-form')?.addEventListener('submit',e=>{e.preventDefault();const winner=render(),score=Number($('#auction-review-rating')?.value);if(!winner||winner.uid!==session?.id||!$('#auction-receipt-confirmed')?.checked||!Number.isInteger(score)||score<1||score>5||reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)){feedback('#auction-review-message','التقييم متاح للفائز مرة واحدة بعد تأكيد الاستلام واختيار تقييم بين 1 و5.');return}reviews.push({id:id('review'),auctionId:a.id,sellerId:a.sellerId,uid:session.id,buyerName:session.name,rating:score,comment:$('#auction-review-comment')?.value||'',created:new Date().toISOString()});if(!put('reviews',reviews)){reviews.pop();feedback('#auction-review-message','تعذر حفظ التقييم محليًا. حاولي مرة أخرى.');return}render();feedback('#auction-review-message','شكرًا، تم تسجيل تقييمك التجريبي.')} );
     const timer=()=>{if(!a||!a.start||!a.end)return;
       syncWinnerNotices();
+      const st=status(a);text('#auction-timer-message',st==='active'?'الوقت المتبقي حتى انتهاء المزاد.':st==='upcoming'?'الوقت المتبقي حتى بدء المزاد.':'انتهى هذا المزاد.');
       const ms=Math.max(0,Date.parse(status(a)==='upcoming'?a.start:a.end)-Date.now()),seconds=Math.floor(ms/1000);text('#auction-days',Math.floor(seconds/86400));text('#auction-hours',Math.floor(seconds%86400/3600));text('#auction-minutes',Math.floor(seconds%3600/60));text('#auction-seconds',seconds%60);if(status(a)!==timer.previous){timer.previous=status(a);render()}};timer();setInterval(timer,1000);
   }
   // PERSONAL PROFILE
   if($('.profile-page')){
     const u=account();visible('#profile-guest-state',!u);visible('#profile-authenticated-content',!!u);
     if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',u.role==='seller'?'بائع':'مشتري'],['#profile-detail-role',u.role==='seller'?'بائع':'مشتري'],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',u.role==='seller');const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);
-      if($('#profile-my-auctions-list'))$('#profile-my-auctions-list').innerHTML=auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).map(a=>{const own=a.bids.filter(b=>b.uid===u.id).sort((x,y)=>Number(y.amount)-Number(x.amount))[0];return `<p><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">${escape(artifact(a.artifactId)?.name||a.id)} ←</a> — أعلى مبلغ زايدتِ به: <strong>${money(own.amount)}</strong></p>`}).join('')||'<p>لا توجد مشاركات بعد.</p>';
+      const myAuctionList=$('#profile-my-auctions-list');
+      if(myAuctionList){
+        myAuctionList.replaceChildren();
+        const joined=auctions.filter(a=>(a.bids||[]).some(b=>b.uid===u.id));
+        if(!joined.length){const empty=document.createElement('p');empty.textContent='لا توجد مشاركات بعد.';myAuctionList.append(empty)}
+        joined.forEach(a=>{
+          const own=a.bids.filter(b=>b.uid===u.id).sort((x,y)=>Number(y.amount)-Number(x.amount))[0];
+          const item=artifact(a.artifactId);
+          const card=document.createElement('article');card.className='alfaw-my-auction-card';
+          const image=document.createElement('img');image.className='alfaw-my-auction-image';image.alt=item?.name||'صورة القطعة الأثرية';image.loading='lazy';image.src=item?.image||'pottery.jpg';
+          const details=document.createElement('div');details.className='alfaw-my-auction-details';
+          const title=document.createElement('h3');title.textContent=item?.name||a.id;
+          const state=document.createElement('p');state.className='alfaw-my-auction-status';state.textContent='حالة المزاد: '+statusName(a);
+          const amount=document.createElement('p');amount.className='alfaw-my-auction-amount';amount.textContent='أعلى مبلغ زايدتِ به: '+money(own.amount);
+          const actions=document.createElement('div');actions.className='alfaw-my-auction-actions';
+          const view=document.createElement('a');view.href='auction-detail.html?id='+encodeURIComponent(a.id);view.textContent='عرض المزاد ←';
+          actions.append(view,makeReceiptButton(a,own));
+          details.append(title,state,amount,actions);card.append(image,details);myAuctionList.append(card);
+        });
+      }
       const invoiceArea=$('#profile-invoices-list');
       if(invoiceArea){
         invoiceArea.replaceChildren();
