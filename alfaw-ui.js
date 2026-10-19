@@ -75,6 +75,43 @@
     } catch (_) { /* Browser storage may be disabled. */ }
   }
 
+  // Highlight the seller dashboard section currently in view.
+  if (document.body.classList.contains('seller-dashboard-page')) {
+    const links = [...document.querySelectorAll('.dashboard-side-link[href^="#"]')];
+    const sections = links.map(link => ({link, section: document.getElementById(link.getAttribute('href').slice(1))})).filter(entry => entry.section);
+    if (sections.length) {
+      let queued = false;
+      const update = () => {
+        queued = false;
+        // Pick the last section crossing the header offset; bottom of the page selects the final section.
+        const threshold = Math.min(220, window.innerHeight * 0.32);
+        let current = sections[0];
+        for (const entry of sections) {
+          if (entry.section.getBoundingClientRect().top <= threshold) current = entry;
+        }
+        if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 12) current = sections[sections.length - 1];
+        for (const entry of sections) {
+          const active = entry === current;
+          entry.link.classList.toggle('active', active);
+          if (active) entry.link.setAttribute('aria-current', 'location');
+          else entry.link.removeAttribute('aria-current');
+        }
+      };
+      const requestUpdate = () => {
+        if (!queued) {
+          queued = true;
+          window.requestAnimationFrame(update);
+        }
+      };
+      window.addEventListener('scroll', requestUpdate, {passive:true});
+      window.addEventListener('resize', requestUpdate);
+      links.forEach(link => link.addEventListener('click', () => {
+        links.forEach(other => other.classList.toggle('active', other === link));
+      }));
+      requestUpdate();
+    }
+  }
+
   // The homepage has its own cinematic scroll timeline; do not interfere.
   if (document.body.classList.contains('home-page')) return;
 
