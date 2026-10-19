@@ -1791,3 +1791,8 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .profile-page .alfaw-seller-review-card{padding:14px 18px;margin:12px 0;border:1px solid rgba(210,169,104,.3);border-radius:12px;background:rgba(28,17,11,.55);color:#e9d8be}
 .profile-page .alfaw-seller-review-card p{margin:9px 0 0;color:#d6c0a1}
 @media(max-width:920px){.site-header .seller-navbar-dashboard{padding:9px 12px;font-size:.85rem}}
+
+/* Seller dashboard belongs in the primary navigation after "البائعون", not the account actions. */
+.site-header .site-nav .seller-navbar-dashboard{display:inline-flex;align-items:center;justify-content:center;padding:inherit;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:none}
+.site-header .site-nav .seller-navbar-dashboard:hover{background:transparent;color:#eac28a}
+.site-header .site-nav .seller-navbar-dashboard[aria-current="page"]{color:#edc790}
