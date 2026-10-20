@@ -18,6 +18,30 @@
   <script src="script.js?v=artifact-upload-preview-20261018" defer></script>
   <link rel="stylesheet" href="alfaw-unified.css?v=seller-navbar-20261019">
   <script src="alfaw-ui.js?v=seller-navbar-20261019" defer></script>
+<style>
+/* Consistent artifact form actions: gold primary pill and neat secondary controls. */
+.manage-artifact-page .manage-artifact-actions{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:12px!important}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-save-button{
+ display:inline-flex!important;align-items:center;justify-content:center;gap:12px;
+ min-height:54px!important;padding:13px 28px!important;border-radius:999px!important;
+ background:#cbaa7b!important;border:1px solid #cbaa7b!important;
+ color:#25170d!important;font-weight:800!important;line-height:1.5!important;
+ transition:background .2s,transform .2s!important
+}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-save-button:hover{background:#dfbf90!important;transform:translateY(-2px)}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-reset-button,
+.manage-artifact-page .manage-artifact-actions .manage-artifact-cancel-button{
+ display:inline-flex!important;align-items:center;justify-content:center;
+ min-height:48px!important;padding:11px 21px!important;border-radius:999px!important;
+ background:transparent!important;border:1px solid #a17a4c!important;
+ color:#f0d6b2!important;font-weight:700!important;text-decoration:none!important;
+ line-height:1.5!important;white-space:nowrap!important;
+ transition:background .2s!important
+}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-reset-button:hover,
+.manage-artifact-page .manage-artifact-actions .manage-artifact-cancel-button:hover{background:#4d3322!important}
+@media(max-width:480px){.manage-artifact-page .manage-artifact-actions{gap:9px!important}.manage-artifact-page .manage-artifact-actions .manage-artifact-save-button{width:100%}}
+</style>
 </head>
 
 <body class="manage-artifact-page">
