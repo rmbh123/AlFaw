@@ -56,9 +56,21 @@
     try {
       const session = JSON.parse(localStorage.getItem('alfaw_phase3_session') || 'null');
       if (session?.role) {
-        const target = session.role === 'admin' ? 'admin-dashboard.html' : 'profile.html';
+        const target = 'profile.html';
         accountLink.setAttribute('href', target);
-        accountLink.textContent = session.role === 'admin' ? 'لوحة المسؤول' : 'حسابي';
+        accountLink.textContent = 'حسابي';
+        if(session.role === 'admin' && header && !header.querySelector('#admin-navbar-dashboard')){
+          const navigation = header.querySelector('#site-navigation');
+          if(navigation){
+            const link = document.createElement('a');
+            link.id = 'admin-navbar-dashboard';
+            link.href = 'admin-dashboard.html';
+            link.className = 'seller-navbar-dashboard';
+            link.textContent = 'لوحة الإدارة';
+            navigation.append(link);
+            if(location.pathname.endsWith('/admin-dashboard.html')) link.setAttribute('aria-current','page');
+          }
+        }
         if(session.role === 'seller' && header && !header.querySelector('#seller-navbar-dashboard')){
           const link = document.createElement('a');
           link.id = 'seller-navbar-dashboard';
