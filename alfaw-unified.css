@@ -1861,3 +1861,7 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .site-header .site-nav a.seller-navbar-dashboard[aria-current="page"]{
   color:var(--alfaw-gold-bright)!important;
 }
+
+/* Sprint 0: seller trust is calculated from real winner ratings. */
+.seller-artifact-image,.auction-card-image{position:relative}
+.alfaw-trust-badge{position:absolute;top:12px;inset-inline-start:12px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:999px;background:#13794c;color:#fff;font-size:13px;font-weight:800;line-height:1.35;box-shadow:0 3px 10px rgba(0,0,0,.22);direction:rtl}
