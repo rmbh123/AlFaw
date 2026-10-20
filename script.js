@@ -2032,7 +2032,7 @@ if (cinema) {
   })();
   if(!session)return;
   document.querySelectorAll('.site-nav a[href="login.html"],.header-actions a[href="login.html"]').forEach(link=>{
-    link.href=session.role==='admin'?'admin-dashboard.html':'profile.html';
-    link.textContent=session.role==='admin'?'لوحة المسؤول':'حسابي';
+    link.href='profile.html';
+    link.textContent='حسابي';
   });
 })();
