@@ -405,3 +405,38 @@ if (document.body.classList.contains('sellers-page')) {
     }
   }
 })();
+
+
+// Highlight the seller dashboard section currently in view.
+// Account for the sticky header and preserve link-based navigation.
+(() => {
+  if (!document.body.classList.contains('seller-dashboard-page')) return;
+  const links = [...document.querySelectorAll('.dashboard-side-nav a[href^="#dashboard-"]')];
+  const sections = links.map(link => ({ link, section: document.querySelector(link.getAttribute('href')) }))
+    .filter(item => item.section);
+  if (!sections.length) return;
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const headerHeight = document.querySelector('[data-site-header]')?.getBoundingClientRect().height || 0;
+    const threshold = headerHeight + 110;
+    let selected = sections[0];
+    for (const item of sections) {
+      if (item.section.getBoundingClientRect().top <= threshold) selected = item;
+    }
+    for (const item of sections) {
+      const active = item === selected;
+      item.link.classList.toggle('active', active);
+      if (active) item.link.setAttribute('aria-current', 'location');
+      else item.link.removeAttribute('aria-current');
+    }
+  };
+  const schedule = () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  window.addEventListener('hashchange', schedule);
+  document.addEventListener('DOMContentLoaded', schedule);
+  schedule();
+})();
