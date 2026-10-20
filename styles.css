@@ -3626,3 +3626,7 @@ img {
   border: 1px solid rgba(184, 155, 115, .65);
   box-shadow: 0 8px 22px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .05);
 }
+
+/* Center notification messages instead of corner-floating popups. */
+.alfaw-toast{top:50%;left:50%;right:auto;bottom:auto;inset-inline-start:auto;transform:translate(-50%,-50%);width:max-content;max-width:min(440px,calc(100vw - 32px));justify-content:center;text-align:center}
+@media(max-width:650px){.alfaw-toast{top:50%;left:50%;right:auto;bottom:auto;inset-inline-start:auto;transform:translate(-50%,-50%)}}
