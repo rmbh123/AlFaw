@@ -98,6 +98,27 @@
   font-family:"AlFawNaskh","Amiri",serif!important;
   font-weight:400!important;
 }
+</style><style>
+/* Dedicated cache-busted face to ensure admin summary uses the actual AlFaw font. */
+@font-face{
+  font-family:"AlFawAdminOriginal";
+  src:url("./ka-hand-naskh-mob-v2.ttf?v=admin-original-20261020") format("truetype");
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+}
+body.admin-dashboard-page .admin-overview-grid .admin-overview-card,
+body.admin-dashboard-page .admin-overview-grid .admin-overview-card *,
+body.admin-dashboard-page .admin-overview-grid .admin-overview-card h3,
+body.admin-dashboard-page .admin-overview-grid .admin-overview-card .admin-overview-row span,
+body.admin-dashboard-page .admin-overview-grid .admin-overview-card .admin-overview-row strong{
+  font-family:"AlFawAdminOriginal","AlFawNaskh","Amiri",serif!important;
+  font-weight:400!important;
+  font-synthesis:none!important;
+}
+body.admin-dashboard-page .admin-overview-grid .admin-overview-card .admin-overview-row strong{
+  font-size:20px!important;
+}
 </style></head>
 
 <body class="admin-dashboard-page">
