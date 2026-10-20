@@ -1845,24 +1845,3 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .seller-dashboard-page .dashboard-rating-stat{padding:19px 13px;border:1px solid #785737;border-radius:13px;background:#3e291b;text-align:center}
 @media(max-width:1020px){.seller-dashboard-page .dashboard-layout{grid-template-columns:minmax(0,1fr)}.seller-dashboard-page .dashboard-sidebar{position:static}.seller-dashboard-page .dashboard-side-nav{flex-direction:row;flex-wrap:wrap}.seller-dashboard-page .dashboard-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.seller-dashboard-page .dashboard-intro{flex-direction:column;align-items:stretch}.seller-dashboard-page .dashboard-summary,.seller-dashboard-page .dashboard-quick-actions,.seller-dashboard-page .dashboard-reviews-summary{grid-template-columns:1fr}.seller-dashboard-page .dashboard-panel-heading{align-items:stretch}.seller-dashboard-page .dashboard-table{min-width:690px}.seller-dashboard-page .dashboard-primary-button,.seller-dashboard-page .dashboard-secondary-button{width:100%}}
-
-/* AlFaw action-button palette: gold interactive buttons, not cards, tabs, or account navigation. */
-:root{--alfaw-action-gold:#e9bf7c;--alfaw-action-gold-hover:#f7d69b;--alfaw-action-ink:#29190e}
-body :is(button:not(.site-menu-toggle):not(.site-account-button):not(.account-menu-toggle):not(.header-account-toggle):not(.header-login):not(.dashboard-side-link):not(.dashboard-side-nav button):not(.filter-tab):not(.tab-button):not(.carousel-arrow):not(.slider-arrow):not(.modal-close):not(.close-button):not([aria-label="إغلاق"]):not([aria-label="فتح قائمة التنقل"]),input[type="submit"],input[type="button"],a.btn,a.button,a[class*="-button"]:not(.header-login):not(.site-account-button):not(.account-menu-toggle):not(.header-account-toggle):not(.dashboard-side-link):not(.dashboard-side-nav a):not(.site-nav a):not(.profile-discover-card):not(.login-explore-card):not(.register-help-card)):not(:disabled):not([aria-disabled="true"]){
-  background:linear-gradient(135deg,#f0c987,var(--alfaw-action-gold))!important;
-  border:1px solid #f2d098!important;
-  color:var(--alfaw-action-ink)!important;
-  border-radius:11px;
-  font-weight:700;
-  text-decoration:none;
-  transition:background .2s ease,transform .2s ease,box-shadow .2s ease;
-}
-body :is(button:not(.site-menu-toggle):not(.site-account-button):not(.account-menu-toggle):not(.header-account-toggle):not(.header-login):not(.dashboard-side-nav button):not(.filter-tab):not(.tab-button):not(.carousel-arrow):not(.slider-arrow):not(.modal-close):not(.close-button),input[type="submit"],input[type="button"],a.btn,a.button,a[class*="-button"]:not(.header-login):not(.site-account-button):not(.account-menu-toggle):not(.header-account-toggle):not(.dashboard-side-link):not(.site-nav a)):not(:disabled):not([aria-disabled="true"]):hover{
-  background:var(--alfaw-action-gold-hover)!important;
-  box-shadow:0 5px 16px rgba(205,151,75,.2);
-}
-body :is(button,input[type="submit"],input[type="button"],a.btn,a.button,a[class*="-button"]):focus-visible{outline:2px solid #ffe1a7;outline-offset:3px}
-body :is(button,input[type="submit"],input[type="button"]):disabled{cursor:not-allowed;opacity:.5}
-/* Explicitly retain the original brown, gold-outlined Account button. */
-body .site-header .header-login{background:rgba(201,168,120,.11)!important;border:1px solid rgba(224,188,139,.69)!important;color:#f1d9b6!important;border-radius:999px!important}
-body .site-header .header-login:hover{background:rgba(201,168,120,.24)!important;color:#f1d9b6!important}
