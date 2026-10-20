@@ -18,6 +18,51 @@
   <script src="script.js?v=artifact-upload-preview-20261018" defer></script>
   <link rel="stylesheet" href="alfaw-unified.css?v=seller-navbar-20261019">
   <script src="alfaw-ui.js?v=seller-navbar-20261019" defer></script>
+<style>
+/* Consistent artifact form actions: gold primary pill and neat secondary controls. */
+.manage-artifact-page .manage-artifact-actions{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:12px!important}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-save-button{
+ display:inline-flex!important;align-items:center;justify-content:center;gap:12px;
+ min-height:54px!important;padding:13px 28px!important;border-radius:999px!important;
+ background:#cbaa7b!important;border:1px solid #cbaa7b!important;
+ color:#25170d!important;font-weight:800!important;line-height:1.5!important;
+ transition:background .2s,transform .2s!important
+}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-save-button:hover{background:#dfbf90!important;transform:translateY(-2px)}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-reset-button,
+.manage-artifact-page .manage-artifact-actions .manage-artifact-cancel-button{
+ display:inline-flex!important;align-items:center;justify-content:center;
+ min-height:48px!important;padding:11px 21px!important;border-radius:999px!important;
+ background:transparent!important;border:1px solid #a17a4c!important;
+ color:#f0d6b2!important;font-weight:700!important;text-decoration:none!important;
+ line-height:1.5!important;white-space:nowrap!important;
+ transition:background .2s!important
+}
+.manage-artifact-page .manage-artifact-actions .manage-artifact-reset-button:hover,
+.manage-artifact-page .manage-artifact-actions .manage-artifact-cancel-button:hover{background:#4d3322!important}
+@media(max-width:480px){.manage-artifact-page .manage-artifact-actions{gap:9px!important}.manage-artifact-page .manage-artifact-actions .manage-artifact-save-button{width:100%}}
+</style>
+<style>
+/* Styled verification choices and centered image/document upload controls. */
+.manage-artifact-page .manage-verification-options{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px!important;margin:18px 0!important}
+.manage-artifact-page .manage-verification-option{position:relative;display:flex!important;align-items:center;gap:14px;padding:20px!important;min-height:110px;border:1px solid #765438!important;border-radius:16px!important;background:#2c1b12!important;cursor:pointer;transition:border-color .2s,background .2s,box-shadow .2s}
+.manage-artifact-page .manage-verification-option:has(input:checked){border:2px solid #e3ba75!important;background:#46301d!important;box-shadow:0 0 0 2px #d8ac5322}
+.manage-artifact-page .manage-verification-option:focus-within{outline:2px solid #e9c78b;outline-offset:3px}
+.manage-artifact-page .manage-verification-option input[type=radio]{flex:none;accent-color:#e7bd7c;width:19px;height:19px;cursor:pointer}
+.manage-artifact-page .manage-verification-option>span{display:grid;gap:8px;min-width:0}
+.manage-artifact-page .manage-verification-option strong{font-size:clamp(17px,1.7vw,22px);color:#f8e6cd}
+.manage-artifact-page .manage-verification-option small{font-size:13px;line-height:1.7;color:#ddc4a7}
+.manage-artifact-page .manage-upload-area{display:flex!important;flex-direction:column;align-items:center!important;justify-content:center!important;gap:15px;padding:25px 18px!important;border:1px dashed #8c643f!important;border-radius:18px!important;background:#372217!important;text-align:center!important}
+.manage-artifact-page .manage-upload-area .manage-upload-label{display:flex!important;flex-direction:column;align-items:center!important;justify-content:center;gap:10px;width:100%;text-align:center!important;cursor:pointer}
+.manage-artifact-page .manage-upload-area .manage-upload-icon{font-size:28px;color:#e7bf7c}
+.manage-artifact-page .manage-upload-area .manage-upload-label strong{font-size:clamp(19px,2vw,24px);color:#f7e4c9}
+.manage-artifact-page .manage-upload-area .manage-upload-label>span:not(.manage-upload-icon){color:#e4c9a9}
+.manage-artifact-page .manage-upload-area .manage-upload-label small{max-width:540px;line-height:1.8;color:#cbb49d}
+.manage-artifact-page .manage-upload-area input[type=file]{display:block!important;width:min(100%,440px)!important;max-width:100%;margin:0 auto!important;padding:8px!important;border:1px solid #7a5939!important;border-radius:999px!important;background:#25170f!important;color:#f0dcc0!important;font:inherit!important;text-align:center;direction:rtl}
+.manage-artifact-page .manage-upload-area input[type=file]::file-selector-button{border:0;border-radius:999px;padding:11px 22px;margin-inline-end:12px;background:#cbaa7b;color:#25170d;font:inherit;font-weight:800;cursor:pointer}
+.manage-artifact-page .manage-upload-area input[type=file]::file-selector-button:hover{background:#dfbf90}
+@media(max-width:650px){.manage-artifact-page .manage-verification-options{grid-template-columns:1fr}.manage-artifact-page .manage-verification-option{min-height:92px;padding:15px!important}.manage-artifact-page .manage-upload-area{padding:19px 12px!important}}
+</style>
 </head>
 
 <body class="manage-artifact-page">
