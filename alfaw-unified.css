@@ -1845,3 +1845,19 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .seller-dashboard-page .dashboard-rating-stat{padding:19px 13px;border:1px solid #785737;border-radius:13px;background:#3e291b;text-align:center}
 @media(max-width:1020px){.seller-dashboard-page .dashboard-layout{grid-template-columns:minmax(0,1fr)}.seller-dashboard-page .dashboard-sidebar{position:static}.seller-dashboard-page .dashboard-side-nav{flex-direction:row;flex-wrap:wrap}.seller-dashboard-page .dashboard-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.seller-dashboard-page .dashboard-intro{flex-direction:column;align-items:stretch}.seller-dashboard-page .dashboard-summary,.seller-dashboard-page .dashboard-quick-actions,.seller-dashboard-page .dashboard-reviews-summary{grid-template-columns:1fr}.seller-dashboard-page .dashboard-panel-heading{align-items:stretch}.seller-dashboard-page .dashboard-table{min-width:690px}.seller-dashboard-page .dashboard-primary-button,.seller-dashboard-page .dashboard-secondary-button{width:100%}}
+
+/* Keep Seller Dashboard navigation typography identical to its sibling links. */
+.site-header .site-nav a.seller-navbar-dashboard{
+  font:600 clamp(12px,1vw,14px)/1.6 var(--font-body)!important;
+  font-size:clamp(12px,1vw,14px)!important;
+  font-weight:600!important;
+  letter-spacing:normal!important;
+  padding:8px 1px!important;
+  min-height:44px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+.site-header .site-nav a.seller-navbar-dashboard[aria-current="page"]{
+  color:var(--alfaw-gold-bright)!important;
+}
