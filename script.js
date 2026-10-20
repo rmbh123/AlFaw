@@ -1648,8 +1648,16 @@ if (cinema) {
   // PERSONAL PROFILE
   if($('.profile-page')){
     const u=account();visible('#profile-guest-state',!u);visible('#profile-authenticated-content',!!u);
-    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',u.role==='seller'?'بائع':'مشتري'],['#profile-detail-role',u.role==='seller'?'بائع':'مشتري'],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',false);
+    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-detail-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',false);
       const isSellerProfile=u.role==='seller';
+      const isBuyerProfile=u.role==='buyer';
+      const isAdminProfile=u.role==='admin';
+      // An administrator has a personal profile, not a buyer or seller workspace.
+      $('.buyer-profile-only').forEach(el=>{el.hidden=!isBuyerProfile});
+      if(isAdminProfile){
+        $('.profile-explore-auctions-button').forEach(el=>{el.textContent='فتح لوحة المسؤول ←';el.href='admin-dashboard.html'});
+        $('.profile-tab').forEach(el=>{if(el.dataset.tab==='auctions'||el.dataset.tab==='bids')el.hidden=true});
+      }
       if(isSellerProfile){text('#profile-reviews-tab-label','تقييمات المشترين');const explore=$('.profile-explore-auctions-button');if(explore){explore.textContent='إدارة المزادات ←';explore.href='manage-auctions.html'}}
       if(isSellerProfile)$$('[data-seller-label]').forEach(el=>{el.textContent=el.dataset.sellerLabel});
       $$('.seller-profile-only').forEach(el=>{if(el.classList.contains('profile-tab'))el.hidden=!isSellerProfile});
@@ -1679,11 +1687,11 @@ if (cinema) {
             links.append(view,edit);details.append(title,state,price,links);card.append(img,details);artifactArea.append(card);
           });
         }
-      }if(!isSellerProfile){const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);}
+      }if(isBuyerProfile){const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);}
       const myAuctionList=$('#profile-my-auctions-list');
       if(myAuctionList){
         myAuctionList.replaceChildren();
-        const joined=isSellerProfile?auctions.filter(a=>a.sellerId===u.sellerId):auctions.filter(a=>(a.bids||[]).some(b=>b.uid===u.id));
+        const joined=isSellerProfile?auctions.filter(a=>a.sellerId===u.sellerId):isBuyerProfile?auctions.filter(a=>(a.bids||[]).some(b=>b.uid===u.id)):[];
         if(!joined.length){const empty=document.createElement('p');empty.textContent=isSellerProfile?'لم تنشئي مزادات بعد.':'لا توجد مشاركات بعد.';myAuctionList.append(empty)}
         joined.forEach(a=>{
           const own=isSellerProfile?null:a.bids.filter(b=>b.uid===u.id).sort((x,y)=>Number(y.amount)-Number(x.amount))[0];
@@ -1696,7 +1704,7 @@ if (cinema) {
           const amount=document.createElement('p');amount.className='alfaw-my-auction-amount';amount.textContent=isSellerProfile?'أعلى عرض حالي: '+(highest(a)===null?'لا توجد عروض':money(highest(a)))+' · عدد العروض: '+(a.bids||[]).length:'أعلى مبلغ زايدتِ به: '+money(own.amount);
           const actions=document.createElement('div');actions.className='alfaw-my-auction-actions';
           const view=document.createElement('a');view.href='auction-detail.html?id='+encodeURIComponent(a.id);view.textContent='عرض المزاد ←';
-          actions.append(view);if(!isSellerProfile)actions.append(makeReceiptButton(a,own));
+          actions.append(view);if(isBuyerProfile)actions.append(makeReceiptButton(a,own));
           details.append(title,state,amount,actions);card.append(image,details);myAuctionList.append(card);
         });
       }
