@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" href="./alfaw-logo.png?v=8">
 
   <link rel="stylesheet" href="styles.css">
-  <script src="script.js?v=admin-nav-20261020" defer></script>
+  <script src="script.js?v=profile-logout-20261020" defer></script>
   <link rel="stylesheet" href="alfaw-unified.css?v=seller-review-polish-20261019">
   <script src="alfaw-ui.js?v=admin-nav-20261020" defer></script>
 <style>
@@ -793,6 +793,24 @@
     </section>
 
   </main>
+
+  <script>
+    // Profile logout must work independently of the shared page initialization.
+    // Capture the click even if an unrelated widget fails during startup.
+    document.addEventListener('click', function (event) {
+      const button = event.target.closest('#profile-logout-button');
+      if (!button) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      try {
+        localStorage.removeItem('alfaw_phase3_session');
+        sessionStorage.removeItem('alfaw_phase3_session');
+      } catch (error) {
+        console.error('Could not clear sign-in session', error);
+      }
+      window.location.replace('login.html');
+    }, true);
+  </script>
 
   <!-- FOOTER -->
 
