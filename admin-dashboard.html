@@ -31,7 +31,55 @@
 .admin-dashboard-page .admin-overview-row span{color:#e7d3ba}
 .admin-dashboard-page .admin-overview-row strong{display:inline-flex;align-items:center;justify-content:center;min-width:48px;padding:6px 13px;border-radius:10px;background:#4c301e;color:#f2ca89!important;font-size:18px!important;line-height:1.4}
 @media(max-width:720px){.admin-dashboard-page .admin-overview-grid{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}.admin-dashboard-page .admin-overview-card:nth-child(3){grid-column:auto!important}.admin-dashboard-page .admin-overview-card{padding:18px!important}}
-</style></head>
+</style>
+<style>
+/* Use the same Cairo interface typography as the rest of AlFaw.
+   Preserve the heritage font only for intentionally decorative titles. */
+.admin-dashboard-page :is(.admin-dashboard-main,.admin-dashboard-layout,.admin-panel,.admin-sidebar,.admin-summary,.admin-overview-grid,.admin-table-toolbar,.admin-table-wrapper,.admin-side-nav),
+.admin-dashboard-page :is(.admin-panel,.admin-sidebar,.admin-summary-card,.admin-overview-card) :is(h2,h3,p,span,strong,small,label,a,button,input,select,th,td){
+  font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
+  letter-spacing:normal!important;
+}
+.admin-dashboard-page .admin-panel-heading h2{
+  font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
+  font-size:clamp(22px,2vw,28px)!important;
+  font-weight:800!important;
+  line-height:1.55!important;
+}
+.admin-dashboard-page .admin-overview-card-heading h3{
+  font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
+  font-size:clamp(17px,1.5vw,21px)!important;
+  font-weight:800!important;
+  line-height:1.6!important;
+}
+.admin-dashboard-page .admin-summary-card :is(h3,p),
+.admin-dashboard-page .admin-side-link{
+  font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
+  font-weight:700!important;
+}
+.admin-dashboard-page .admin-panel-heading p:not(.section-label),
+.admin-dashboard-page .admin-overview-row span,
+.admin-dashboard-page .admin-sidebar-note{
+  font-size:14px!important;
+  font-weight:500!important;
+  line-height:1.85!important;
+}
+.admin-dashboard-page .admin-overview-row strong{
+  font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
+  font-size:17px!important;
+  font-weight:800!important;
+  font-variant-numeric:tabular-nums;
+}
+.admin-dashboard-page .admin-table :is(th,td){
+  font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
+  font-size:13px!important;
+  line-height:1.7!important;
+}
+.admin-dashboard-page :is(input,select,button){
+  font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
+}
+</style>
+</head>
 
 <body class="admin-dashboard-page">
 <div class="alfaw-sprint-note" role="note">نموذج واجهات Sprint 1 — بيانات تجريبية محلية، دون ربط بقاعدة بيانات أو توثيق رسمي فعلي.</div>
