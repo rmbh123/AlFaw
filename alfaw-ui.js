@@ -440,3 +440,45 @@ if (document.body.classList.contains('sellers-page')) {
   document.addEventListener('DOMContentLoaded', schedule);
   schedule();
 })();
+
+
+/* Follow the visible admin dashboard section in the sidebar while scrolling. */
+(() => {
+  if (!document.body.classList.contains('admin-dashboard-page')) return;
+  const links = [...document.querySelectorAll('.admin-side-nav a[href^="#admin-"]')];
+  const sections = links.map(link => ({
+    link,
+    section: document.getElementById(link.getAttribute('href').slice(1))
+  })).filter(item => item.section);
+  if (!sections.length) return;
+  let scheduled = false;
+  const draw = () => {
+    scheduled = false;
+    const header = document.querySelector('[data-site-header]');
+    const threshold = (header ? header.getBoundingClientRect().height : 0) + 110;
+    let current = sections[0];
+    for (const item of sections) {
+      if (item.section.getBoundingClientRect().top <= threshold) current = item;
+    }
+    // Make the last section reachable when the page cannot scroll further.
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
+      current = sections[sections.length - 1];
+    }
+    for (const item of sections) {
+      const active = item === current;
+      item.link.classList.toggle('active', active);
+      if (active) item.link.setAttribute('aria-current', 'location');
+      else item.link.removeAttribute('aria-current');
+    }
+  };
+  const schedule = () => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(draw);
+  };
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule);
+  addEventListener('hashchange', schedule);
+  document.addEventListener('DOMContentLoaded', schedule);
+  schedule();
+})();
