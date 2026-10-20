@@ -16,7 +16,7 @@
 
   <link rel="stylesheet" href="styles.css">
   <script src="script.js?v=admin-nav-20261020" defer></script>
-  <link rel="stylesheet" href="alfaw-unified.css?v=heritage-motion-20261018">
+  <link rel="stylesheet" href="alfaw-unified.css?v=admin-seller-style-20261020">
   <script src="alfaw-ui.js?v=admin-nav-20261020" defer></script>
 <style>.admin-dashboard-page .admin-summary-card{border-radius:20px!important;background:#342116!important;border:1px solid #765235!important;padding:22px!important}.admin-dashboard-page .admin-panel,.admin-dashboard-page .admin-sidebar{border-radius:22px!important;background:#352217!important;border:1px solid #765235!important}.admin-dashboard-page .admin-overview-card{border-radius:17px!important;background:#2b1b12!important;border:1px solid #765235!important;padding:20px!important}.admin-dashboard-page .admin-summary-card strong{color:#e7c18b!important;font-size:30px}.admin-dashboard-page .admin-side-link{border-radius:12px!important}.admin-dashboard-page .admin-side-link.active{background:#704a2e!important;color:#f6d49e!important}.admin-dashboard-page .admin-table-wrapper{border-radius:15px!important;border:1px solid #765235!important}.admin-dashboard-page .admin-table thead{background:#533723!important}</style><style>
 /* Compact, balanced administrator overview; no empty grid cell. */
@@ -126,7 +126,38 @@ body.admin-dashboard-page #admin-overview-title{
   font-weight:400!important;
   font-synthesis:none!important;
 }
-</style></head>
+</style>
+<style>
+/* Align the administrator dashboard with the seller dashboard visual system.
+   Keep admin-specific content, read-only controls, and role checks unchanged. */
+.admin-dashboard-page .admin-dashboard-main{width:min(1380px,calc(100% - 48px));max-width:1380px;margin:0 auto;padding:36px 0 88px}
+.admin-dashboard-page .admin-dashboard-heading{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:clamp(26px,3vw,44px);margin:0 0 24px;border:1px solid rgba(207,166,104,.35);border-radius:22px;background:linear-gradient(135deg,#392419,#26170f)}
+.admin-dashboard-page .admin-dashboard-heading h1{font-family:var(--font-heritage);font-size:clamp(36px,4vw,60px);line-height:1.3;margin:8px 0 12px}
+.admin-dashboard-page .admin-dashboard-heading h1 span{color:#dcb781}
+.admin-dashboard-page .admin-dashboard-heading p{line-height:1.9}
+.admin-dashboard-page .admin-heading-badge{border:1px solid rgba(207,166,104,.35);border-radius:16px;background:#332116;padding:16px 20px}
+.admin-dashboard-page .admin-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:0 0 26px}
+.admin-dashboard-page .admin-summary-card{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:10px;min-height:145px;padding:22px!important;border:1px solid rgba(207,166,104,.35)!important;border-radius:17px!important;background:linear-gradient(145deg,#372419,#281910)!important;box-shadow:0 8px 22px #0002}
+.admin-dashboard-page .admin-summary-card strong{font-size:clamp(1.3rem,2.5vw,1.8rem)!important;color:#f0cb8c!important}
+.admin-dashboard-page .admin-dashboard-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start}
+.admin-dashboard-page .admin-sidebar{position:sticky;top:110px;padding:23px 16px!important;border:1px solid rgba(208,164,101,.35)!important;border-radius:20px!important;background:#2b1b12!important}
+.admin-dashboard-page .admin-sidebar-heading{padding:0 11px 18px;border-bottom:1px solid rgba(208,164,101,.2);margin-bottom:14px}
+.admin-dashboard-page .admin-side-nav{display:flex;flex-direction:column;gap:7px}
+.admin-dashboard-page .admin-side-link{display:flex;align-items:center;gap:12px;min-height:46px;padding:11px 14px;border-radius:12px!important;color:#e9d6ba;text-decoration:none;transition:background .2s,color .2s}
+.admin-dashboard-page .admin-side-link:hover{background:#48301f;color:#f5e4cb}
+.admin-dashboard-page .admin-side-link.active{background:#704a2e!important;color:#f6d49e!important}
+.admin-dashboard-page .admin-sidebar-note{margin-top:22px;padding:16px;border:1px solid rgba(208,164,101,.22);border-radius:14px;background:#352317}
+.admin-dashboard-page .admin-main-content{display:grid;gap:22px;min-width:0}
+.admin-dashboard-page .admin-panel{min-width:0;padding:clamp(20px,2.5vw,30px)!important;border:1px solid rgba(210,169,107,.34)!important;border-radius:20px!important;background:linear-gradient(135deg,#382318,#2b1b12)!important}
+.admin-dashboard-page .admin-panel-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:22px}
+.admin-dashboard-page .admin-panel-heading h2{font-family:inherit;line-height:1.55}
+.admin-dashboard-page .admin-table-wrapper{overflow-x:auto;border:1px solid rgba(210,169,107,.3)!important;border-radius:15px!important}
+.admin-dashboard-page .admin-table{width:100%;border-collapse:collapse}
+.admin-dashboard-page .admin-information-section{border:1px solid rgba(210,169,107,.28);border-radius:20px;background:#302015;padding:24px}
+@media(max-width:1000px){.admin-dashboard-page .admin-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-dashboard-page .admin-dashboard-layout{grid-template-columns:1fr}.admin-dashboard-page .admin-sidebar{position:static}.admin-dashboard-page .admin-side-nav{flex-direction:row;flex-wrap:wrap}}
+@media(max-width:640px){.admin-dashboard-page .admin-dashboard-main{width:calc(100% - 28px);padding-top:20px}.admin-dashboard-page .admin-dashboard-heading{flex-direction:column;align-items:stretch}.admin-dashboard-page .admin-summary{grid-template-columns:1fr}.admin-dashboard-page .admin-table{min-width:690px}.admin-dashboard-page .admin-heading-badge{align-self:flex-start}}
+</style>
+</head>
 
 <body class="admin-dashboard-page">
 <div class="alfaw-sprint-note" role="note">نموذج واجهات Sprint 1 — بيانات تجريبية محلية، دون ربط بقاعدة بيانات أو توثيق رسمي فعلي.</div>
