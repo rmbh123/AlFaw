@@ -79,7 +79,26 @@
   font-family:var(--font-heritage,"AlFawNaskh",serif)!important;
 }
 </style>
-</head>
+<style>
+/* Original AlFaw Arabic font for the overview cards shown in the dashboard. */
+.admin-dashboard-page .admin-overview-grid,
+.admin-dashboard-page .admin-overview-card,
+.admin-dashboard-page .admin-overview-card :is(h3,span,strong,p),
+.admin-dashboard-page .admin-overview-card-heading,
+.admin-dashboard-page .admin-overview-row,
+.admin-dashboard-page .admin-overview-row :is(span,strong){
+  font-family:"AlFawNaskh","Amiri",serif!important;
+  font-synthesis:none;
+}
+.admin-dashboard-page .admin-overview-card-heading h3{
+  font-family:"AlFawNaskh","Amiri",serif!important;
+  font-weight:400!important;
+}
+.admin-dashboard-page .admin-overview-row :is(span,strong){
+  font-family:"AlFawNaskh","Amiri",serif!important;
+  font-weight:400!important;
+}
+</style></head>
 
 <body class="admin-dashboard-page">
 <div class="alfaw-sprint-note" role="note">نموذج واجهات Sprint 1 — بيانات تجريبية محلية، دون ربط بقاعدة بيانات أو توثيق رسمي فعلي.</div>
