@@ -49,43 +49,50 @@
     window.matchMedia('(min-width: 921px)').addEventListener('change', close);
   }
 
-  // Keep the account action correct even on informational pages that do not
-  // load the auction/account application script.
-  const accountLink = header?.querySelector('#site-account-link');
-  if (accountLink) {
+  // A single source of truth for the account link and role-specific dashboard links.
+  // Reconcile after both shared scripts have initialized and on browser history restores.
+  const syncRoleNavigation = () => {
+    if (!header) return;
+    const navigation = header.querySelector('#site-navigation');
+    const accountLink = header.querySelector('#site-account-link');
+    let session = null;
     try {
-      const session = JSON.parse(localStorage.getItem('alfaw_phase3_session') || 'null');
-      if (session?.role) {
-        const target = 'profile.html';
-        accountLink.setAttribute('href', target);
-        accountLink.textContent = 'حسابي';
-        if(session.role === 'admin' && header && !header.querySelector('#admin-navbar-dashboard')){
-          const navigation = header.querySelector('#site-navigation');
-          if(navigation){
-            const link = document.createElement('a');
-            link.id = 'admin-navbar-dashboard';
-            link.href = 'admin-dashboard.html';
-            link.className = 'seller-navbar-dashboard';
-            link.textContent = 'لوحة الإدارة';
-            navigation.append(link);
-            if(location.pathname.endsWith('/admin-dashboard.html')) link.setAttribute('aria-current','page');
-          }
-        }
-        if(session.role === 'seller' && header && !header.querySelector('#seller-navbar-dashboard')){
-          const link = document.createElement('a');
-          link.id = 'seller-navbar-dashboard';
-          link.href = 'seller-dashboard.html';
-          link.className = 'seller-navbar-dashboard';
-          link.textContent = 'لوحة البائع';
-          const navigation = header.querySelector('#site-navigation');
-          if(navigation){
-            navigation.append(link);
-            if(location.pathname.endsWith('/seller-dashboard.html'))link.setAttribute('aria-current','page');
-          }
-        }
+      session = JSON.parse(localStorage.getItem('alfaw_phase3_session') || 'null');
+      const users = JSON.parse(localStorage.getItem('alfaw_phase3_users') || '[]');
+      if (!session || !Array.isArray(users) || !users.some(user => user.id === session.id && user.role === session.role)) session = null;
+    } catch (_) { session = null; }
+
+    if (accountLink) {
+      accountLink.href = session ? 'profile.html' : 'login.html';
+      accountLink.textContent = session ? 'حسابي' : 'دخول';
+    }
+    if (!navigation) return;
+    const dashboards = [
+      { id: 'seller-navbar-dashboard', role: 'seller', href: 'seller-dashboard.html', label: 'لوحة البائع' },
+      { id: 'admin-navbar-dashboard', role: 'admin', href: 'admin-dashboard.html', label: 'لوحة الإدارة' }
+    ];
+    dashboards.forEach(({ id, role, href, label }) => {
+      let link = navigation.querySelector('#' + id);
+      if (session?.role !== role) {
+        if (link) link.remove();
+        return;
       }
-    } catch (_) { /* Browser storage may be disabled. */ }
-  }
+      if (!link) {
+        link = document.createElement('a');
+        link.id = id;
+        link.className = 'seller-navbar-dashboard';
+        navigation.append(link);
+      }
+      link.href = href;
+      link.textContent = label;
+      if (location.pathname.endsWith('/' + href)) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+  };
+  syncRoleNavigation();
+  document.addEventListener('DOMContentLoaded', syncRoleNavigation);
+  window.addEventListener('pageshow', syncRoleNavigation);
+  window.addEventListener('storage', syncRoleNavigation);
 
   // The homepage has its own cinematic scroll timeline; do not interfere.
   if (document.body.classList.contains('home-page')) return;
