@@ -1783,11 +1783,20 @@ if (cinema) {
 
   }
   // Consistent sign-out for all roles, including seller and admin dashboards.
-  document.querySelectorAll('[data-alfaw-logout],#profile-logout-button').forEach(button=>button.addEventListener('click',()=>{
-    session=null;
-    localStorage.removeItem('alfaw_phase3_session');
-    location.replace('login.html');
-  }));
+  document.querySelectorAll('[data-alfaw-logout],#profile-logout-button').forEach(button=>{
+    button.addEventListener('click',event=>{
+      event.preventDefault();
+      session=null;
+      try {
+        localStorage.removeItem('alfaw_phase3_session');
+        sessionStorage.removeItem('alfaw_phase3_session');
+      } catch (error) {
+        console.error('Unable to clear the demo session on logout',error);
+      }
+      // Replace history so the previous authenticated page cannot be revisited via Back.
+      window.location.replace('login.html');
+    });
+  });
   // A back/forward cache restore must recheck the session before showing private content.
   window.addEventListener('pageshow',event=>{
     if(event.persisted && ($('.profile-page')||$('.seller-dashboard-page')||$('.admin-dashboard-page'))){
