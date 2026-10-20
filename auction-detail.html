@@ -16,6 +16,23 @@
 <script defer="" src="script.js?v=buyer-final-20261019"></script>
   <link rel="stylesheet" href="alfaw-unified.css?v=seller-navbar-20261019">
   <script src="alfaw-ui.js?v=seller-navbar-20261019" defer></script>
+<style>
+/* Phase 3: compact, responsive auction rules cards */
+.auction-detail-page .alfaw-rules-panel{padding:clamp(18px,3vw,30px);border:1px solid #86653a;border-radius:24px;background:linear-gradient(145deg,#2a1a10,#160e0a);color:#f9e8d0;box-shadow:0 18px 38px #0003}
+.auction-detail-page .alfaw-rules-heading{display:flex;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid #7e603d}
+.auction-detail-page .alfaw-rules-heading h3{margin:0;color:#ffe0ab;font-size:clamp(22px,2.5vw,30px);font-weight:800}
+.auction-detail-page .alfaw-rules-symbol{color:#dfb876;font-size:27px}
+.auction-detail-page .alfaw-rules-list{list-style:none;counter-reset:rules;display:grid;gap:10px;margin:0;padding:0}
+.auction-detail-page .alfaw-rules-list li{counter-increment:rules;display:flex;align-items:center;gap:12px;position:relative;padding:13px 48px 13px 12px;border:1px solid #58412b;border-radius:15px;background:linear-gradient(110deg,#302116,#21160f);min-width:0}
+.auction-detail-page .alfaw-rules-list li::before{content:counter(rules);position:absolute;right:11px;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#8b673c;color:#fff4df;font-size:14px;font-weight:700}
+.auction-detail-page .alfaw-rule-icon{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid #79582c;border-radius:11px;color:#e4b96e;font-size:21px}
+.auction-detail-page .alfaw-rule-active{color:#80d29c;border-color:#466b46}
+.auction-detail-page .alfaw-rule-warning{color:#e98e7b;border-color:#7c4540}
+.auction-detail-page .alfaw-rule-copy{display:grid;gap:3px;min-width:0;line-height:1.6}
+.auction-detail-page .alfaw-rule-copy strong{font-size:clamp(13px,1.3vw,16px);color:#f9ead7;font-weight:700}
+.auction-detail-page .alfaw-rule-copy small{font-size:12px;color:#c8b39b}
+@media(max-width:520px){.auction-detail-page .alfaw-rules-panel{padding:14px;border-radius:18px}.auction-detail-page .alfaw-rules-list li{gap:8px;padding:11px 42px 11px 9px}.auction-detail-page .alfaw-rule-icon{width:32px;height:32px;font-size:18px}.auction-detail-page .alfaw-rule-copy small{font-size:11px}}
+</style>
 </head>
 <body class="auction-detail-page">
 <div class="alfaw-sprint-note" role="note">نموذج واجهات Sprint 1 — بيانات تجريبية محلية، دون ربط بقاعدة بيانات أو توثيق رسمي فعلي.</div>
@@ -210,24 +227,15 @@
             </p>
 </form>
 <div id="auction-my-receipts" class="alfaw-receipt-links" aria-live="polite"></div>
-<div class="auction-bidding-requirements">
-<h3>شروط المزايدة</h3>
-<ul>
-<li>يجب تسجيل الدخول أولًا.</li>
-<li>يجب أن يكون المزاد نشطًا.</li>
-<li>
-                يجب أن يساوي العرض الحد الأدنى
-                المطلوب أو يتجاوزه.
-              </li>
-<li>
-                لا يمكن للبائع المزايدة
-                على قطعته الخاصة.
-              </li>
-<li>
-                لا تُقبل أي مزايدة بعد
-                انتهاء المزاد.
-              </li>
-</ul>
+<div class="auction-bidding-requirements alfaw-rules-panel" dir="rtl">
+  <div class="alfaw-rules-heading"><span class="alfaw-rules-symbol" aria-hidden="true">⚖</span><h3>شروط المزايدة</h3></div>
+  <ol class="alfaw-rules-list">
+    <li><span class="alfaw-rule-icon" aria-hidden="true">♙</span><span class="alfaw-rule-copy"><strong>يجب تسجيل الدخول أولًا.</strong><small>سجّل الدخول بحساب مشتري لتقديم مزايدة.</small></span></li>
+    <li><span class="alfaw-rule-icon alfaw-rule-active" aria-hidden="true">●</span><span class="alfaw-rule-copy"><strong>يجب أن يكون المزاد نشطًا.</strong><small>يمكنك المزايدة فقط خلال فترة المزاد.</small></span></li>
+    <li><span class="alfaw-rule-icon" aria-hidden="true">﷼</span><span class="alfaw-rule-copy"><strong>يجب أن يساوي العرض الحد الأدنى المطلوب أو يتجاوزه.</strong><small>راجع الحد الأدنى الحالي قبل تأكيد المزايدة.</small></span></li>
+    <li><span class="alfaw-rule-icon alfaw-rule-warning" aria-hidden="true">⊘</span><span class="alfaw-rule-copy"><strong>لا يمكن للبائع المزايدة على قطعته الخاصة.</strong><small>المزايدة مخصصة للمشترين المؤهلين.</small></span></li>
+    <li><span class="alfaw-rule-icon" aria-hidden="true">◷</span><span class="alfaw-rule-copy"><strong>لا تُقبل أي مزايدة بعد انتهاء المزاد.</strong><small>يُغلق تقديم العروض عند انتهاء الوقت.</small></span></li>
+  </ol>
 </div>
 </div>
 </div>
