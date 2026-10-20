@@ -74,7 +74,12 @@
     dashboards.forEach(({ id, role, href, label }) => {
       let link = navigation.querySelector('#' + id);
       if (session?.role !== role) {
-        if (link) link.remove();
+        if (link) {
+          if (role === 'admin') {
+            link.style.display = 'none';
+            link.setAttribute('aria-hidden', 'true');
+          } else link.remove();
+        }
         return;
       }
       if (!link) {
@@ -84,7 +89,9 @@
         navigation.append(link);
       }
       link.href = href;
-      link.textContent = label;
+      link.textContent = role === 'admin' ? 'لوحة المسؤول' : label;
+      link.style.removeProperty('display');
+      link.removeAttribute('aria-hidden');
       if (location.pathname.endsWith('/' + href)) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     });
