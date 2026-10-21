@@ -1318,6 +1318,37 @@ if (cinema) {
     put('artifacts',artifacts);
     put('auctions',auctions);
   }
+  // Second one-time demo auction for a four-minute bid/win/review walkthrough.
+  // Keep its original end time and bids on refresh; never reset an expired auction.
+  const fourMinuteDemoId='auction-four-minute-review-20261021';
+  const fourMinuteArtifactId='artifact-four-minute-review-20261021';
+  let addedFourMinuteDemo=false;
+  if(!artifacts.some(item=>item.id===fourMinuteArtifactId)){
+    artifacts.push({
+      id:fourMinuteArtifactId,name:'عملة تراثية — تجربة الفوز والتقييم',
+      category:'coins',price:200,image:'coin.jpg',sellerId:'ahmed',
+      verification:'pending',period:'غير محددة',origin:'الجزيرة العربية',
+      condition:'تجريبية',description:'قطعة تجريبية لاختبار المزايدة والفوز وتقييم البائع.',
+      provenance:'عرض تجريبي فقط، وليست قطعة معروضة للبيع الحقيقي.',
+      verificationReference:'',documents:[],created:new Date().toISOString()
+    });
+    addedFourMinuteDemo=true;
+  }
+  if(!auctions.some(a=>a.id===fourMinuteDemoId)){
+    const now=Date.now();
+    auctions.push({
+      id:fourMinuteDemoId,artifactId:fourMinuteArtifactId,sellerId:'ahmed',
+      startingPrice:200,increment:20,
+      start:new Date(now-60000).toISOString(),
+      end:new Date(now+4*60000).toISOString(),
+      bids:[],created:new Date(now).toISOString()
+    });
+    addedFourMinuteDemo=true;
+  }
+  if(addedFourMinuteDemo){
+    put('artifacts',artifacts);
+    put('auctions',auctions);
+  }
   // Upgrade the original undated demo auctions, preserving participant-entered bids.
   let repairedDemoSchedule = false;
   auctions.forEach(a => {
