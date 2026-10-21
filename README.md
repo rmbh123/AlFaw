@@ -23,7 +23,7 @@ Nothing here performs Heritage Commission verification. The verification status 
 |---|---|---|---|
 | Buyer | buyer@alfaw.demo | AlFawDemo!2026 | login.html → profile |
 | Seller | seller@alfaw.demo | AlFawDemo!2026 | login.html → seller dashboard |
-| Admin (read-only) | admin@alfaw.demo | AlFawDemo!2026 | login.html → admin dashboard |
+| Admin (read-only) | admin@alfaw.demo | AlFawDemo!2026 | admin-login.html → admin dashboard |
 
 New buyer or seller accounts can be created using the registration form. Admin registration is deliberately not available through the public form. These demo secrets exist visibly in the frontend JavaScript: they **do not confer real security**.
 
@@ -33,7 +33,7 @@ New buyer or seller accounts can be created using the registration form. Admin r
 - Artifacts: `browse.html`, `artifact-detail.html` — Arabic search, multi-filters, sorting, pagination, documented artifact detail, seller verification-status display
 - Auctions: `auctions.html`, `auction-detail.html` — active/upcoming/ended demo auctions; countdown; price, simulated bids, history, bidder ranking, auction result, winner review flow
 - Seller pages: `seller-profile.html`, `seller-detail.html`, `seller-dashboard.html`, `manage-artifact.html`, `manage-auctions.html`
-- Accounts: `register.html`, `login.html`, `profile.html`
+- Accounts: `register.html`, `login.html`, `admin-login.html`, `profile.html`
 - Admin read-only view: `admin-dashboard.html`
 - Information: `verification.html`; the bidding guide is now embedded at `auctions.html#bidding-guide` (`bidding-guide.html` redirects for old bookmarks)
 - `serller-detail.html` redirects to `seller-detail.html` for compatibility with older URLs.
@@ -42,7 +42,7 @@ New buyer or seller accounts can be created using the registration form. Admin r
 
 - Auction demo times are created relative to the first visit and persisted in browser storage. No fixed hard-coded countdown is presented as a live server timestamp.
 - Bid validity, bidder ranking, winner condition and Trust Score are **client-side demonstrations**. Real users, tabs or browsers cannot reliably transact across devices without a server.
-- Sellers can archive artifacts from active listings while preserving historical auction references; uploaded demo images and PDF/image documents are stored **only locally**. A 1 MiB-per-file limit was selected solely to accommodate local browser storage, **not** as a final product rule (Sprint 0 report leaves size as `[X] MB`).
+- Sellers can archive artifacts from active listings while preserving historical auction references; uploaded demo images and PDF/image documents are stored **only locally**. Images and PDF/image attachments accept files up to **50 MB each**. Demo artifact photos are resized and compressed for browser `localStorage`; supporting attachments are saved locally in IndexedDB. This is **not** cloud upload or original-quality archival storage.
 - Ratings require a demo auction winner, 1–5 stars, and are limited to one per auction/winner in the local state. Trust Score = average stars ÷ 5 × 100, only for recorded authenticity reviews. Missing ratings show “لا توجد تقييمات”.
 - Admin may read registered users, listings, bids and auction data; no admin update/delete controls are provided.
 
