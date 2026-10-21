@@ -1230,7 +1230,7 @@ if (cinema) {
   const date = n => n && !isNaN(Date.parse(n)) ? new Date(n).toLocaleString('ar-SA') : 'غير محدد';
   const corruptedStorageKeys=new Set();
   const get = (name,fallback) => {let x;try{x=localStorage.getItem('alfaw_phase3_'+name)}catch(error){console.warn('تعذر قراءة التخزين:',name,error);window.addEventListener('DOMContentLoaded',()=>window.dispatchEvent(new CustomEvent('alfaw:storage-error',{detail:{name,read:true}})),{once:true});return fallback}if(x===null)return fallback;try{return JSON.parse(x)}catch(error){console.error('بيانات محلية تالفة:',name,error);corruptedStorageKeys.add(name);window.addEventListener('DOMContentLoaded',()=>window.dispatchEvent(new CustomEvent('alfaw:storage-corrupt',{detail:{name}})),{once:true});return fallback}};
-  const put = (name,value) => {if(corruptedStorageKeys.has(name)){console.error('تم منع الكتابة فوق بيانات تالفة:',name);window.dispatchEvent(new CustomEvent('alfaw:storage-corrupt',{detail:{name}}));return false}try {localStorage.setItem('alfaw_phase3_'+name,JSON.stringify(value));return true}catch(error){console.warn('تعذر حفظ البيانات محليًا:',name,error);window.dispatchEvent(new CustomEvent('alfaw:storage-error',{detail:{name}}));return false}};
+  const put = (name,value) => {if(corruptedStorageKeys.has(name)){console.error('تم منع الكتابة فوق بيانات تالفة:',name);window.dispatchEvent(new CustomEvent('alfaw:storage-corrupt',{detail:{name}}));return false}try {localStorage.setItem('alfaw_phase3_'+name,JSON.stringify(value));if(name==='auctions'||name==='reviews')window.dispatchEvent(new CustomEvent('alfaw:data-updated',{detail:{name}}));return true}catch(error){console.warn('تعذر حفظ البيانات محليًا:',name,error);window.dispatchEvent(new CustomEvent('alfaw:storage-error',{detail:{name}}));return false}};
   const id = prefix => prefix+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
   const text = (s,v) => {const el=$(s);if(el)el.textContent=String(v??'')};
   const value = (s,v) => {const el=$(s);if(el)el.value=v??''};
@@ -1733,9 +1733,38 @@ if (cinema) {
         }
       };
       refreshProfileStats();
-      const statsRefreshTimer=setInterval(refreshProfileStats,15000);
-      window.addEventListener('pagehide',()=>clearInterval(statsRefreshTimer),{once:true});
-      window.addEventListener('focus',refreshProfileStats);
+      // Event-driven refresh: immediately after local data changes or another tab updates it.
+      let nextAuctionEndTimer=null;
+      const scheduleNextAuctionEnd=()=>{
+        clearTimeout(nextAuctionEndTimer);
+        const now=Date.now();
+        const nextEnd=Math.min(...auctions.map(a=>Date.parse(a.end)).filter(t=>Number.isFinite(t)&&t>now));
+        if(Number.isFinite(nextEnd)){
+          nextAuctionEndTimer=setTimeout(()=>{
+            refreshProfileStats();
+            scheduleNextAuctionEnd();
+          },Math.min(Math.max(0,nextEnd-now)+10,2147483647));
+        }
+      };
+      const onProfileDataUpdate=event=>{
+        if(event.detail?.name==='auctions'||event.detail?.name==='reviews'){
+          refreshProfileStats();
+          scheduleNextAuctionEnd();
+        }
+      };
+      window.addEventListener('alfaw:data-updated',onProfileDataUpdate);
+      window.addEventListener('storage',event=>{
+        if(event.key==='alfaw_phase3_auctions'){
+          try{const updated=JSON.parse(event.newValue);if(Array.isArray(updated))auctions=updated}catch(error){console.warn('Invalid auction data in storage event',error)}
+          refreshProfileStats();scheduleNextAuctionEnd();
+        }else if(event.key==='alfaw_phase3_reviews'){
+          try{const updated=JSON.parse(event.newValue);if(Array.isArray(updated))reviews=updated}catch(error){console.warn('Invalid review data in storage event',error)}
+          refreshProfileStats();
+        }
+      });
+      window.addEventListener('focus',()=>{refreshProfileStats();scheduleNextAuctionEnd()});
+      window.addEventListener('pagehide',()=>clearTimeout(nextAuctionEndTimer),{once:true});
+      scheduleNextAuctionEnd();
       const myAuctionList=$('#profile-my-auctions-list');
       if(myAuctionList){
         myAuctionList.replaceChildren();
