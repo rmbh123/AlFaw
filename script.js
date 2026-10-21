@@ -1413,16 +1413,9 @@ if (cinema) {
       winnerDeadlineTimer=setTimeout(()=>{
         syncWinnerNotices();
         scheduleWinnerDeadline();
-      },Math.min(Math.max(0,next-now)+30,2147483647));
+      },Math.min(Math.max(0,next-now)+1,2147483647));
     }
   };
-  syncWinnerNotices();
-  scheduleWinnerDeadline();
-  window.addEventListener('alfaw:data-updated',event=>{
-    if(event.detail?.name==='auctions'){syncWinnerNotices();scheduleWinnerDeadline()}
-  });
-  window.addEventListener('focus',()=>{syncWinnerNotices();scheduleWinnerDeadline()});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncWinnerNotices();scheduleWinnerDeadline()}});
   const sellerReviews=id=>reviews.filter(r=>r.sellerId===id);
   const rating=id=>{const r=sellerReviews(id);const avg=r.length?r.reduce((s,x)=>s+Number(x.rating),0)/r.length:null;return {count:r.length,avg,trust:avg===null?null:Math.round(avg/5*100)}};
   const requireRole=(role,content,warning)=>{const ok=session?.role===role && (role!=='seller'||!!currentSeller());visible(content,ok);visible(warning,!ok);return ok};
@@ -1438,6 +1431,14 @@ if (cinema) {
     document.body.append(box);
     let timer=setTimeout(()=>box.remove(),4500);box.addEventListener('mouseenter',()=>clearTimeout(timer));box.addEventListener('mouseleave',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});box.addEventListener('focusin',()=>clearTimeout(timer));box.addEventListener('focusout',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});
   };
+  // Initialize only after showToast is defined, including auctions already expired on load.
+  syncWinnerNotices();
+  scheduleWinnerDeadline();
+  window.addEventListener('alfaw:data-updated',event=>{
+    if(event.detail?.name==='auctions'){syncWinnerNotices();scheduleWinnerDeadline()}
+  });
+  window.addEventListener('focus',()=>{syncWinnerNotices();scheduleWinnerDeadline()});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncWinnerNotices();scheduleWinnerDeadline()}});
   const artworkCard=a=>`<article class="seller-artifact-card"><div class="seller-artifact-image"><img loading="lazy" src="${escape(a.image)}" alt="${escape(a.name)}"><span class="alfaw-trust-badge">★ ${rating(a.sellerId).trust===null?'لا توجد تقييمات':rating(a.sellerId).trust+'%'}</span></div><div class="seller-artifact-content"><span>${escape(categories[a.category]||'')}</span><h3>${escape(a.name)}</h3><p>${escape(a.description||'')}</p><strong>${money(a.price)}</strong><p><a href="artifact-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل القطعة ←</a></p></div></article>`;
   const auctionCard=a=>{const item=artifact(a.artifactId);if(!item)return '';return `<article class="auction-card"><div class="auction-card-image"><img loading="lazy" src="${escape(item.image)}" alt="${escape(item.name)}"><span class="auction-status-badge">${statusName(a)}</span><span class="alfaw-trust-badge">★ ${rating(item.sellerId).trust===null?'لا توجد تقييمات':rating(item.sellerId).trust+'%'}</span></div><div class="auction-card-content"><small>${escape(a.id)}</small><h3>${escape(item.name)}</h3><p>${escape(item.description||'')}</p><div class="auction-pricing"><div><span>السعر الابتدائي</span><strong>${money(a.startingPrice)}</strong></div><div><span>أعلى عرض</span><strong>${highest(a)===null?'لا توجد مزايدات':money(highest(a))}</strong></div></div><div class="auction-card-timing"><span>${date(a.start)}</span><span>${date(a.end)}</span></div><a class="auction-details-button" href="auction-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل المزاد ←</a></div></article>`};
 
