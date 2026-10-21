@@ -1819,8 +1819,18 @@ if (cinema) {
         const validName=name.length>=3&&name.length<=100;
         const validEmail=/^[A-Z0-9.!#$%&'*+/=?^_\x60{|}~-]+@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,}$/i.test(email)&&!email.includes('..')&&email.length<=254;
         const uniqueEmail=!users.some(x=>x.id!==u.id&&String(x.email||'').toLowerCase()===email);
-        if(!validName||!validEmail||!uniqueEmail||!/^05[0-9]{8}$/.test(phone)||!city){
-          feedback('#profile-form-message','تحققي من الاسم (3 أحرف على الأقل) والبريد غير المكرر ورقم الجوال (05 ثم 8 أرقام) والمدينة.');
+        const errors=[
+          ['#profile-full-name-error',validName?'':'الاسم يجب أن يكون بين 3 و100 حرف.'],
+          ['#profile-email-error',!validEmail?'أدخلي بريدًا إلكترونيًا صحيحًا مثل name@example.com.':!uniqueEmail?'هذا البريد مستخدم في حساب آخر.':''],
+          ['#profile-phone-error',/^05[0-9]{8}$/.test(phone)?'':'رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.'],
+          ['#profile-city-error',city?'':'اختاري المدينة.']
+        ];
+        errors.forEach(([selector,message])=>feedback(selector,message));
+        if(errors.some(([,message])=>message)){
+          feedback('#profile-form-message','لم يتم الحفظ. صححي الحقول المحددة ثم حاولي مجددًا.');
+          const firstInvalid=errors.find(([,message])=>message)?.[0];
+          const fieldId=firstInvalid?.replace('-error','');
+          if(fieldId)$(fieldId)?.focus();
           return;
         }
         const before={name:u.name,email:u.email,phone:u.phone,city:u.city};
@@ -1842,6 +1852,11 @@ if (cinema) {
         text('#profile-display-name',name);
         text('#profile-avatar',name[0]);
         text('#profile-display-city',city);
+        text('#profile-detail-name',name);
+        text('#profile-detail-email',email);
+        text('#profile-detail-phone',phone);
+        text('#profile-detail-city',city);
+        errors.forEach(([selector])=>feedback(selector,''));
         feedback('#profile-form-message',before.email!==email?'تم حفظ التعديلات. بريد تسجيل الدخول الجديد: '+email+' — استخدمي هذا البريد مع كلمة المرور نفسها عند دخولك القادم.':'تم حفظ بيانات الحساب محليًا.');
       });
     }
