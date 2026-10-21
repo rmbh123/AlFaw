@@ -1676,7 +1676,13 @@ if (cinema) {
   // PERSONAL PROFILE
   if($('.profile-page')){
     const u=account();visible('#profile-guest-state',!u);visible('#profile-authenticated-content',!!u);
-    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-detail-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',false);
+    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-detail-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone]].forEach(([k,v])=>value(k,v));
+      const citySelect=$('#profile-city');
+      if(citySelect){
+        const storedCity=String(u.city||'').trim();
+        const matched=[...citySelect.options].find(option=>option.value===storedCity||option.textContent.trim()===storedCity);
+        citySelect.value=matched?.value|| (storedCity?'other':'');
+      }visible('#profile-seller-shortcut',false);
       const isSellerProfile=u.role==='seller';
       const isBuyerProfile=u.role==='buyer';
       const isAdminProfile=u.role==='admin';
@@ -1819,8 +1825,18 @@ if (cinema) {
         const validName=name.length>=3&&name.length<=100;
         const validEmail=/^[A-Z0-9.!#$%&'*+/=?^_\x60{|}~-]+@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,}$/i.test(email)&&!email.includes('..')&&email.length<=254;
         const uniqueEmail=!users.some(x=>x.id!==u.id&&String(x.email||'').toLowerCase()===email);
-        if(!validName||!validEmail||!uniqueEmail||!/^05[0-9]{8}$/.test(phone)||!city){
-          feedback('#profile-form-message','تحققي من الاسم (3 أحرف على الأقل) والبريد غير المكرر ورقم الجوال (05 ثم 8 أرقام) والمدينة.');
+        const errors=[
+          ['#profile-full-name-error',validName?'':'الاسم يجب أن يكون بين 3 و100 حرف.'],
+          ['#profile-email-error',!validEmail?'أدخلي بريدًا إلكترونيًا صحيحًا مثل name@example.com.':!uniqueEmail?'هذا البريد مستخدم في حساب آخر.':''],
+          ['#profile-phone-error',/^05[0-9]{8}$/.test(phone)?'':'رقم الجوال يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.'],
+          ['#profile-city-error',city?'':'اختاري المدينة.']
+        ];
+        errors.forEach(([selector,message])=>feedback(selector,message));
+        if(errors.some(([,message])=>message)){
+          feedback('#profile-form-message','لم يتم الحفظ. صححي الحقول المحددة ثم حاولي مجددًا.');
+          const firstInvalid=errors.find(([,message])=>message)?.[0];
+          const fieldId=firstInvalid?.replace('-error','');
+          if(fieldId)$(fieldId)?.focus();
           return;
         }
         const before={name:u.name,email:u.email,phone:u.phone,city:u.city};
@@ -1839,9 +1855,21 @@ if (cinema) {
           feedback('#profile-form-message',restored?'تعذر تحديث الجلسة. لم يتم حفظ التعديل؛ حاولي مجددًا.':'تعذر تحديث الجلسة واستعادة بيانات الحساب السابقة. يرجى إعادة تحميل الصفحة والتحقق من بياناتك قبل المحاولة مجددًا.');
           return;
         }
+        // Verify persisted values before reporting success to the user.
+        let savedUser=null,savedSession=null;
+        try{
+          const savedUsers=JSON.parse(localStorage.getItem('alfaw_phase3_users')||'[]');
+          savedUser=Array.isArray(savedUsers)?savedUsers.find(item=>item.id===u.id):null;
+          savedSession=JSON.parse(localStorage.getItem('alfaw_phase3_session')||'null');
+        }catch(error){console.error('Profile persistence verification failed',error)}
+        if(!savedUser||['name','email','phone','city'].some(key=>savedUser[key]!==u[key])||savedSession?.id!==u.id||savedSession?.name!==name){
+          feedback('#profile-form-message','لم يمكن التأكد من حفظ التغييرات. أعيدي تحميل الصفحة وتحققي من البيانات قبل المحاولة مجددًا.');
+          return;
+        }
         text('#profile-display-name',name);
         text('#profile-avatar',name[0]);
         text('#profile-display-city',city);
+        errors.forEach(([selector])=>feedback(selector,''));
         feedback('#profile-form-message',before.email!==email?'تم حفظ التعديلات. بريد تسجيل الدخول الجديد: '+email+' — استخدمي هذا البريد مع كلمة المرور نفسها عند دخولك القادم.':'تم حفظ بيانات الحساب محليًا.');
       });
     }
