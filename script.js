@@ -1716,6 +1716,26 @@ if (cinema) {
           });
         }
       }if(isBuyerProfile){const bids=auctions.flatMap(a=>a.bids.filter(b=>b.uid===u.id));text('#profile-bids-count',bids.length);text('#profile-auctions-count',auctions.filter(a=>a.bids.some(b=>b.uid===u.id)).length);text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);}
+      // Keep profile statistics current when an auction finishes while this page is open.
+      const refreshProfileStats=()=>{
+        if(isSellerProfile){
+          const ownAuctions=auctions.filter(a=>a.sellerId===u.sellerId);
+          text('#profile-auctions-count',ownAuctions.length);
+          text('#profile-bids-count',ownAuctions.reduce((n,a)=>n+(a.bids||[]).length,0));
+          text('#profile-wins-count',ownAuctions.filter(a=>status(a)==='ended'&&auctionWinner(a)).length);
+          text('#profile-reviews-count',reviews.filter(r=>r.sellerId===u.sellerId).length);
+        }else if(isBuyerProfile){
+          const ownBids=auctions.flatMap(a=>(a.bids||[]).filter(b=>b.uid===u.id));
+          text('#profile-auctions-count',auctions.filter(a=>(a.bids||[]).some(b=>b.uid===u.id)).length);
+          text('#profile-bids-count',ownBids.length);
+          text('#profile-wins-count',auctions.filter(a=>auctionWinner(a)?.uid===u.id).length);
+          text('#profile-reviews-count',reviews.filter(r=>r.uid===u.id).length);
+        }
+      };
+      refreshProfileStats();
+      const statsRefreshTimer=setInterval(refreshProfileStats,15000);
+      window.addEventListener('pagehide',()=>clearInterval(statsRefreshTimer),{once:true});
+      window.addEventListener('focus',refreshProfileStats);
       const myAuctionList=$('#profile-my-auctions-list');
       if(myAuctionList){
         myAuctionList.replaceChildren();
