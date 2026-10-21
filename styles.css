@@ -3630,3 +3630,26 @@ img {
 /* Center notification messages instead of corner-floating popups. */
 .alfaw-toast{top:50%;left:50%;right:auto;bottom:auto;inset-inline-start:auto;transform:translate(-50%,-50%);width:max-content;max-width:min(440px,calc(100vw - 32px));justify-content:center;text-align:center}
 @media(max-width:650px){.alfaw-toast{top:50%;left:50%;right:auto;bottom:auto;inset-inline-start:auto;transform:translate(-50%,-50%)}}
+
+/* AlFaw heritage-style review card: scoped to auction detail only. */
+.auction-detail-page .alfaw-review-card{
+  box-sizing:border-box;max-width:920px;margin:38px auto;padding:clamp(20px,4vw,38px);
+  background:linear-gradient(145deg,#26190f,#160e09);
+  border:1px solid #ad854d;border-radius:24px;
+  box-shadow:0 16px 40px rgba(0,0,0,.24);color:#f7eddd;
+  scroll-margin-top:110px;
+}
+.auction-detail-page .alfaw-review-card h3{font-size:clamp(23px,3vw,32px);margin:0 0 10px;color:#f4d49d;text-align:right}
+.auction-detail-page .alfaw-review-card>p{color:#d5c3aa;margin:0 0 24px;text-align:right}
+.auction-detail-page .alfaw-review-card .auction-review-form{display:grid;grid-template-columns:1fr;gap:12px;max-width:100%;align-items:stretch}
+.auction-detail-page .alfaw-review-card .auction-review-form>label{display:block;color:#f7e8d0;font-weight:700;text-align:right;margin:6px 0 0}
+.auction-detail-page .alfaw-review-card select,
+.auction-detail-page .alfaw-review-card textarea{box-sizing:border-box;width:100%;max-width:100%;background:#21160f;color:#f9edda;border:1px solid #80613c;border-radius:12px;padding:13px 16px;font:inherit;text-align:right}
+.auction-detail-page .alfaw-review-card select:focus-visible,
+.auction-detail-page .alfaw-review-card textarea:focus-visible{outline:2px solid #dfb16d;outline-offset:2px}
+.auction-detail-page .alfaw-review-card textarea{min-height:120px;resize:vertical}
+.auction-detail-page .alfaw-review-card .alfaw-receipt{display:flex!important;flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;font-size:clamp(14px,1.5vw,17px);font-weight:400!important;line-height:1.7}
+.auction-detail-page .alfaw-review-card .alfaw-receipt input{width:19px;height:19px;flex:none;accent-color:#c79b60}
+.auction-detail-page .alfaw-review-card #submit-auction-review{justify-self:start;min-width:190px;border:1px solid #e0b676;border-radius:12px;padding:13px 24px;background:linear-gradient(135deg,#e6bf80,#bd8c4d);color:#1c1109;font:inherit;font-weight:700;cursor:pointer}
+.auction-detail-page .alfaw-review-card #submit-auction-review:hover{filter:brightness(1.08)}
+@media(max-width:600px){.auction-detail-page .alfaw-review-card{margin:24px 12px;padding:20px 16px;border-radius:18px}.auction-detail-page .alfaw-review-card #submit-auction-review{width:100%}}
