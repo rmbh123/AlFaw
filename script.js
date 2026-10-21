@@ -2123,8 +2123,8 @@ if (cinema) {
         if(previewURL){URL.revokeObjectURL(previewURL);previewURL=null}
         area.replaceChildren();const files=[...e.target.files];
         if(!files.length)return;
-        const invalid=files.filter(file=>!allowedImage.includes(file.type)||file.size>1024*1024);
-        if(invalid.length){area.textContent='صيغة الصور المسموحة JPG أو PNG أو WEBP، بحد تجريبي 1 MB لكل صورة.';return}
+        const invalid=files.filter(file=>!allowedImage.includes(file.type)||file.size>50*1024*1024);
+        if(invalid.length){area.textContent='صيغة الصور المسموحة JPG أو PNG أو WEBP، بحد أقصى 50 MB لكل صورة (تُضغط الصورة للحفظ التجريبي محليًا).';return}
         const first=files[0];const img=document.createElement('img');img.alt='معاينة '+first.name;previewURL=URL.createObjectURL(first);img.src=previewURL;img.onload=()=>{if(previewURL===img.src){URL.revokeObjectURL(previewURL);previewURL=null}};
         area.append(img);
         const note=document.createElement('p');note.textContent='معاينة: '+fileLabel(first)+(files.length>1?' — سيتم حفظ الصورة الأولى فقط في النسخة التجريبية.':'');area.append(note);
@@ -2143,14 +2143,16 @@ if (cinema) {
         const upload=$('#artifact-images')?.files[0];if(!old&&!upload){feedback('#manage-artifact-form-message','اختاري صورة للقطعة.');return}
         // Browser-local Sprint 1 preview. Avoid sending a false signal of real archival storage.
         const readAsDataURL=file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)});
-        const compress=async file=>{const src=await readAsDataURL(file);const img=new Image();img.src=src;await img.decode();
-          const scale=Math.min(1,1200/img.width,900/img.height),canvas=document.createElement('canvas');
-          canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
-          canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
-          return canvas.toDataURL('image/jpeg',.78)};
+        const compress=async file=>{const src=URL.createObjectURL(file);const img=new Image();
+          try{img.src=src;await img.decode();
+            const scale=Math.min(1,1200/img.width,900/img.height),canvas=document.createElement('canvas');
+            canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+            canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+            return canvas.toDataURL('image/jpeg',.78);
+          }finally{URL.revokeObjectURL(src)}};
         const photoFiles=[...($('#artifact-images')?.files||[])],docFiles=[...($('#artifact-documents')?.files||[])];
         if(photoFiles.some(f=>!allowedImage.includes(f.type))||docFiles.some(f=>!['application/pdf','image/png','image/jpeg','image/webp'].includes(f.type))){feedback('#manage-artifact-form-message','الصور والمستندات يجب أن تكون بصيغة صورة أو PDF.');return}
-        if(photoFiles.some(f=>f.size>1024*1024)){feedback('#manage-artifact-form-message','الحد التجريبي للصور 1 ميغابايت لكل صورة.');return}
+        if(photoFiles.some(f=>f.size>50*1024*1024)){feedback('#manage-artifact-form-message','الحد الأقصى للصورة الواحدة 50 ميغابايت.');return}
         if(docFiles.some(f=>f.size>50*1024*1024)){feedback('#manage-artifact-form-message','الحد الأقصى للمستند الواحد 50 ميغابايت.');return}
         const data={id:old?.id||id('artifact'),name,description,price,category:cat,period,origin,condition,verification:v,verificationReference:v==='verified'?ref:'',provenance:$('#artifact-provenance')?.value.trim()||'',conditionNotes:$('#artifact-condition-notes')?.value.trim()||'',sellerId:currentSeller().id,image:old?.image||'',documents:old?.documents||[],created:old?.created||new Date().toISOString()};
         try{
