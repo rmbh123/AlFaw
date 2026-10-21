@@ -1429,7 +1429,8 @@ if (cinema) {
     const dismiss=document.createElement('button');dismiss.type='button';dismiss.textContent='إغلاق';
     dismiss.setAttribute('aria-label','إغلاق الإشعار');dismiss.addEventListener('click',()=>box.remove());box.append(dismiss);
     document.body.append(box);
-    let timer=setTimeout(()=>box.remove(),4500);box.addEventListener('mouseenter',()=>clearTimeout(timer));box.addEventListener('mouseleave',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});box.addEventListener('focusin',()=>clearTimeout(timer));box.addEventListener('focusout',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});
+    // Winner congratulations stays visible until explicitly dismissed.
+    if(!url?.includes('auction-detail.html?id=')){let timer=setTimeout(()=>box.remove(),4500);box.addEventListener('mouseenter',()=>clearTimeout(timer));box.addEventListener('mouseleave',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});box.addEventListener('focusin',()=>clearTimeout(timer));box.addEventListener('focusout',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});}
   };
   // Initialize only after showToast is defined, including auctions already expired on load.
   syncWinnerNotices();
