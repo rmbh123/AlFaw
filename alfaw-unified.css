@@ -1868,3 +1868,11 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 
 /* Make unavailable artifact deletion clear without a misleading clickable action. */
 .alfaw-seller-delete-button:disabled{opacity:.42;cursor:not-allowed;filter:grayscale(.5);box-shadow:none;transform:none}
+
+/* Buyer account only: clearly outlined gold selection and card-based sections. */
+.profile-page:has(#profile-account-role) .profile-tabs .profile-tab.active{border:2px solid #d7ab69;box-shadow:inset 0 0 0 1px rgba(255,228,178,.16),0 0 0 2px rgba(215,171,105,.10);background:#49301d;color:#f5d6a4}
+.profile-page .profile-tabs .profile-tab{border:2px solid transparent;transition:border-color .15s ease,background .15s ease}
+.profile-page .profile-tabs .profile-tab:focus-visible{outline:3px solid #e2b974;outline-offset:2px}
+.profile-page #profile-panel-auctions .profile-auctions-list,.profile-page #profile-panel-invoices .profile-auctions-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:16px;align-items:stretch}
+.profile-page #profile-panel-auctions .alfaw-my-auction-card{min-width:0}
+.profile-page #profile-panel-invoices .alfaw-receipt-button{min-height:94px;border:1px solid #bd9259;border-radius:14px;background:linear-gradient(135deg,#3b2719,#28180f);color:#f3d7a6;padding:18px;text-align:right;white-space:normal}
