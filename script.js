@@ -1796,7 +1796,7 @@ if (cinema) {
         feedback('#profile-form-message',before.email!==email?'تم حفظ التعديلات. بريد تسجيل الدخول الجديد: '+email+' — استخدمي هذا البريد مع كلمة المرور نفسها عند دخولك القادم.':'تم حفظ بيانات الحساب محليًا.');
       });
     }
-    $$$('.profile-tab').forEach(btn=>btn.addEventListener('click',()=>{const target=btn.dataset.profileTab;$$$('.profile-tab').forEach(b=>b.classList.toggle('active',b===btn));$$('.profile-panel').forEach(panel=>{panel.hidden=panel.dataset.profilePanel!==target})}));
+    $('.profile-tab').forEach(btn=>btn.addEventListener('click',()=>{const target=btn.dataset.profileTab;$('.profile-tab').forEach(b=>b.classList.toggle('active',b===btn));$$('.profile-panel').forEach(panel=>{panel.hidden=panel.dataset.profilePanel!==target})}));
     // Sprint 1: make the overview shortcut and cancel action functional.
     $('#profile-edit-shortcut')?.addEventListener('click',()=>{
       const tab=$('.profile-tab[data-profile-tab="personal"]');tab?.click();
