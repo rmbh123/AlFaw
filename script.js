@@ -1684,12 +1684,12 @@ if (cinema) {
       $('.buyer-profile-only').forEach(el=>{el.hidden=!isBuyerProfile});
       if(isAdminProfile){
         $('.profile-explore-auctions-button').forEach(el=>{el.textContent='فتح لوحة المسؤول ←';el.href='admin-dashboard.html'});
-        $('.profile-tab').forEach(el=>{if(el.dataset.tab==='auctions'||el.dataset.tab==='bids')el.hidden=true});
+        $('.profile-tab').forEach(el=>{if(el.dataset.profileTab==='auctions'||el.dataset.profileTab==='invoices'||el.dataset.profileTab==='artifacts')el.hidden=true});
       }
       if(isSellerProfile){text('#profile-reviews-tab-label','تقييمات المشترين');const explore=$('.profile-explore-auctions-button');if(explore){explore.textContent='إدارة المزادات ←';explore.href='manage-auctions.html'}}
       if(isSellerProfile)$$('[data-seller-label]').forEach(el=>{el.textContent=el.dataset.sellerLabel});
       $$('.seller-profile-only').forEach(el=>{if(el.classList.contains('profile-tab'))el.hidden=!isSellerProfile});
-      $$('.buyer-profile-only').forEach(el=>{el.hidden=isSellerProfile});
+      $('.buyer-profile-only').forEach(el=>{el.hidden=!isBuyerProfile});
       if(isSellerProfile){
         const owned=artifacts.filter(item=>item.sellerId===u.sellerId&&!item.archived);
         const sellerAuctions=auctions.filter(a=>a.sellerId===u.sellerId);
