@@ -1915,34 +1915,32 @@ if (cinema) {
         if(!mine.length){const empty=document.createElement('p');empty.textContent='لا توجد فواتير مزايدات تجريبية بعد.';invoiceArea.append(empty)}
         mine.forEach(({auctionRecord,b})=>invoiceArea.append(makeReceiptButton(auctionRecord,b)));
       }
-      // Buyer reviews: completed wins waiting for a review, and reviews already submitted.
+      // Buyer reviews: only ratings actually submitted by this buyer.
       if(isBuyerProfile){
         const reviewsArea=$('#profile-reviews-list');
         if(reviewsArea){
           reviewsArea.replaceChildren();
-          const eligible=auctions.filter(a=>auctionWinner(a)?.uid===u.id);
           const submitted=reviews.filter(r=>r.uid===u.id);
-          const ids=new Set([...eligible.map(a=>a.id),...submitted.map(r=>r.auctionId)]);
-          if(!ids.size){
+          if(!submitted.length){
             const empty=document.createElement('p');
-            empty.textContent='لا توجد مزادات فزت بها أو تقييمات أرسلتها بعد.';
+            empty.textContent='لم ترسل أي تقييمات بعد.';
             reviewsArea.append(empty);
           }
-          [...ids].forEach(auctionId=>{
+          submitted.forEach(review=>{
+            const auctionId=review.auctionId;
             const auctionRecord=auctions.find(a=>a.id===auctionId);
-            const review=submitted.find(r=>r.auctionId===auctionId);
             const item=auctionRecord&&artifacts.find(x=>x.id===auctionRecord.artifactId);
             const card=document.createElement('article');
             card.className='alfaw-seller-review-card';
             const heading=document.createElement('strong');
             heading.textContent=item?.name||'مزاد '+auctionId;
             const detail=document.createElement('p');
-            detail.textContent=review?'تم التقييم: '+Number(review.rating)+'/5'+(review.comment?' — '+review.comment:''):'فزت بهذا المزاد — بانتظار تقييم البائع.';
+            detail.textContent='تم التقييم: '+Number(review.rating)+'/5'+(review.comment?' — '+review.comment:'');
             card.append(heading,detail);
             if(auctionRecord){
               const link=document.createElement('a');
               link.href='auction-detail.html?id='+encodeURIComponent(auctionId);
-              link.textContent=review?'عرض المزاد':'تقييم البائع ←';
+              link.textContent='عرض المزاد';
               card.append(link);
             }
             reviewsArea.append(card);
