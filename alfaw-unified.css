@@ -1876,3 +1876,12 @@ body.home-page .cinema-scroll .intro-copy .hero-tags > span {
 .profile-page #profile-panel-auctions .profile-auctions-list,.profile-page #profile-panel-invoices .profile-auctions-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:16px;align-items:stretch}
 .profile-page #profile-panel-auctions .alfaw-my-auction-card{min-width:0}
 .profile-page #profile-panel-invoices .alfaw-receipt-button{min-height:94px;border:1px solid #bd9259;border-radius:14px;background:linear-gradient(135deg,#3b2719,#28180f);color:#f3d7a6;padding:18px;text-align:right;white-space:normal}
+
+/* Profile activity summary: compact, squarer cards without touching dashboards. */
+.profile-page .profile-stats{gap:16px;align-items:stretch}
+.profile-page .profile-stats .profile-stat-card{min-width:0;min-height:174px;aspect-ratio:1.35/1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:11px;padding:20px 14px;border:1px solid rgba(208,164,100,.55);border-radius:18px;background:linear-gradient(155deg,#3a2518,#24160f);box-shadow:0 9px 22px rgba(0,0,0,.15);color:#f4e4d1}
+.profile-page .profile-stat-card .profile-stat-icon{display:grid;place-items:center;width:45px;height:45px;border:1px solid rgba(219,176,107,.55);border-radius:12px;color:#e5bc7d;background:rgba(224,170,95,.08);font-size:1.5rem}
+.profile-page .profile-stat-card strong{font-size:clamp(2rem,3vw,2.6rem);line-height:1;color:#f0c987;font-weight:800;font-variant-numeric:tabular-nums}
+.profile-page .profile-stat-card>span:last-child{font-size:.98rem;line-height:1.5;font-weight:650}
+@media(max-width:900px){.profile-page .profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-page .profile-stats .profile-stat-card{aspect-ratio:1.45/1;min-height:155px}}
+@media(max-width:430px){.profile-page .profile-stats{gap:10px}.profile-page .profile-stats .profile-stat-card{aspect-ratio:auto;min-height:148px;padding:15px 9px}.profile-page .profile-stat-card>span:last-child{font-size:.86rem}}
