@@ -1852,10 +1852,6 @@ if (cinema) {
         text('#profile-display-name',name);
         text('#profile-avatar',name[0]);
         text('#profile-display-city',city);
-        text('#profile-detail-name',name);
-        text('#profile-detail-email',email);
-        text('#profile-detail-phone',phone);
-        text('#profile-detail-city',city);
         errors.forEach(([selector])=>feedback(selector,''));
         feedback('#profile-form-message',before.email!==email?'تم حفظ التعديلات. بريد تسجيل الدخول الجديد: '+email+' — استخدمي هذا البريد مع كلمة المرور نفسها عند دخولك القادم.':'تم حفظ بيانات الحساب محليًا.');
       });
