@@ -1676,7 +1676,13 @@ if (cinema) {
   // PERSONAL PROFILE
   if($('.profile-page')){
     const u=account();visible('#profile-guest-state',!u);visible('#profile-authenticated-content',!!u);
-    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-detail-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone],['#profile-city',u.city]].forEach(([k,v])=>value(k,v));visible('#profile-seller-shortcut',false);
+    if(u){[['#profile-display-name',u.name],['#profile-avatar',u.name[0]],['#profile-display-city',u.city],['#profile-account-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-detail-role',({admin:'مسؤول',seller:'بائع',buyer:'مشتري'}[u.role]||'غير محدد')],['#profile-joined-date',date(u.joined)],['#profile-member-id',u.id]].forEach(([k,v])=>text(k,v));[['#profile-full-name',u.name],['#profile-email',u.email],['#profile-phone',u.phone]].forEach(([k,v])=>value(k,v));
+      const citySelect=$('#profile-city');
+      if(citySelect){
+        const storedCity=String(u.city||'').trim();
+        const matched=[...citySelect.options].find(option=>option.value===storedCity||option.textContent.trim()===storedCity);
+        citySelect.value=matched?.value|| (storedCity?'other':'');
+      }visible('#profile-seller-shortcut',false);
       const isSellerProfile=u.role==='seller';
       const isBuyerProfile=u.role==='buyer';
       const isAdminProfile=u.role==='admin';
@@ -1847,6 +1853,17 @@ if (cinema) {
           Object.assign(u,before);
           const restored=put('users',users);
           feedback('#profile-form-message',restored?'تعذر تحديث الجلسة. لم يتم حفظ التعديل؛ حاولي مجددًا.':'تعذر تحديث الجلسة واستعادة بيانات الحساب السابقة. يرجى إعادة تحميل الصفحة والتحقق من بياناتك قبل المحاولة مجددًا.');
+          return;
+        }
+        // Verify persisted values before reporting success to the user.
+        let savedUser=null,savedSession=null;
+        try{
+          const savedUsers=JSON.parse(localStorage.getItem('alfaw_phase3_users')||'[]');
+          savedUser=Array.isArray(savedUsers)?savedUsers.find(item=>item.id===u.id):null;
+          savedSession=JSON.parse(localStorage.getItem('alfaw_phase3_session')||'null');
+        }catch(error){console.error('Profile persistence verification failed',error)}
+        if(!savedUser||['name','email','phone','city'].some(key=>savedUser[key]!==u[key])||savedSession?.id!==u.id||savedSession?.name!==name){
+          feedback('#profile-form-message','لم يمكن التأكد من حفظ التغييرات. أعيدي تحميل الصفحة وتحققي من البيانات قبل المحاولة مجددًا.');
           return;
         }
         text('#profile-display-name',name);
