@@ -1580,7 +1580,29 @@ if (cinema) {
           const heading=document.createElement('strong');heading.textContent='المستندات المتاحة للقطعة';documentsHost.append(heading);
           a.documents.forEach(d=>{
             const link=document.createElement('a');
-            link.href=d.url;
+            if(d.storageKey){
+              link.href='#';
+              link.addEventListener('click',async event=>{
+                event.preventDefault();
+                try{
+                  const db=await new Promise((resolve,reject)=>{
+                    const req=indexedDB.open('alfaw-document-files',1);
+                    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+                  });
+                  const file=await new Promise((resolve,reject)=>{
+                    const tx=db.transaction('documents','readonly');
+                    const req=tx.objectStore('documents').get(d.storageKey);
+                    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+                  });
+                  db.close();
+                  if(!file){alert('هذا المستند غير متوفر في هذا المتصفح.');return}
+                  const url=URL.createObjectURL(file);
+                  const download=document.createElement('a');download.href=url;download.download=d.name||'document';
+                  document.body.append(download);download.click();download.remove();
+                  setTimeout(()=>URL.revokeObjectURL(url),60000);
+                }catch(error){alert('تعذر فتح المستند المحفوظ في هذا المتصفح.')}
+              });
+            }else{link.href=d.url||'#'}
             link.target='_blank';
             link.rel='noopener noreferrer';
             link.textContent=d.name;
