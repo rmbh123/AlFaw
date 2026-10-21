@@ -1400,7 +1400,7 @@ if (cinema) {
     notices.unshift(...created);
     if(!put('notices',notices)){notices.splice(0,created.length);return}
     const own=created.filter(n=>n.uid===session?.id);
-    own.forEach(n=>showToast(n.body,n.url));
+    own.forEach(n=>showToast(n.body,n.url,true));
     window.dispatchEvent(new CustomEvent('alfaw:winners-updated'));
   };
   // Timers are recalculated when auctions change and on focus after background-tab throttling.
@@ -1422,15 +1422,30 @@ if (cinema) {
   const notice=(uid,body,url='profile.html')=>{
     notices.unshift({id:id('notice'),uid,body,url,read:false,created:new Date().toISOString()});if(!put('notices',notices)){notices.shift();return false}if(uid===session?.id)showToast(body,url);return true
   };
-  const showToast=(message,url)=>{
+  const showToast=(message,url,isWin=false)=>{
     const box=document.createElement('div');box.className='alfaw-toast';box.setAttribute('role','status');
     const span=document.createElement('span');span.textContent=message;box.append(span);
     if(url){const link=document.createElement('a');link.href=url;link.textContent='عرض';box.append(link)}
     const dismiss=document.createElement('button');dismiss.type='button';dismiss.textContent='إغلاق';
-    dismiss.setAttribute('aria-label','إغلاق الإشعار');dismiss.addEventListener('click',()=>box.remove());box.append(dismiss);
+    dismiss.setAttribute('aria-label','إغلاق الإشعار');
+    dismiss.addEventListener('click',()=>{
+      box.remove();
+      if(isWin&&url){
+        const destination=url+'#auction-review-section';
+        const current=new URL(location.href);
+        const target=new URL(destination,location.href);
+        if(current.pathname===target.pathname&&current.search===target.search){
+          const reviewSection=$('#auction-review-section');
+          if(reviewSection&&!reviewSection.hidden){
+            reviewSection.scrollIntoView({behavior:'smooth',block:'start'});
+            reviewSection.querySelector('select, input, button')?.focus({preventScroll:true});
+          }else location.assign(destination);
+        }else location.assign(destination);
+      }
+    });box.append(dismiss);
     document.body.append(box);
     // Winner congratulations stays visible until explicitly dismissed.
-    if(!url?.includes('auction-detail.html?id=')){let timer=setTimeout(()=>box.remove(),4500);box.addEventListener('mouseenter',()=>clearTimeout(timer));box.addEventListener('mouseleave',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});box.addEventListener('focusin',()=>clearTimeout(timer));box.addEventListener('focusout',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});}
+    if(!isWin){let timer=setTimeout(()=>box.remove(),4500);box.addEventListener('mouseenter',()=>clearTimeout(timer));box.addEventListener('mouseleave',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});box.addEventListener('focusin',()=>clearTimeout(timer));box.addEventListener('focusout',()=>{clearTimeout(timer);timer=setTimeout(()=>box.remove(),2500)});}
   };
   // Initialize only after showToast is defined, including auctions already expired on load.
   syncWinnerNotices();
@@ -1748,6 +1763,15 @@ if (cinema) {
       const ranked=rankedBids(a);if($('#auction-ranking-list'))$('#auction-ranking-list').innerHTML=ranked.length?ranked.map((b,i)=>`<div class="auction-ranking-row"${b.uid===session?.id?' aria-current="true"':''}><strong>${i+1}</strong> ${escape(b.bidderName)}${b.uid===session?.id?' (أنت)':''} — ${money(b.amount)}</div>`).join(''):'لا توجد مزايدات بعد.';
       const winner=auctionWinner(a); text('#auction-result-heading',st!=='ended'?'لم ينتهِ المزاد بعد':winner?'انتهى المزاد':'لا يوجد عرض فائز');text('#auction-result-message',winner?'أعلى عرض: '+money(winner.amount):'لا توجد نتيجة فائزة بعد.');visible('#auction-review-section',!!(winner&&winner.uid===session?.id&&!reviews.some(r=>r.auctionId===a.id&&r.uid===session.id)));return winner};
     render();
+    if(location.hash==='#auction-review-section'){
+      requestAnimationFrame(()=>{
+        const section=$('#auction-review-section');
+        if(section&&!section.hidden){
+          section.scrollIntoView({behavior:'smooth',block:'start'});
+          section.querySelector('select, input, button')?.focus({preventScroll:true});
+        }
+      });
+    }
     const displayMyReceipts=()=>{
       const area=$('#auction-my-receipts');if(!area)return;
       area.replaceChildren();
