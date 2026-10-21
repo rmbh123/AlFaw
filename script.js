@@ -1580,7 +1580,29 @@ if (cinema) {
           const heading=document.createElement('strong');heading.textContent='المستندات المتاحة للقطعة';documentsHost.append(heading);
           a.documents.forEach(d=>{
             const link=document.createElement('a');
-            link.href=d.url;
+            if(d.storageKey){
+              link.href='#';
+              link.addEventListener('click',async event=>{
+                event.preventDefault();
+                try{
+                  const db=await new Promise((resolve,reject)=>{
+                    const req=indexedDB.open('alfaw-document-files',1);
+                    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+                  });
+                  const file=await new Promise((resolve,reject)=>{
+                    const tx=db.transaction('documents','readonly');
+                    const req=tx.objectStore('documents').get(d.storageKey);
+                    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+                  });
+                  db.close();
+                  if(!file){alert('هذا المستند غير متوفر في هذا المتصفح.');return}
+                  const url=URL.createObjectURL(file);
+                  const download=document.createElement('a');download.href=url;download.download=d.name||'document';
+                  document.body.append(download);download.click();download.remove();
+                  setTimeout(()=>URL.revokeObjectURL(url),60000);
+                }catch(error){alert('تعذر فتح المستند المحفوظ في هذا المتصفح.')}
+              });
+            }else{link.href=d.url||'#'}
             link.target='_blank';
             link.rel='noopener noreferrer';
             link.textContent=d.name;
@@ -1863,8 +1885,8 @@ if (cinema) {
       $('#artifact-documents')?.addEventListener('change',e=>{
         const area=$('#artifact-documents-preview');if(!area)return;area.replaceChildren();
         const files=[...e.target.files];if(!files.length)return;
-        const bad=files.filter(file=>!allowedDoc.includes(file.type)||file.size>1024*1024);
-        if(bad.length){area.textContent='المستندات المسموحة PDF أو JPG أو PNG أو WEBP، بحد تجريبي 1 MB لكل ملف.';return}
+        const bad=files.filter(file=>!allowedDoc.includes(file.type)||file.size>50*1024*1024);
+        if(bad.length){area.textContent='المستندات المسموحة PDF أو JPG أو PNG أو WEBP، بحد أقصى 50 MB لكل ملف.';return}
         const list=document.createElement('ul');list.className='alfaw-upload-doc-list';
         files.forEach(file=>{const li=document.createElement('li');li.textContent=fileLabel(file);list.append(li)});
         area.append(list);
@@ -1881,12 +1903,34 @@ if (cinema) {
           return canvas.toDataURL('image/jpeg',.78)};
         const photoFiles=[...($('#artifact-images')?.files||[])],docFiles=[...($('#artifact-documents')?.files||[])];
         if(photoFiles.some(f=>!allowedImage.includes(f.type))||docFiles.some(f=>!['application/pdf','image/png','image/jpeg','image/webp'].includes(f.type))){feedback('#manage-artifact-form-message','الصور والمستندات يجب أن تكون بصيغة صورة أو PDF.');return}
-        // LocalStorage quotas are small; 1 MB each is a prototype storage limit, not a product policy.
-        if([...photoFiles,...docFiles].some(f=>f.size>1024*1024)){feedback('#manage-artifact-form-message','الحد التجريبي في هذه النسخة 1 ميغابايت لكل ملف.');return}
+        if(photoFiles.some(f=>f.size>1024*1024)){feedback('#manage-artifact-form-message','الحد التجريبي للصور 1 ميغابايت لكل صورة.');return}
+        if(docFiles.some(f=>f.size>50*1024*1024)){feedback('#manage-artifact-form-message','الحد الأقصى للمستند الواحد 50 ميغابايت.');return}
         const data={id:old?.id||id('artifact'),name,description,price,category:cat,period,origin,condition,verification:v,verificationReference:v==='verified'?ref:'',provenance:$('#artifact-provenance')?.value.trim()||'',conditionNotes:$('#artifact-condition-notes')?.value.trim()||'',sellerId:currentSeller().id,image:old?.image||'',documents:old?.documents||[],created:old?.created||new Date().toISOString()};
         try{
           if(photoFiles.length)data.image=await compress(photoFiles[0]);
-          if(docFiles.length)data.documents=await Promise.all(docFiles.map(async file=>({name:file.name,type:file.type,url:await readAsDataURL(file)})));
+          // Store large attachments as Blob values in IndexedDB, not in localStorage.
+          // Files are still local to this browser; this is not cloud storage.
+          if(docFiles.length){
+            const db=await new Promise((resolve,reject)=>{
+              const req=indexedDB.open('alfaw-document-files',1);
+              req.onupgradeneeded=()=>req.result.createObjectStore('documents');
+              req.onsuccess=()=>resolve(req.result);
+              req.onerror=()=>reject(req.error);
+            });
+            try{
+              const saved=[];
+              for(const file of docFiles){
+                const key=id('document');
+                await new Promise((resolve,reject)=>{
+                  const tx=db.transaction('documents','readwrite');
+                  tx.objectStore('documents').put(file,key);
+                  tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);
+                });
+                saved.push({name:file.name,type:file.type,storageKey:key});
+              }
+              data.documents=saved;
+            }finally{db.close()}
+          }
           const existing=old?artifacts.findIndex(x=>x.id===old.id):-1;
           const previous=existing>=0?artifacts[existing]:null;
           if(existing>=0)artifacts[existing]=data;else artifacts.push(data);
@@ -1913,13 +1957,13 @@ if (cinema) {
     ['#manage-auctions-search','#manage-auctions-status-filter'].forEach(s=>$(s)?.addEventListener('input',drawManageAuctions));
     $('#manage-auctions-table-body')?.addEventListener('click',e=>{const btn=e.target.closest('[data-delete-auction]');if(!btn)return;const a=auction(btn.dataset.deleteAuction);if(!a||a.sellerId!==currentSeller()?.id||status(a)!=='upcoming'||a.bids.length)return;if(!confirm('هل تريد حذف المزاد؟'))return;const originalAuctions=auctions;auctions=auctions.filter(x=>x.id!==a.id);if(!put('auctions',auctions)){auctions=originalAuctions;feedback('#manage-auctions-list-message','تعذر حذف المزاد من التخزين المحلي.');return}location.reload()});drawManageAuctions();
   }
-  // ADMIN MANAGEMENT — browser-local Sprint 1 prototype; no server-side authority.
+  // ADMIN MONITORING — read-only, as specified in the approved Product Backlog.
   const drawAdmin=()=>{
     if(!$('.admin-dashboard-page')||!requireRole('admin','#admin-dashboard-content','#admin-dashboard-access-message'))return;
     text('#admin-total-users',users.length);text('#admin-total-artifacts',artifacts.length);text('#admin-total-auctions',auctions.length);text('#admin-total-bids',auctions.reduce((sum,a)=>sum+a.bids.length,0));['active','upcoming','ended'].forEach(k=>text('#admin-'+k+'-auctions',auctions.filter(a=>status(a)===k).length));['verified','unverified','pending'].forEach(k=>text('#admin-'+k+'-artifacts',artifacts.filter(a=>a.verification===k).length));['buyer','seller','admin'].forEach(k=>text('#admin-'+({buyer:'buyers',seller:'sellers',admin:'admins'}[k])+'-count',users.filter(u=>u.role===k).length));
-    const q=$('#admin-users-search')?.value.toLowerCase()||'',role=$('#admin-users-role-filter')?.value||'all',filteredUsers=users.filter(u=>(u.name+' '+u.email).toLowerCase().includes(q)&&(role==='all'||u.role===role));if($('#admin-users-table-body'))$('#admin-users-table-body').innerHTML=filteredUsers.map(u=>`<tr><td>${escape(u.id)}</td><td>${escape(u.name)}</td><td>${escape(u.email)}</td><td>${escape(u.role)}</td><td>${escape(u.city)}</td><td>${date(u.joined)}</td><td><button type="button" class="alfaw-admin-view" data-view-user="${escape(u.id)}">عرض</button> ${u.id!==session.id&&u.role!=='admin'?`<button type="button" class="alfaw-admin-view" data-edit-user="${escape(u.id)}">تعديل</button> <button type="button" class="alfaw-admin-view" data-delete-user="${escape(u.id)}">حذف</button>`:''} </td></tr>`).join('')||'<tr><td colspan="7">لا توجد نتائج.</td></tr>';
-    const aq=$('#admin-artifacts-search')?.value.toLowerCase()||'',vf=$('#admin-artifacts-verification-filter')?.value||'all',filteredArtifacts=artifacts.filter(a=>(a.name+' '+a.id).toLowerCase().includes(aq)&&(vf==='all'||a.verification===vf));if($('#admin-artifacts-table-body'))$('#admin-artifacts-table-body').innerHTML=filteredArtifacts.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td><a href="artifact-detail.html?id=${encodeURIComponent(a.id)}">عرض</a> ${!a.archived?`<button type="button" class="alfaw-admin-view" data-archive-artifact="${escape(a.id)}">أرشفة</button>`:`<button type="button" class="alfaw-admin-view" data-restore-artifact="${escape(a.id)}">استعادة</button>`}</td></tr>`).join('')||'<tr><td colspan="7">لا توجد نتائج.</td></tr>';
-    const z=$('#admin-auctions-search')?.value.toLowerCase()||'',f=$('#admin-auctions-status-filter')?.value||'all',filteredAuctions=auctions.filter(a=>(a.id+' '+(artifact(a.artifactId)?.name||'')).toLowerCase().includes(z)&&(f==='all'||status(a)===f));if($('#admin-auctions-table-body'))$('#admin-auctions-table-body').innerHTML=filteredAuctions.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${date(a.start)}</td><td>${date(a.end)}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">عرض</a> ${status(a)==='upcoming'&&!(a.bids||[]).length?`<button type="button" class="alfaw-admin-view" data-delete-admin-auction="${escape(a.id)}">حذف</button>`:''} </td></tr>`).join('')||'<tr><td colspan="9">لا توجد نتائج.</td></tr>';
+    const q=$('#admin-users-search')?.value.toLowerCase()||'',role=$('#admin-users-role-filter')?.value||'all',filteredUsers=users.filter(u=>(u.name+' '+u.email).toLowerCase().includes(q)&&(role==='all'||u.role===role));if($('#admin-users-table-body'))$('#admin-users-table-body').innerHTML=filteredUsers.map(u=>`<tr><td>${escape(u.id)}</td><td>${escape(u.name)}</td><td>${escape(u.email)}</td><td>${escape(u.role)}</td><td>${escape(u.city)}</td><td>${date(u.joined)}</td><td><button type="button" class="alfaw-admin-view" data-view-user="${escape(u.id)}">عرض</button> </td></tr>`).join('')||'<tr><td colspan="7">لا توجد نتائج.</td></tr>';
+    const aq=$('#admin-artifacts-search')?.value.toLowerCase()||'',vf=$('#admin-artifacts-verification-filter')?.value||'all',filteredArtifacts=artifacts.filter(a=>(a.name+' '+a.id).toLowerCase().includes(aq)&&(vf==='all'||a.verification===vf));if($('#admin-artifacts-table-body'))$('#admin-artifacts-table-body').innerHTML=filteredArtifacts.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(a.name)}</td><td>${escape(categories[a.category])}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${escape(verifications[a.verification])}</td><td>${money(a.price)}</td><td><a href="artifact-detail.html?id=${encodeURIComponent(a.id)}">عرض</a></td></tr>`).join('')||'<tr><td colspan="7">لا توجد نتائج.</td></tr>';
+    const z=$('#admin-auctions-search')?.value.toLowerCase()||'',f=$('#admin-auctions-status-filter')?.value||'all',filteredAuctions=auctions.filter(a=>(a.id+' '+(artifact(a.artifactId)?.name||'')).toLowerCase().includes(z)&&(f==='all'||status(a)===f));if($('#admin-auctions-table-body'))$('#admin-auctions-table-body').innerHTML=filteredAuctions.map(a=>`<tr><td>${escape(a.id)}</td><td>${escape(artifact(a.artifactId)?.name||'')}</td><td>${escape(seller(a.sellerId)?.name||'')}</td><td>${money(a.startingPrice)}</td><td>${highest(a)===null?'لا توجد عروض':money(highest(a))}</td><td>${date(a.start)}</td><td>${date(a.end)}</td><td>${statusName(a)}</td><td><a href="auction-detail.html?id=${encodeURIComponent(a.id)}">عرض</a> </td></tr>`).join('')||'<tr><td colspan="9">لا توجد نتائج.</td></tr>';
     const bq=$('#admin-bids-search')?.value.toLowerCase()||'',af=$('#admin-bids-auction-filter')?.value||'all',allBids=auctions.flatMap(a=>a.bids.map(b=>({...b,auctionId:a.id}))).filter(b=>(b.auctionId+' '+b.bidderName).toLowerCase().includes(bq)&&(af==='all'||af===b.auctionId));if($('#admin-bids-table-body'))$('#admin-bids-table-body').innerHTML=allBids.map(b=>`<tr><td>${escape(b.id)}</td><td>${escape(b.auctionId)}</td><td>${escape(artifact(auction(b.auctionId)?.artifactId)?.name||'')}</td><td>${escape(b.bidderName)}</td><td>${money(b.amount)}</td><td>${date(b.created)}</td><td><a href="auction-detail.html?id=${b.auctionId}">عرض</a></td></tr>`).join('')||'<tr><td colspan="7">لا توجد عروض.</td></tr>';
   };
   if($('.admin-dashboard-page')){
@@ -1931,64 +1975,6 @@ if (cinema) {
       panel.replaceChildren();const heading=document.createElement('h3');heading.textContent='تفاصيل المستخدم (عرض فقط)';panel.append(heading);
       for(const [label,value] of [['الاسم',u.name],['البريد',u.email],['الدور',u.role],['المدينة',u.city],['تاريخ التسجيل',date(u.joined)]]){
         const row=document.createElement('p');row.textContent=label+': '+(value||'—');panel.append(row)}
-    });
-    // Administrative mutations are intentionally local-only until backend RBAC exists.
-    // Block removal of users with linked bids, reviews, listings or auctions to preserve history.
-    $('#admin-users-table-body')?.addEventListener('click',e=>{
-      if(session?.role!=='admin'||!account()||account().role!=='admin')return;
-      const edit=e.target.closest('[data-edit-user]'),del=e.target.closest('[data-delete-user]');
-      const target=users.find(u=>u.id===(edit?.dataset.editUser||del?.dataset.deleteUser));
-      if(!target||target.id===session.id||target.role==='admin')return;
-      if(edit){
-        const name=prompt('الاسم الجديد للمستخدم:',target.name);
-        if(name===null)return;
-        const clean=name.trim();
-        if(clean.length<2||clean.length>100){alert('يجب أن يكون الاسم بين حرفين و100 حرف.');return}
-        const city=prompt('المدينة:',target.city||'');
-        if(city===null)return;
-        const previous={name:target.name,city:target.city};
-        target.name=clean;target.city=city.trim().slice(0,100);
-        if(!put('users',users)){Object.assign(target,previous);alert('تعذر حفظ التعديل.');return}
-        drawAdmin();return;
-      }
-      if(del){
-        const linked=artifacts.some(a=>a.sellerId===target.sellerId&&target.sellerId)
-          ||auctions.some(a=>(a.bids||[]).some(b=>b.uid===target.id))
-          ||reviews.some(r=>r.uid===target.id)
-          ||notices.some(n=>n.uid===target.id);
-        if(linked){alert('لا يمكن حذف مستخدم لديه قطع أو مزايدات أو تقييمات أو إشعارات مرتبطة.');return}
-        if(!confirm('حذف حساب المستخدم التجريبي نهائيًا؟'))return;
-        const previous=[...users];users=users.filter(u=>u.id!==target.id);
-        if(!put('users',users)){users=previous;alert('تعذر حفظ الحذف.');return}
-        if(target.sellerId&&!artifacts.some(a=>a.sellerId===target.sellerId)&&!auctions.some(a=>a.sellerId===target.sellerId)){
-          const oldSellers=[...sellers];sellers=sellers.filter(x=>x.id!==target.sellerId);
-          if(!put('sellers',sellers)){sellers=oldSellers;users=previous;put('users',users);alert('تعذر إكمال الحذف.');return}
-        }
-        drawAdmin();
-      }
-    });
-    $('#admin-artifacts-table-body')?.addEventListener('click',e=>{
-      if(session?.role!=='admin'||account()?.role!=='admin')return;
-      const archive=e.target.closest('[data-archive-artifact]'),restore=e.target.closest('[data-restore-artifact]');
-      const item=artifact(archive?.dataset.archiveArtifact||restore?.dataset.restoreArtifact);
-      if(!item)return;
-      if(archive&&auctions.some(a=>a.artifactId===item.id&&status(a)==='active')){
-        alert('لا يمكن أرشفة قطعة مرتبطة بمزاد نشط.');return;
-      }
-      if(!confirm(archive?'أرشفة القطعة وإخفاؤها من العرض؟':'استعادة القطعة للعرض؟'))return;
-      const previous=item.archived;item.archived=!!archive;
-      if(!put('artifacts',artifacts)){item.archived=previous;alert('تعذر حفظ التغيير.');return}
-      drawAdmin();
-    });
-    $('#admin-auctions-table-body')?.addEventListener('click',e=>{
-      if(session?.role!=='admin'||account()?.role!=='admin')return;
-      const btn=e.target.closest('[data-delete-admin-auction]');if(!btn)return;
-      const item=auction(btn.dataset.deleteAdminAuction);
-      if(!item||status(item)!=='upcoming'||(item.bids||[]).length){alert('لا يمكن حذف مزاد بدأ أو يحتوي على عروض.');return}
-      if(!confirm('حذف المزاد القادم الذي لم يبدأ؟'))return;
-      const previous=auctions;auctions=auctions.filter(a=>a.id!==item.id);
-      if(!put('auctions',auctions)){auctions=previous;alert('تعذر حذف المزاد.');return}
-      drawAdmin();
     });
     ['#admin-users-search','#admin-users-role-filter','#admin-artifacts-search','#admin-artifacts-verification-filter','#admin-auctions-search','#admin-auctions-status-filter','#admin-bids-search','#admin-bids-auction-filter'].forEach(s=>$(s)?.addEventListener('input',drawAdmin));drawAdmin()}
 })();
