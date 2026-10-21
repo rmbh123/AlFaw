@@ -1287,6 +1287,37 @@ if (cinema) {
       addedDefaultAuctions = true;
     }
   });
+  // One-time, short-lived demo auction for testing bid -> win -> review.
+  // Persist its deadline on first visit; never reset it after bids or expiration.
+  const quickDemoId='auction-quick-review-20261021';
+  const quickArtifactId='artifact-quick-review-20261021';
+  let addedQuickReviewDemo=false;
+  if(!artifacts.some(item=>item.id===quickArtifactId)){
+    artifacts.push({
+      id:quickArtifactId,name:'إناء فخاري تراثي — تجربة المزايدة',category:'pottery',
+      price:100,image:'pottery.jpg',sellerId:'noura',verification:'pending',
+      period:'غير محددة',origin:'الجزيرة العربية',condition:'تجريبية',
+      description:'قطعة تجريبية لاختبار المزايدة والفوز ثم تقييم البائع.',
+      provenance:'قطعة تجريبية للعرض فقط؛ ليست معروضة للبيع الحقيقي.',
+      verificationReference:'',documents:[],created:new Date().toISOString()
+    });
+    addedQuickReviewDemo=true;
+  }
+  if(!auctions.some(a=>a.id===quickDemoId)){
+    const now=Date.now();
+    auctions.push({
+      id:quickDemoId,artifactId:quickArtifactId,sellerId:'noura',
+      startingPrice:100,increment:10,
+      start:new Date(now-60000).toISOString(),
+      end:new Date(now+3*60000).toISOString(),
+      bids:[],created:new Date(now).toISOString()
+    });
+    addedQuickReviewDemo=true;
+  }
+  if(addedQuickReviewDemo){
+    put('artifacts',artifacts);
+    put('auctions',auctions);
+  }
   // Upgrade the original undated demo auctions, preserving participant-entered bids.
   let repairedDemoSchedule = false;
   auctions.forEach(a => {
