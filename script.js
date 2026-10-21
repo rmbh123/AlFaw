@@ -1352,20 +1352,46 @@ if (cinema) {
   const compareBids=(x,y)=>Number(y.amount)-Number(x.amount)||(Date.parse(x.created)||0)-(Date.parse(y.created)||0)||String(x.id||'').localeCompare(String(y.id||''));
   const rankedBids=a=>[...(a.bids||[])].sort(compareBids).filter((b,i,list)=>list.findIndex(x=>x.uid===b.uid)===i);
   const auctionWinner=a=>{if(status(a)!=='ended')return null;const top=rankedBids(a)[0];return top&&(!a.reservePrice||Number(top.amount)>=Number(a.reservePrice))?top:null;};
-  // Create one local winner notification for each completed auction, regardless of the page opened.
+  // Notify the winner once, when the auction finishes, including while the page stays open.
   const syncWinnerNotices=()=>{
     const pending=auctions.filter(a=>auctionWinner(a)&&!notices.some(n=>n.auctionId===a.id&&n.kind==='won'));
     if(!pending.length)return;
-    const created=pending.map(a=>({
-      id:id('notice'),uid:auctionWinner(a).uid,
-      body:'تهانينا، فزت بالمزاد '+a.id,
-      url:'auction-detail.html?id='+encodeURIComponent(a.id),
-      auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()
-    }));
+    const created=pending.map(a=>{
+      const winner=auctionWinner(a);
+      const item=artifacts.find(x=>x.id===a.artifactId);
+      return {
+        id:id('notice'),uid:winner.uid,
+        body:'تهانينا! فزت بمزاد '+(item?.name||a.id)+' بمبلغ '+Number(winner.amount).toLocaleString('ar-SA')+' ريال.',
+        url:'auction-detail.html?id='+encodeURIComponent(a.id),
+        auctionId:a.id,kind:'won',read:false,created:new Date().toISOString()
+      };
+    });
     notices.unshift(...created);
     if(!put('notices',notices)){notices.splice(0,created.length);return}
+    const own=created.filter(n=>n.uid===session?.id);
+    own.forEach(n=>showToast(n.body,n.url));
+    window.dispatchEvent(new CustomEvent('alfaw:winners-updated'));
+  };
+  // Timers are recalculated when auctions change and on focus after background-tab throttling.
+  let winnerDeadlineTimer=null;
+  const scheduleWinnerDeadline=()=>{
+    clearTimeout(winnerDeadlineTimer);
+    const now=Date.now();
+    const next=Math.min(...auctions.map(a=>Date.parse(a.end)).filter(t=>Number.isFinite(t)&&t>now));
+    if(Number.isFinite(next)){
+      winnerDeadlineTimer=setTimeout(()=>{
+        syncWinnerNotices();
+        scheduleWinnerDeadline();
+      },Math.min(Math.max(0,next-now)+30,2147483647));
+    }
   };
   syncWinnerNotices();
+  scheduleWinnerDeadline();
+  window.addEventListener('alfaw:data-updated',event=>{
+    if(event.detail?.name==='auctions'){syncWinnerNotices();scheduleWinnerDeadline()}
+  });
+  window.addEventListener('focus',()=>{syncWinnerNotices();scheduleWinnerDeadline()});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncWinnerNotices();scheduleWinnerDeadline()}});
   const sellerReviews=id=>reviews.filter(r=>r.sellerId===id);
   const rating=id=>{const r=sellerReviews(id);const avg=r.length?r.reduce((s,x)=>s+Number(x.rating),0)/r.length:null;return {count:r.length,avg,trust:avg===null?null:Math.round(avg/5*100)}};
   const requireRole=(role,content,warning)=>{const ok=session?.role===role && (role!=='seller'||!!currentSeller());visible(content,ok);visible(warning,!ok);return ok};
@@ -1778,6 +1804,7 @@ if (cinema) {
         const nextEnd=Math.min(...auctions.map(a=>Date.parse(a.end)).filter(t=>Number.isFinite(t)&&t>now));
         if(Number.isFinite(nextEnd)){
           nextAuctionEndTimer=setTimeout(()=>{
+            syncWinnerNotices();
             refreshProfileStats();
             scheduleNextAuctionEnd();
           },Math.min(Math.max(0,nextEnd-now)+10,2147483647));
@@ -1790,6 +1817,7 @@ if (cinema) {
         }
       };
       window.addEventListener('alfaw:data-updated',onProfileDataUpdate);
+      window.addEventListener('alfaw:winners-updated',refreshProfileStats);
       window.addEventListener('storage',event=>{
         if(event.key==='alfaw_phase3_auctions'){
           try{const updated=JSON.parse(event.newValue);if(Array.isArray(updated))auctions=updated}catch(error){console.warn('Invalid auction data in storage event',error)}
