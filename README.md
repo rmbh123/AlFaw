@@ -4,7 +4,7 @@ An Arabic RTL, responsive **interface prototype** for historical-artifact auctio
 
 ## Sprint 1 boundary
 
-The university brief explicitly states: **Implement all pages except for the database connection**. For that reason this ZIP intentionally has **no live database, backend, real authentication, real official verification, payment service, real-time multi-device synchronization, or legally binding bidding**. Interactions on this version run **only in this browser** using `localStorage`. Even when local credentials are checked, browser data can be edited; **do not use real passwords, identity data, or payments**. A backend is required before production.
+The university brief requires **all pages**. Database integration is optional for Sprint 1 and is permitted by the instructor. This submission uses browser-local demonstration data and has **no live database, backend, real official verification, payment service, real-time multi-device synchronization, or legally binding bidding**. Interactions on this version run **only in this browser** using `localStorage`. Even when local credentials are checked, browser data can be edited; **do not use real passwords, identity data, or payments**. A backend is required before production.
 
 Nothing here performs Heritage Commission verification. The verification status shown is illustrative / supplied by the hypothetical seller. Do not interpret it as an official certified result.
 
@@ -21,9 +21,9 @@ Nothing here performs Heritage Commission verification. The verification status 
 
 | Role | Email | Password | Entry page |
 |---|---|---|---|
-| Buyer | buyer@alfaw.demo | AlFawDemo!2026 | login.html → profile |
-| Seller | seller@alfaw.demo | AlFawDemo!2026 | login.html → seller dashboard |
-| Admin (read-only) | admin@alfaw.demo | AlFawDemo!2026 | admin-login.html → admin dashboard |
+| Buyer | buyer@alfaw.demo | AlfawDemo!2026 | login.html → profile |
+| Seller | seller@alfaw.demo | AlfawDemo!2026 | login.html → seller dashboard |
+| Admin (read-only) | admin@alfaw.demo | AlfawDemo!2026 | admin-login.html → admin dashboard |
 
 New buyer or seller accounts can be created using the registration form. Admin registration is deliberately not available through the public form. These demo secrets exist visibly in the frontend JavaScript: they **do not confer real security**.
 
@@ -43,6 +43,8 @@ New buyer or seller accounts can be created using the registration form. Admin r
 - Auction demo times are created relative to the first visit and persisted in browser storage. No fixed hard-coded countdown is presented as a live server timestamp.
 - Bid validity, bidder ranking, winner condition and Trust Score are **client-side demonstrations**. Real users, tabs or browsers cannot reliably transact across devices without a server.
 - Sellers can archive artifacts from active listings while preserving historical auction references; uploaded demo images and PDF/image documents are stored **only locally**. Images and PDF/image attachments accept files up to **50 MB each**. Demo artifact photos are resized and compressed for browser `localStorage`; supporting attachments are saved locally in IndexedDB. This is **not** cloud upload or original-quality archival storage.
+- Archived artifacts disappear from public catalogues. Their completed auction and artifact detail pages remain accessible through historical links, so bid history, receipts, and winner reviews remain available. Active or upcoming auctions prevent artifact deletion.
+- Buyers can view and print informational bid receipts from auction details and their profile. Receipts are derived from their recorded bids; they are not payment invoices or proof of purchase.
 - Ratings require a demo auction winner, 1–5 stars, and are limited to one per auction/winner in the local state. Trust Score = average stars ÷ 5 × 100, only for recorded authenticity reviews. Missing ratings show “لا توجد تقييمات”.
 - Admin may read registered users, listings, bids and auction data; no admin update/delete controls are provided.
 
@@ -52,7 +54,9 @@ New buyer or seller accounts can be created using the registration form. Admin r
 - See `docs/TRACEABILITY.md` for feature-to-backlog alignment and deferred Sprint 2+ capabilities.
 - See `docs/CHAPTER4_DESIGN_NOTES.md` for preliminary Sprint 1 architecture, UML/data model, pseudocode for three key processes and a site map.
 - See `docs/QA_TEST_CASES.md` for end-to-end manual tests, including device and accessibility checks.
-- A local automated Chromium navigation attempt in the authoring environment was blocked by administrator policy; **interactive browser tests have not been falsely marked as passed**.
+- Optional browser regressions: install Playwright in a separate tools directory, install Chromium, then run `node tests/check_browser_flows.cjs` with Playwright available on Node's module path. `ALFAW_PLAYWRIGHT_MODULE` may point to an installed Playwright module, and `ALFAW_CHROMIUM_EXECUTABLE` may select a Chromium binary. These are test tools only; the website itself has no npm runtime dependency.
+- Browser tests use a temporary localhost server, fresh browser-local accounts, form interactions, and explicit test-only auction schedule fixtures. They do not verify cloud security, cross-device bidding, or production performance.
+- See `docs/QA_RESULTS.md` for the checks actually performed on this ZIP, and `docs/REPORT_UPDATE_AR.md` for exact remaining report edits.
 
 ## Submission obligations not possible from a ZIP
 

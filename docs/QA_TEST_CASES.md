@@ -1,6 +1,6 @@
 # AlFaw — manual acceptance and regression scenarios
 
-**Note:** These are runnable manual test plans, not pass claims. Use a fresh browser storage for deterministic initial data. A production pass requires a real backend, which Sprint 1 explicitly excludes.
+**Note:** These are runnable manual test plans, not pass claims. Use a fresh browser storage for deterministic initial data. A production pass requires a real backend, which is optional in Sprint 1 and not integrated in this prototype.
 
 | ID | Steps | Expected |
 |---|---|---|
@@ -38,3 +38,11 @@
 | A32 | Open documents from artifact detail | User-provided local demo document opens safely |
 
 **Requires later integration:** Real multi-device bids within 5 seconds; authoritative timer; server password hashing; access control; true official verification; durable document storage; performance guarantee below 3 seconds.
+
+## Regression checks for this revision
+
+- Newly created and edited artifacts must appear with their saved data in Browse. Archived artifacts must disappear from Browse.
+- Archive a completed-auction artifact: its historical auction/details remain accessible, and its eligible winner can review once.
+- The bid minimum beside the input must match the displayed next minimum before and after a bid.
+- Use the README demo credentials exactly; a wrong password must fail.
+- Receipts must contain the logged-in buyer's bids, open, and offer printing.

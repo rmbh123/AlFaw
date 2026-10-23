@@ -1,3 +1,14 @@
+# Corrections in this ZIP
+
+- Fixed the Browse single-element/list selector error so locally saved artifact additions, edits, and archives reach the public catalogue.
+- Kept completed auction and related artifact detail links available after archiving; retained active/upcoming deletion restrictions.
+- Removed archived-auction cards from public catalogues, including previously rendered cards.
+- Updated the bid input hint from the actual current minimum after every bid.
+- Corrected README demo password casing and the missing compareBids dependency in the auction-rule test.
+- Kept outbid notification kind and auctionId with the saved notice.
+- Aligned repository design notes with the report's planned Firebase/Firestore design, component selection, receipts, and browser-local file storage.
+- Added browser regression scenarios and Arabic report correction instructions.
+
 # Changes applied to the replacement source ZIP
 
 This deliverable was produced **from the newly supplied** `AlFaw-main 2(1).zip` archive, not the earlier archive.
@@ -19,10 +30,10 @@ This deliverable was produced **from the newly supplied** `AlFaw-main 2(1).zip` 
 - Added motion/focus/reduced-motion/responsive refinements without creating new product functionality.
 - Included README, AUTHORS, source structure QA, traceability, Chapter 4 design notes, and manual QA acceptance cases.
 
-## Not implemented (Sprint 1 restriction)
+## Not integrated in this prototype
 
 No database/API server, real authentication/security enforcement, actual authority verification, realtime cross-user bidding, durable file hosting, payment gateway, native app, direct messages, shipping or live-streaming. Any locally demonstrated feature is **not** a verified live financial workflow.
 
 ## Verification performed
 
-`python tests/check_structure.py` — PASS: static local links, image assets, RTL markup, unique page IDs, JavaScript syntax. Interactive Chromium navigation was blocked by execution-environment policy; UI flow/performance/WCAG and multiplayer tests must still be run in the team's browser/hosted testing environment.
+`python tests/check_structure.py` checks static links/assets, RTL markup, unique page IDs, JavaScript syntax and auction helpers. Current browser regression coverage and remaining limits are recorded in `docs/QA_RESULTS.md`.

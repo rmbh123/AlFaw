@@ -7,7 +7,7 @@
 | Register buyer/seller, validate fields and duplicate email | `register.html`, `script.js` | Local prototype | Real account table, validation on server |
 | Login with email/password, error on mismatch | `login.html`, `script.js` | Local-only password fingerprint checking | Server-side password hashing, authoritative sessions |
 | Logout; private pages unavailable | `profile.html`, guards in script | Local routing guard only | Auth middleware, invalidation, anti-cache |
-| Accessible bidding guide with step-by-step process/rules | `bidding-guide.html`, page navigation | Built | None for UI; rules must be enforced in backend |
+| Accessible bidding guide with step-by-step process/rules | `auctions.html#bidding-guide` (legacy guide URL redirects) | Built | None for UI; rules must be enforced in backend |
 | Profile view/edit | `profile.html` | Local data edits | Account API, secure authorization |
 | Full artifact description/period/origin/condition/documents | `artifact-detail.html`, `manage-artifact.html` | UI and local documents | Document upload, verification and storage |
 | Show authority-supplied verification status, not verify | `artifact-detail.html`, `browse.html`, `verification.html` | UI labels, illustrative data | Trustworthy verified status import from authority |
@@ -20,6 +20,7 @@
 | Seller Trust Score on profile and listings, no-rating state | `seller-profile.html`, `seller-detail.html`, `seller-dashboard.html`, listings | Computed from local winner rating | Server verified reviews/aggregation |
 | Winner's 1–5 authenticity stars and review once | `auction-detail.html`, seller detail | Local winner-only gate | Enforce winner and proof of receipt on backend |
 | Seller add/edit/delete listings | `manage-artifact.html`, `seller-dashboard.html` | Local create/update/archive with image/docs demo | Persisted storage and authorization |
+| View/print own bid receipts | `auction-detail.html`, `profile.html` | Derived from locally recorded bids; informational only | Authenticated access to persistent bid records |
 | Seller manage auctions | `manage-auctions.html` | Local create/list/delete upcoming auction | Backend authoritative status |
 | In-platform popups for bids and wins | `script.js` toast and profile notices | Local-only | Delivery to actual authenticated users |
 | Full Arabic RTL interface | All HTML pages and styles | Implemented as markup | Device/user accessibility audit needed |
@@ -37,5 +38,5 @@ No native mobile app; no buyer–seller direct messaging; no international deliv
 1. Backend/database, secure registration/login, server-side permissions, atomic bid transactions, notifications and multi-user synchronization.
 2. A method to load genuine verification decisions from the Heritage Commission. The site must never self-issue an official verification claim.
 3. Evidence-based speed/accessibility QA in real browsers and hardware. Do not infer a 3-second benchmark without measurements.
-4. Decide the final file-size limit `[X] MB` left unspecified in the original backlog.
+4. The implemented attachment limit is 50 MB per file (JPG, PNG, WEBP; PDF also accepted for documents). Keep this limit in the report acceptance criteria.
 5. Update actual coursework report, publish the repository and invite the lab instructor to Jira.
