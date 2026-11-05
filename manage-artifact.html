@@ -63,6 +63,135 @@
 .manage-artifact-page .manage-upload-area input[type=file]::file-selector-button:hover{background:#dfbf90}
 @media(max-width:650px){.manage-artifact-page .manage-verification-options{grid-template-columns:1fr}.manage-artifact-page .manage-verification-option{min-height:92px;padding:15px!important}.manage-artifact-page .manage-upload-area{padding:19px 12px!important}}
 </style>
+
+<style>
+.manage-artifact-page .verification-details {
+  margin-top: 22px;
+  padding: clamp(18px, 3vw, 28px);
+  border: 1px solid #80603e;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #392719, #2c1d14);
+  box-shadow: 0 12px 30px #140c071f;
+}
+.manage-artifact-page .verification-details[hidden] { display: none !important; }
+.manage-artifact-page .verification-details-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.manage-artifact-page .verification-document-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border: 1px solid #967046;
+  border-radius: 14px;
+  background: #cbaa7b14;
+  color: #e7c28c;
+}
+.manage-artifact-page .verification-document-icon svg { width: 26px; height: 26px; }
+.manage-artifact-page .verification-details-heading h3 {
+  margin: 0 0 5px;
+  color: #f7e4c9;
+  font-size: 19px;
+}
+.manage-artifact-page .verification-details-heading p {
+  margin: 0;
+  color: #d3bea6;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.manage-artifact-page .verification-required-badge {
+  margin-inline-start: auto;
+  padding: 6px 12px;
+  border: 1px solid #9b784b;
+  border-radius: 999px;
+  color: #efd1a2;
+  font-size: 11px;
+  line-height: 1.8;
+}
+.manage-artifact-page .verification-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.manage-artifact-page .verification-fields .manage-field { min-width: 0; margin: 0; }
+.manage-artifact-page .verification-fields label {
+  display: block;
+  margin-bottom: 10px;
+  color: #f2ddbf;
+  font-size: 14px;
+}
+.manage-artifact-page .verification-fields label span { color: #e2b675; }
+.manage-artifact-page .verification-fields input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 15px;
+  border: 1px solid #795b3f;
+  border-radius: 12px;
+  background: #24180f;
+  color: #f6e6ce;
+  font: inherit;
+  font-size: 14px;
+}
+.manage-artifact-page .verification-fields input::placeholder { color: #bda58b; opacity: 1; }
+.manage-artifact-page .verification-fields input:focus-visible,
+.manage-artifact-page .verification-upload input:focus-visible {
+  outline: 2px solid #e4be83;
+  outline-offset: 3px;
+}
+.manage-artifact-page .verification-upload {
+  margin: 0;
+  background: #271b12 !important;
+  border-color: #a07b4e !important;
+}
+.manage-artifact-page .verification-upload-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #cbaa7b1c;
+  color: #edc78c;
+  font-size: 27px;
+}
+.manage-artifact-page .verification-upload .manage-upload-label strong { font-size: 18px; }
+.manage-artifact-page .verification-upload .manage-upload-label > span { font-size: 13px; }
+.manage-artifact-page .verification-file-hint { color: #d6bfa2; font-size: 12px; }
+.manage-artifact-page .verification-file-hint span {
+  display: inline-block;
+  margin-inline-start: 10px;
+  padding-inline-start: 10px;
+  border-inline-start: 1px solid #795b3f;
+}
+.manage-artifact-page #artifact-verification-existing {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: #e4c99f;
+  font-size: 12px;
+  line-height: 1.8;
+}
+@media (max-width: 650px) {
+  .manage-artifact-page .verification-fields { grid-template-columns: 1fr; }
+  .manage-artifact-page .verification-required-badge { margin-inline-start: 0; }
+  .manage-artifact-page .verification-details-heading { gap: 12px; }
+  .manage-artifact-page .verification-upload input[type=file] {
+    box-sizing: border-box;
+    min-width: 0;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+  }
+  .manage-artifact-page .verification-upload input[type=file]::file-selector-button {
+    padding: 9px 12px;
+    margin-inline-end: 6px;
+  }
+}
+</style>
 </head>
 
 <body class="manage-artifact-page">
@@ -603,48 +732,50 @@
 
               </div>
 
-              <div
-                class="manage-verification-reference"
-                id="manage-verification-reference"
-                hidden
-              >
-
-                <div class="manage-field">
-                  <label for="artifact-verification-authority">اسم جهة التوثيق *</label>
-                  <input type="text" id="artifact-verification-authority" name="verificationAuthority"
-                         maxlength="150" placeholder="اسم الجهة التي أصدرت وثيقة التوثيق" disabled>
+              <div class="manage-verification-reference verification-details"
+                   id="manage-verification-reference" hidden>
+                <div class="verification-details-heading">
+                  <span class="verification-document-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M7 3h7l4 4v14H6V3h1Z"/><path d="M14 3v5h4M9 12h6M9 16h4"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>وثيقة التوثيق</h3>
+                    <p>أضف بيانات الجهة المُصدرة وأرفق الوثيقة الداعمة للقطعة.</p>
+                  </div>
+                  <span class="verification-required-badge">مطلوب للقطعة الموثّقة</span>
                 </div>
-                <div class="manage-field manage-upload-area">
-                  <label for="artifact-verification-file">ملف التوثيق *</label>
+
+                <div class="verification-fields">
+                  <div class="manage-field">
+                    <label for="artifact-verification-authority">جهة التوثيق <span aria-hidden="true">*</span></label>
+                    <input type="text" id="artifact-verification-authority" name="verificationAuthority"
+                           maxlength="150" placeholder="اسم الجهة المُصدرة للوثيقة" disabled>
+                  </div>
+                  <div class="manage-field">
+                    <label for="artifact-verification-reference">الرقم المرجعي <span aria-hidden="true">*</span></label>
+                    <input type="text" id="artifact-verification-reference" name="verificationReference"
+                           maxlength="150" placeholder="الرقم كما يظهر في الوثيقة" disabled
+                           aria-describedby="artifact-verification-reference-error">
+                    <small id="artifact-verification-reference-error" class="field-error" aria-live="polite"></small>
+                  </div>
+                </div>
+
+                <div class="manage-field manage-upload-area verification-upload">
+                  <label for="artifact-verification-file" class="manage-upload-label">
+                    <span class="verification-upload-icon" aria-hidden="true">＋</span>
+                    <strong>أرفق ملف التوثيق <span aria-hidden="true">*</span></strong>
+                    <span>اختر نسخة واضحة من وثيقة الجهة المُصدرة</span>
+                  </label>
                   <input type="file" id="artifact-verification-file" name="verificationFile"
-                         accept=".pdf,.jpg,.jpeg,.png,.webp" disabled>
-                  <small>أرفق وثيقة الجهة التي وثّقت القطعة، بصيغة PDF أو صورة، حتى 50 MB.</small>
+                         accept=".pdf,.jpg,.jpeg,.png,.webp" disabled
+                         aria-describedby="artifact-verification-file-hint artifact-verification-existing">
+                  <small id="artifact-verification-file-hint" class="verification-file-hint">
+                    PDF · JPG · PNG · WEBP <span>حتى 50 MB</span>
+                  </small>
                   <small id="artifact-verification-existing" role="status"></small>
                 </div>
-                <div class="manage-field">
-
-                  <label for="artifact-verification-reference">
-                    الرقم المرجعي للتوثيق *
-                  </label>
-
-                  <input
-                    type="text"
-                    id="artifact-verification-reference"
-                    name="verificationReference"
-                    placeholder="أدخل الرقم المرجعي كما يظهر في الوثيقة"
-                    maxlength="150"
-                    disabled
-                    aria-describedby="artifact-verification-reference-error"
-                  >
-
-                  <small
-                    id="artifact-verification-reference-error"
-                    class="field-error"
-                    aria-live="polite"
-                  ></small>
-
-                </div>
-
               </div>
 
               <div class="manage-verification-note">
