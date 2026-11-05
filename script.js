@@ -1684,6 +1684,11 @@ if (cinema) {
     if(params.has('id')&&!canViewArtifact(artifact(params.get('id')))){location.replace('browse.html');return}const a=params.has('id')?artifact(params.get('id')):artifacts.find(x=>!x.archived);if(a){const s=seller(a.sellerId),aAuction=auctions.find(x=>x.artifactId===a.id);[['#artifact-breadcrumb-name',a.name],['#artifact-detail-title',a.name],['#artifact-detail-category',categories[a.category]],['#artifact-detail-summary',a.description],['#artifact-detail-price',money(a.price)],['#artifact-period',a.period],['#artifact-origin',a.origin],['#artifact-condition',a.condition],['#artifact-full-description',a.description],['#artifact-provenance-description',a.provenance],['#artifact-detail-verification-status',verifications[a.verification]],['#artifact-verification-reference',a.verificationReference||'غير متوفر'],['#artifact-seller-name',s?.name],['#artifact-seller-display-name',s?.name],['#artifact-seller-avatar',s?.name[0]],['#artifact-seller-description',s?.bio],['#artifact-seller-trust',rating(a.sellerId).trust===null?'لا توجد تقييمات':rating(a.sellerId).trust+'%']].forEach(([key,v])=>text(key,v));const image=$('#artifact-main-photo');if(image){image.src=a.image;image.alt=a.name}const sellerLink=$('#artifact-seller-profile-link');if(sellerLink&&s)sellerLink.href='seller-detail.html?id='+encodeURIComponent(s.id);const auctionLink=$('#artifact-auction-link');if(auctionLink)auctionLink.href=aAuction?'auction-detail.html?id='+encodeURIComponent(aAuction.id):'auctions.html';const documentsHost=$('#artifact-document-list');
       if(documentsHost){
         documentsHost.replaceChildren();
+        if (a.verification === 'verified' && a.verificationAuthority) {
+          const authority = document.createElement('p');
+          authority.textContent = 'جهة التوثيق: ' + a.verificationAuthority;
+          documentsHost.append(authority);
+        }
         if(a.documents?.length){
           const heading=document.createElement('strong');heading.textContent='المستندات المتاحة للقطعة';documentsHost.append(heading);
           a.documents.forEach(d=>{
@@ -1713,7 +1718,7 @@ if (cinema) {
             }else{link.href=d.url||'#'}
             link.target='_blank';
             link.rel='noopener noreferrer';
-            link.textContent=d.name;
+            link.textContent=(d.purpose === 'verification' ? 'ملف التوثيق: ' : '') + d.name;
             documentsHost.append(link);
           });
         }else{
@@ -2112,8 +2117,21 @@ if (cinema) {
     const old=params.get('id')?artifact(params.get('id')):null;const unauthorized=params.has('id')&&(!old||old.archived||old.sellerId!==currentSeller().id);
     if(unauthorized){feedback('#manage-artifact-form-message','لا يمكن تعديل قطعة لا تملكها.');$('#manage-artifact-form')?.setAttribute('hidden','');}
     else{
-      if(old){text('#manage-artifact-title','تعديل قطعة أثرية');[['#artifact-name',old.name],['#artifact-category',old.category],['#artifact-period',old.period],['#artifact-origin',old.origin],['#artifact-condition',old.condition],['#artifact-description',old.description],['#artifact-provenance',old.provenance],['#artifact-condition-notes',old.conditionNotes],['#artifact-starting-price',old.price],['#artifact-verification-reference',old.verificationReference]].forEach(([k,v])=>value(k,v));const radio=$(`input[name="verificationStatus"][value="${old.verification}"]`);if(radio)radio.checked=true;if($('#artifact-images'))$('#artifact-images').required=false}
-      const updateVerification=()=>{const yes=$('input[name="verificationStatus"]:checked')?.value==='verified';visible('#manage-verification-reference',yes);if($('#artifact-verification-reference')){$('#artifact-verification-reference').disabled=!yes;$('#artifact-verification-reference').required=yes}};
+      if(old){text('#manage-artifact-title','تعديل قطعة أثرية');[['#artifact-name',old.name],['#artifact-category',old.category],['#artifact-period',old.period],['#artifact-origin',old.origin],['#artifact-condition',old.condition],['#artifact-description',old.description],['#artifact-provenance',old.provenance],['#artifact-condition-notes',old.conditionNotes],['#artifact-starting-price',old.price],['#artifact-verification-reference',old.verificationReference],['#artifact-verification-authority',old.verificationAuthority||'']].forEach(([k,v])=>value(k,v));const radio=$(`input[name="verificationStatus"][value="${old.verification}"]`);if(radio)radio.checked=true;if($('#artifact-images'))$('#artifact-images').required=false}
+      const existingVerificationDocument = old?.documents?.find(document => document.purpose === 'verification');
+      text('#artifact-verification-existing', existingVerificationDocument
+        ? 'الملف المحفوظ: ' + existingVerificationDocument.name + ' — يمكنك رفع ملف بديل.'
+        : 'ملف التوثيق مطلوب عند اختيار موثّقة.');
+      const updateVerification = () => {
+        const verified = $('input[name="verificationStatus"]:checked')?.value === 'verified';
+        visible('#manage-verification-reference', verified);
+        for (const selector of ['#artifact-verification-reference', '#artifact-verification-authority', '#artifact-verification-file']) {
+          const field = $(selector);
+          if (!field) continue;
+          field.disabled = !verified;
+          field.required = verified && (selector !== '#artifact-verification-file' || !existingVerificationDocument);
+        }
+      };
       $$('input[name="verificationStatus"]').forEach(r=>r.addEventListener('change',updateVerification));updateVerification();
       const preview=()=>{text('#artifact-live-preview-name',$('#artifact-name')?.value||'اسم القطعة');text('#artifact-live-preview-category',categories[$('#artifact-category')?.value]||'فئة القطعة');text('#artifact-live-preview-description',$('#artifact-description')?.value||'وصف القطعة');text('#artifact-live-preview-price',money($('#artifact-starting-price')?.value));text('#artifact-live-preview-verification',verifications[$('input[name="verificationStatus"]:checked')?.value]||'غير موثق')};
       $$('#manage-artifact-form input,#manage-artifact-form select,#manage-artifact-form textarea').forEach(el=>el.addEventListener('input',preview));preview();
@@ -2144,6 +2162,12 @@ if (cinema) {
       });
       $('#manage-artifact-form')?.addEventListener('submit',async e=>{e.preventDefault();const name=$('#artifact-name')?.value.trim()||'',description=$('#artifact-description')?.value.trim()||'',price=Number($('#artifact-starting-price')?.value),cat=$('#artifact-category')?.value,period=$('#artifact-period')?.value.trim(),origin=$('#artifact-origin')?.value.trim(),condition=$('#artifact-condition')?.value,v=$('input[name="verificationStatus"]:checked')?.value||'unverified',ref=$('#artifact-verification-reference')?.value.trim()||'';
         if(name.length<3||description.length<20||!cat||!period||!origin||!condition||!Number.isFinite(price)||price<=0||(v==='verified'&&!ref)){feedback('#manage-artifact-form-message','يرجى إكمال الحقول المطلوبة.');return}
+        const verificationAuthority = $('#artifact-verification-authority')?.value.trim() || '';
+        const verificationFile = v === 'verified' ? $('#artifact-verification-file')?.files[0] : null;
+        if (v === 'verified' && (!verificationAuthority || (!verificationFile && !existingVerificationDocument))) {
+          feedback('#manage-artifact-form-message', 'للقطعة الموثّقة، أدخل اسم جهة التوثيق ومرجع التوثيق وأرفق ملف التوثيق.');
+          return;
+        }
         const upload=$('#artifact-images')?.files[0];if(!old&&!upload){feedback('#manage-artifact-form-message','اختاري صورة للقطعة.');return}
         // Browser-local Sprint 1 preview. Avoid sending a false signal of real archival storage.
         const readAsDataURL=file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)});
@@ -2155,10 +2179,11 @@ if (cinema) {
             return canvas.toDataURL('image/jpeg',.78);
           }finally{URL.revokeObjectURL(src)}};
         const photoFiles=[...($('#artifact-images')?.files||[])],docFiles=[...($('#artifact-documents')?.files||[])];
+        if (verificationFile) docFiles.push(verificationFile);
         if(photoFiles.some(f=>!allowedImage.includes(f.type))||docFiles.some(f=>!['application/pdf','image/png','image/jpeg','image/webp'].includes(f.type))){feedback('#manage-artifact-form-message','الصور والمستندات يجب أن تكون بصيغة صورة أو PDF.');return}
         if(photoFiles.some(f=>f.size>50*1024*1024)){feedback('#manage-artifact-form-message','الحد الأقصى للصورة الواحدة 50 ميغابايت.');return}
         if(docFiles.some(f=>f.size>50*1024*1024)){feedback('#manage-artifact-form-message','الحد الأقصى للمستند الواحد 50 ميغابايت.');return}
-        const data={id:old?.id||id('artifact'),name,description,price,category:cat,period,origin,condition,verification:v,verificationReference:v==='verified'?ref:'',provenance:$('#artifact-provenance')?.value.trim()||'',conditionNotes:$('#artifact-condition-notes')?.value.trim()||'',sellerId:currentSeller().id,image:old?.image||'',documents:old?.documents||[],created:old?.created||new Date().toISOString()};
+        const data={id:old?.id||id('artifact'),name,description,price,category:cat,period,origin,condition,verification:v,verificationAuthority:v==='verified'?verificationAuthority:'',verificationReference:v==='verified'?ref:'',provenance:$('#artifact-provenance')?.value.trim()||'',conditionNotes:$('#artifact-condition-notes')?.value.trim()||'',sellerId:currentSeller().id,image:old?.image||'',documents:old?.documents||[],created:old?.created||new Date().toISOString()};
         try{
           if(photoFiles.length)data.image=await compress(photoFiles[0]);
           // Store large attachments as Blob values in IndexedDB, not in localStorage.
@@ -2171,7 +2196,10 @@ if (cinema) {
               req.onerror=()=>reject(req.error);
             });
             try{
-              const saved=[];
+              const replacingSupportingDocuments = ($('#artifact-documents')?.files.length || 0) > 0;
+              const saved = data.documents.filter(document =>
+                document.purpose === 'verification' ? !verificationFile : !replacingSupportingDocuments);
+
               for(const file of docFiles){
                 const key=id('document');
                 await new Promise((resolve,reject)=>{
@@ -2179,7 +2207,7 @@ if (cinema) {
                   tx.objectStore('documents').put(file,key);
                   tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);
                 });
-                saved.push({name:file.name,type:file.type,storageKey:key});
+                saved.push({name:file.name,type:file.type,storageKey:key,...(file === verificationFile ? {purpose:'verification'} : {})});
               }
               data.documents=saved;
             }finally{db.close()}
