@@ -1247,6 +1247,57 @@ if (cinema) {
     {id:'khalid',name:'خالد الحربي',city:'جدة',category:'manuscripts',specialty:'المخطوطات التاريخية',bio:'مهتم بالمخطوطات التراثية.',joined:'2026-09-08'},
     {id:'fahad',name:'فهد الدوسري',city:'الدمام',category:'weapons',specialty:'المقتنيات التقليدية',bio:'مهتم بالأدوات والحلي والمقتنيات التراثية.',joined:'2026-09-10'}
   ];
+  // Illustrative catalogue metadata, not authenticated historical records.
+  const demoArtifactDetails = {
+    'artifact-001': {
+      period: 'العصر الإسلامي — تأريخ توضيحي',
+      origin: 'الجزيرة العربية',
+      condition: 'جيدة',
+      description: 'عملة معدنية بنقوش كتابية وزخارف دائرية، مع آثار تداول على الحواف وتفاوت طبيعي في لون السطح. بيانات القطعة توضيحية للعرض التجريبي.',
+      provenance: 'سجل عرض تجريبي لمجموعة عملات لدى البائع أحمد العتيبي. أُدرجت القطعة في كتالوج ألفاو في أكتوبر 2026 لشرح عرض المقتنيات والمزايدة عليها. هذا سجل توضيحي ولا يثبت ملكية تاريخية.',
+      conditionNotes: 'تآكل سطحي خفيف على الحواف مع بقاء النقوش الرئيسية ظاهرة.'
+    },
+    'artifact-002': {
+      period: 'القرن التاسع عشر الميلادي — تأريخ توضيحي',
+      origin: 'نجد، الجزيرة العربية',
+      condition: 'جيدة',
+      description: 'إناء فخاري بلون ترابي وشكل مستدير، يوضح أساليب صناعة الأواني التقليدية واستخدامها في الحياة اليومية. بيانات القطعة توضيحية للعرض التجريبي.',
+      provenance: 'سجل عرض تجريبي لمجموعة فخار لدى البائعة نورة القحطاني. أُدرج الإناء في كتالوج ألفاو في أكتوبر 2026 مع صورة وبيانات وصفية لتجربة استعراض القطع. هذا سجل توضيحي ولا يثبت سلسلة ملكية فعلية.',
+      conditionNotes: 'آثار استخدام سطحية وتفاوت في اللون مع حافة متماسكة.'
+    },
+    'artifact-003': {
+      period: 'القرن الثامن عشر الميلادي — تأريخ توضيحي',
+      origin: 'الحجاز، الجزيرة العربية',
+      condition: 'متوسطة',
+      description: 'نموذج لمخطوطة بخط عربي وصفحات ذات هوامش واسعة، مع تغيّر لون الورق وآثار تقادم توضح طبيعة المقتنيات الورقية. بيانات القطعة توضيحية للعرض التجريبي.',
+      provenance: 'سجل عرض تجريبي لمجموعة مخطوطات لدى البائع خالد الحربي. أُدرجت المخطوطة في كتالوج ألفاو في أكتوبر 2026 لتوضيح بيانات المخطوطات ومسار المزاد. الوصف والتأريخ لا يمثلان توثيقًا علميًا أو سجل ملكية معتمدًا.',
+      conditionNotes: 'اصفرار في الورق واهتراء محدود عند الأطراف، مع وضوح النص في نموذج العرض.'
+    },
+    'artifact-004': {
+      period: 'بدايات القرن العشرين الميلادي — تأريخ توضيحي',
+      origin: 'جنوب الجزيرة العربية',
+      condition: 'جيدة',
+      description: 'حلية تراثية بزخارف هندسية وتفاصيل معدنية بارزة، تمثل نموذجًا من المقتنيات الشخصية التقليدية. بيانات القطعة توضيحية للعرض التجريبي.',
+      provenance: 'سجل عرض تجريبي لمجموعة حلي لدى البائع فهد الدوسري. أُدرجت الحلية في كتالوج ألفاو في أكتوبر 2026 لتجربة تصفح الحلي وبيانات البائع. هذا السجل توضيحي ولا يثبت مصدرًا تاريخيًا أو ملكية سابقة.',
+      conditionNotes: 'تغيّر طفيف في لون المعدن وآثار استعمال خفيفة على الزخارف.'
+    },
+    'artifact-005': {
+      period: 'القرن التاسع عشر الميلادي — تأريخ توضيحي',
+      origin: 'جنوب الجزيرة العربية',
+      condition: 'جيدة',
+      description: 'خنجر تراثي بمقبض مزخرف وغمد ذي تفاصيل تقليدية، يُعرض كنموذج للمقتنيات الحرفية والتراثية. بيانات القطعة توضيحية للعرض التجريبي.',
+      provenance: 'سجل عرض تجريبي لمجموعة مقتنيات تقليدية لدى البائع فهد الدوسري. أُدرج الخنجر في كتالوج ألفاو في أكتوبر 2026 لعرض المزاد المنتهي وسجل المزايدات. هذا سجل توضيحي ولا يشكل إثباتًا للأصالة أو الملكية.',
+      conditionNotes: 'آثار تقادم على الأجزاء المعدنية مع بقاء تفاصيل المقبض والغمد ظاهرة.'
+    },
+    'artifact-006': {
+      period: 'العصر الإسلامي — تأريخ توضيحي',
+      origin: 'الجزيرة العربية',
+      condition: 'جيدة',
+      description: 'نموذج لعملة فضية ذات نقوش عربية وحافة دائرية، مع تدرجات في لون المعدن وآثار تداول خفيفة. بيانات القطعة توضيحية للعرض التجريبي.',
+      provenance: 'سجل عرض تجريبي لمجموعة عملات لدى البائع أحمد العتيبي. أُدرجت العملة الفضية في كتالوج ألفاو في أكتوبر 2026 لتجربة استعراض نتائج المزاد. مادة العملة وتأريخها وملكيتها بيانات توضيحية تتطلب توثيقًا مستقلًا للاستخدام الفعلي.',
+      conditionNotes: 'تآكل محدود على الأطراف وتغيّر طبيعي في لون السطح ضمن نموذج العرض.'
+    }
+  };
   const startingArtifacts=[
     ['artifact-001','عملة تاريخية','coins',8000,'coin.jpg','ahmed','unverified'],
     ['artifact-002','إناء فخاري تراثي','pottery',6500,'pottery.jpg','noura','pending'],
@@ -1254,7 +1305,7 @@ if (cinema) {
     ['artifact-004','حلية تراثية','jewelry',15000,'jewelry.jpg','fahad','unverified'],
     ['artifact-005','خنجر تراثي','weapons',12000,'dagger.jpg','fahad','pending'],
     ['artifact-006','عملة فضية تاريخية','coins',9000,'silver-coin.jpg','ahmed','verified']
-  ].map(([id,name,category,price,image,sellerId,verification])=>({id,name,category,price,image,sellerId,verification,period:'غير محددة',origin:'الجزيرة العربية',condition:'غير محددة',description:`مقتنى تراثي: ${name}.`,provenance:'لا تتوفر معلومات مفصلة عن المصدر.',verificationReference:verification==='verified'?'DEMO-HC-'+id.split('-')[1]:'',documents:[],created:'2026-10-01'}));
+  ].map(([id,name,category,price,image,sellerId,verification])=>({id,name,category,price,image,sellerId,verification,...demoArtifactDetails[id],verificationReference:verification==='verified'?'DEMO-HC-'+id.split('-')[1]:'',documents:[],created:'2026-10-01'}));
   const startingAuctions=[
     ['auction-001','artifact-005','fahad',12000,500],
     ['auction-002','artifact-006','ahmed',9000,250],
@@ -1296,7 +1347,7 @@ if (cinema) {
     artifacts.push({
       id:quickArtifactId,name:'إناء فخاري تراثي — تجربة المزايدة',category:'pottery',
       price:100,image:'pottery.jpg',sellerId:'noura',verification:'pending',
-      period:'غير محددة',origin:'الجزيرة العربية',condition:'تجريبية',
+      period:'القرن التاسع عشر الميلادي — تأريخ توضيحي',origin:'نجد، الجزيرة العربية',condition:'جيدة',
       description:'قطعة تجريبية لاختبار المزايدة والفوز ثم تقييم البائع.',
       provenance:'قطعة تجريبية للعرض فقط؛ ليست معروضة للبيع الحقيقي.',
       verificationReference:'',documents:[],created:new Date().toISOString()
@@ -1327,8 +1378,8 @@ if (cinema) {
     artifacts.push({
       id:fourMinuteArtifactId,name:'عملة تراثية — تجربة الفوز والتقييم',
       category:'coins',price:200,image:'coin.jpg',sellerId:'ahmed',
-      verification:'pending',period:'غير محددة',origin:'الجزيرة العربية',
-      condition:'تجريبية',description:'قطعة تجريبية لاختبار المزايدة والفوز وتقييم البائع.',
+      verification:'pending',period:'العصر الإسلامي — تأريخ توضيحي',origin:'الجزيرة العربية',
+      condition:'جيدة',description:'قطعة تجريبية لاختبار المزايدة والفوز وتقييم البائع.',
       provenance:'عرض تجريبي فقط، وليست قطعة معروضة للبيع الحقيقي.',
       verificationReference:'',documents:[],created:new Date().toISOString()
     });
@@ -1477,7 +1528,7 @@ if (cinema) {
   // Ensure the built-in demo seller has an owned artifact to exercise edit/delete.
   // Do not recreate it after the seller archives it.
   if(!artifacts.some(a=>a.id==='demo-seller-artifact-001')){
-    const demoItem={id:'demo-seller-artifact-001',name:'قطعة تراثية تجريبية',description:'قطعة تراثية توضيحية لتجربة إضافة القطع وتعديلها وحذفها من لوحة البائع.',price:3500,category:'pottery',period:'غير محددة',origin:'المملكة العربية السعودية',condition:'جيدة',image:'pottery.jpg',sellerId:'demo-shop',verification:'unverified',verificationReference:'',documents:[],created:new Date().toISOString(),demo:true};
+    const demoItem={id:'demo-seller-artifact-001',name:'قطعة تراثية تجريبية',description:'قطعة تراثية توضيحية لتجربة إضافة القطع وتعديلها وحذفها من لوحة البائع.',price:3500,category:'pottery',period:'القرن التاسع عشر الميلادي — تأريخ توضيحي',origin:'نجد، المملكة العربية السعودية',condition:'جيدة',provenance:'قطعة ضمن مجموعة متجر العرض التجريبي، أُدرجت لتجربة إدارة المقتنيات. سجل توضيحي لعرض وظائف المنصة.',image:'pottery.jpg',sellerId:'demo-shop',verification:'unverified',verificationReference:'',documents:[],created:new Date().toISOString(),demo:true};
     // Only seed once per browser even after deletion.
     if(localStorage.getItem('alfaw_demo_seller_artifact_seeded')!=='true'){
       const next=[...artifacts,demoItem];
@@ -1487,6 +1538,31 @@ if (cinema) {
       }
     }
   }
+  // Fill only missing legacy demo metadata, preserving seller edits and auction state.
+  const legacyDemoDetails = {
+    ...demoArtifactDetails,
+    [quickArtifactId]: {period:'القرن التاسع عشر الميلادي — تأريخ توضيحي', condition:'جيدة'},
+    [fourMinuteArtifactId]: {period:'العصر الإسلامي — تأريخ توضيحي', condition:'جيدة'},
+    'demo-seller-artifact-001': {
+      period:'القرن التاسع عشر الميلادي — تأريخ توضيحي',
+      condition:'جيدة',
+      provenance:'قطعة ضمن مجموعة متجر العرض التجريبي، أُدرجت لتجربة إدارة المقتنيات. سجل توضيحي لعرض وظائف المنصة.'
+    }
+  };
+  let updatedDemoMetadata = false;
+  for (const item of artifacts) {
+    const details = legacyDemoDetails[item.id];
+    if (!details) continue;
+    for (const [field, replacement] of Object.entries(details)) {
+      const current = item[field];
+      if (!current || ['غير محددة', 'غير محدد', 'تجريبية',
+          'لا تتوفر معلومات مفصلة عن المصدر.', 'مقتنى تراثي: ' + item.name + '.'].includes(current)) {
+        item[field] = replacement;
+        updatedDemoMetadata = true;
+      }
+    }
+  }
+  if (updatedDemoMetadata) put('artifacts', artifacts);
   const demoSeeds=demoIdentity.filter(x=>!users.some(u=>u.email===x.email));
   if(demoSeeds.length){demoSeeds.forEach(x=>users.push({id:x.id,name:x.name,email:x.email,role:x.role,sellerId:x.sellerId||null,city:'الرياض',phone:'',joined:new Date().toISOString(),demo:true}));put('users',users)}
   // Seed hashes once; the visible UI never grants Admin registration.
