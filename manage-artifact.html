@@ -610,6 +610,18 @@
               >
 
                 <div class="manage-field">
+                  <label for="artifact-verification-authority">اسم جهة التوثيق *</label>
+                  <input type="text" id="artifact-verification-authority" name="verificationAuthority"
+                         maxlength="150" placeholder="اسم الجهة التي أصدرت وثيقة التوثيق" disabled>
+                </div>
+                <div class="manage-field manage-upload-area">
+                  <label for="artifact-verification-file">ملف التوثيق *</label>
+                  <input type="file" id="artifact-verification-file" name="verificationFile"
+                         accept=".pdf,.jpg,.jpeg,.png,.webp" disabled>
+                  <small>أرفق وثيقة الجهة التي وثّقت القطعة، بصيغة PDF أو صورة، حتى 50 MB.</small>
+                  <small id="artifact-verification-existing" role="status"></small>
+                </div>
+                <div class="manage-field">
 
                   <label for="artifact-verification-reference">
                     الرقم المرجعي للتوثيق *
