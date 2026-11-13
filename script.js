@@ -1400,6 +1400,41 @@ if (cinema) {
     put('artifacts',artifacts);
     put('auctions',auctions);
   }
+  // Public Sprint 1 demo: a newly seeded artifact with an immediately active auction.
+  // Merge into existing localStorage without clearing any user's bids or artifacts.
+  const liveDemoArtifactId='artifact-live-bidding-20261113';
+  const liveDemoAuctionId='auction-live-bidding-20261113';
+  let addedLiveBiddingDemo=false;
+  if(!artifacts.some(item=>item.id===liveDemoArtifactId)){
+    artifacts.push({
+      id:liveDemoArtifactId,name:'عملة تراثية للتجربة — مزاد مفتوح',
+      category:'coins',price:500,image:'coin.jpg',sellerId:'ahmed',
+      verification:'unverified',verificationReference:'',
+      period:'طراز تراثي توضيحي',origin:'الجزيرة العربية',condition:'جيدة',
+      description:'قطعة تجريبية مخصصة لاختبار المزايدة في موقع ألفاو. المعلومات والصورة توضيحية فقط، ولا تمثل عرض بيع حقيقي.',
+      provenance:'بيانات تجريبية غير موثقة، لا تمثل إثبات ملكية أو أصالة.',
+      conditionNotes:'حالة افتراضية لأغراض الاختبار.',documents:[],created:new Date().toISOString()
+    });
+    addedLiveBiddingDemo=true;
+  }
+  if(!auctions.some(item=>item.id===liveDemoAuctionId)){
+    const now=Date.now();
+    auctions.push({id:liveDemoAuctionId,artifactId:liveDemoArtifactId,sellerId:'ahmed',
+      startingPrice:500,increment:50,
+      start:new Date(now-60*60*1000).toISOString(),
+      end:new Date(now+7*24*60*60*1000).toISOString(),
+      bids:[],created:new Date(now).toISOString()});
+    addedLiveBiddingDemo=true;
+  }
+  if(addedLiveBiddingDemo){put('artifacts',artifacts);put('auctions',auctions)}
+  // Keep this designated demo auction active for hands-on testing, without erasing bids.
+  // The rolling end time is for the browser-only demonstration, not a real auction.
+  const liveDemoAuction=auctions.find(a=>a.id===liveDemoAuctionId && a.artifactId===liveDemoArtifactId && a.sellerId==='ahmed');
+  if(liveDemoAuction && (!Number.isFinite(Date.parse(liveDemoAuction.start)) || !Number.isFinite(Date.parse(liveDemoAuction.end)) || Date.parse(liveDemoAuction.end)<=Date.now())){
+    liveDemoAuction.start=new Date(Date.now()-60*60*1000).toISOString();
+    liveDemoAuction.end=new Date(Date.now()+7*24*60*60*1000).toISOString();
+    put('auctions',auctions);
+  }
   // Upgrade the original undated demo auctions, preserving participant-entered bids.
   let repairedDemoSchedule = false;
   auctions.forEach(a => {
