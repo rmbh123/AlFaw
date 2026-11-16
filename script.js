@@ -929,7 +929,7 @@ const alfawSellers = {
       },
       {
         name: "عملة فضية إسلامية",
-        image: "silver-alfaw_coin_transparent.webp",
+        image: "silver-coin.jpg",
         description: "قطعة من التراث النقدي الإسلامي.",
         price: "6,500 ريال"
       }
@@ -1304,7 +1304,7 @@ if (cinema) {
     ['artifact-003','مخطوطة تاريخية','manuscripts',25000,'alfaw_manuscript_transparent.webp','khalid','verified'],
     ['artifact-004','حلية تراثية','jewelry',15000,'jewelry.jpg','fahad','unverified'],
     ['artifact-005','خنجر تراثي','weapons',12000,'alfaw_dagger_transparent.webp','fahad','pending'],
-    ['artifact-006','عملة فضية تاريخية','coins',9000,'silver-alfaw_coin_transparent.webp','ahmed','verified']
+    ['artifact-006','عملة فضية تاريخية','coins',9000,'silver-coin.jpg','ahmed','verified']
   ].map(([id,name,category,price,image,sellerId,verification])=>({id,name,category,price,image,sellerId,verification,...demoArtifactDetails[id],verificationReference:verification==='verified'?'DEMO-HC-'+id.split('-')[1]:'',documents:[],created:'2026-10-01'}));
   const startingAuctions=[
     ['auction-001','artifact-005','fahad',12000,500],
@@ -1358,7 +1358,7 @@ if (cinema) {
   let addedQuickReviewDemo=false;
   if(!artifacts.some(item=>item.id===quickArtifactId)){
     artifacts.push({
-      id:quickArtifactId,name:'إناء فخاري تراثي — تجربة المزايدة',category:'pottery',
+      id:quickArtifactId,name:'إناء فخاري مزخرف',category:'pottery',
       price:100,image:'alfaw_pottery_transparent.webp',sellerId:'noura',verification:'pending',
       period:'القرن التاسع عشر الميلادي — تأريخ توضيحي',origin:'نجد، الجزيرة العربية',condition:'جيدة',
       description:'قطعة تجريبية لاختبار المزايدة والفوز ثم تقييم البائع.',
@@ -1389,7 +1389,7 @@ if (cinema) {
   let addedFourMinuteDemo=false;
   if(!artifacts.some(item=>item.id===fourMinuteArtifactId)){
     artifacts.push({
-      id:fourMinuteArtifactId,name:'عملة تراثية — تجربة الفوز والتقييم',
+      id:fourMinuteArtifactId,name:'عملة عربية فضية',
       category:'coins',price:200,image:'alfaw_coin_transparent.webp',sellerId:'ahmed',
       verification:'pending',period:'العصر الإسلامي — تأريخ توضيحي',origin:'الجزيرة العربية',
       condition:'جيدة',description:'قطعة تجريبية لاختبار المزايدة والفوز وتقييم البائع.',
@@ -1420,7 +1420,7 @@ if (cinema) {
   let addedLiveBiddingDemo=false;
   if(!artifacts.some(item=>item.id===liveDemoArtifactId)){
     artifacts.push({
-      id:liveDemoArtifactId,name:'عملة تراثية للتجربة — مزاد مفتوح',
+      id:liveDemoArtifactId,name:'عملة تراثية منقوشة',
       category:'coins',price:500,image:'alfaw_coin_transparent.webp',sellerId:'ahmed',
       verification:'unverified',verificationReference:'',
       period:'طراز تراثي توضيحي',origin:'الجزيرة العربية',condition:'جيدة',
@@ -1558,7 +1558,7 @@ if (cinema) {
   window.addEventListener('focus',()=>{syncWinnerNotices();scheduleWinnerDeadline()});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncWinnerNotices();scheduleWinnerDeadline()}});
   const artworkCard=a=>`<article class="seller-artifact-card"><div class="seller-artifact-image"><img loading="lazy" src="${escape(a.image)}" alt="${escape(a.name)}"><span class="alfaw-trust-badge">★ ${rating(a.sellerId).trust===null?'لا توجد تقييمات':rating(a.sellerId).trust+'%'}</span></div><div class="seller-artifact-content"><span>${escape(categories[a.category]||'')}</span><h3>${escape(a.name)}</h3><p>${escape(a.description||'')}</p><strong>${money(a.price)}</strong><p><a href="artifact-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل القطعة ←</a></p></div></article>`;
-  const auctionCard=a=>{const item=artifact(a.artifactId);if(!item)return '';return `<article class="auction-card"><div class="auction-card-image"><img loading="lazy" src="${escape(item.image)}" alt="${escape(item.name)}"><span class="auction-status-badge">${statusName(a)}</span><span class="alfaw-trust-badge">★ ${rating(item.sellerId).trust===null?'لا توجد تقييمات':rating(item.sellerId).trust+'%'}</span></div><div class="auction-card-content"><small>${escape(a.id)}</small><h3>${escape(item.name)}</h3><p>${escape(item.description||'')}</p><div class="auction-pricing"><div><span>السعر الابتدائي</span><strong>${money(a.startingPrice)}</strong></div><div><span>أعلى عرض</span><strong>${highest(a)===null?'لا توجد مزايدات':money(highest(a))}</strong></div></div><div class="auction-card-timing"><span>${date(a.start)}</span><span>${date(a.end)}</span></div><a class="auction-details-button" href="auction-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل المزاد ←</a></div></article>`};
+  const auctionCard=a=>{const item=artifact(a.artifactId);if(!item)return '';return `<article class="auction-card"><div class="auction-card-image"><img loading="lazy" src="${escape(item.image)}" alt="${escape(item.name)}"><span class="auction-status-badge">${statusName(a)}</span><span class="alfaw-trust-badge">★ ${rating(item.sellerId).trust===null?'لا توجد تقييمات':rating(item.sellerId).trust+'%'}</span></div><div class="auction-card-content"><small>${escape(categories[item.category]||'قطعة تراثية')}</small><h3>${escape(item.name)}</h3><p>${escape(item.description||'')}</p><div class="auction-pricing"><div><span>السعر الابتدائي</span><strong>${money(a.startingPrice)}</strong></div><div><span>أعلى عرض</span><strong>${highest(a)===null?'لا توجد مزايدات':money(highest(a))}</strong></div></div><div class="auction-card-timing"><span>${date(a.start)}</span><span>${date(a.end)}</span></div><a class="auction-details-button" href="auction-detail.html?id=${encodeURIComponent(a.id)}">تفاصيل المزاد ←</a></div></article>`};
 
   // FRONT-END-ONLY SPRINT 1: Local prototype credentials are for UX testing,
   // never for real accounts or security. Passwords are not stored in plaintext.
@@ -1576,7 +1576,7 @@ if (cinema) {
   // Ensure the built-in demo seller has an owned artifact to exercise edit/delete.
   // Do not recreate it after the seller archives it.
   if(!artifacts.some(a=>a.id==='demo-seller-artifact-001')){
-    const demoItem={id:'demo-seller-artifact-001',name:'قطعة تراثية تجريبية',description:'قطعة تراثية توضيحية لتجربة إضافة القطع وتعديلها وحذفها من لوحة البائع.',price:3500,category:'pottery',period:'القرن التاسع عشر الميلادي — تأريخ توضيحي',origin:'نجد، المملكة العربية السعودية',condition:'جيدة',provenance:'قطعة ضمن مجموعة متجر العرض التجريبي، أُدرجت لتجربة إدارة المقتنيات. سجل توضيحي لعرض وظائف المنصة.',image:'alfaw_pottery_transparent.webp',sellerId:'demo-shop',verification:'unverified',verificationReference:'',documents:[],created:new Date().toISOString(),demo:true};
+    const demoItem={id:'demo-seller-artifact-001',name:'إناء فخاري نجدي',description:'قطعة تراثية توضيحية لتجربة إضافة القطع وتعديلها وحذفها من لوحة البائع.',price:3500,category:'pottery',period:'القرن التاسع عشر الميلادي — تأريخ توضيحي',origin:'نجد، المملكة العربية السعودية',condition:'جيدة',provenance:'قطعة ضمن مجموعة متجر العرض التجريبي، أُدرجت لتجربة إدارة المقتنيات. سجل توضيحي لعرض وظائف المنصة.',image:'alfaw_pottery_transparent.webp',sellerId:'demo-shop',verification:'unverified',verificationReference:'',documents:[],created:new Date().toISOString(),demo:true};
     // Only seed once per browser even after deletion.
     if(localStorage.getItem('alfaw_demo_seller_artifact_seeded')!=='true'){
       const next=[...artifacts,demoItem];
@@ -1586,6 +1586,19 @@ if (cinema) {
       }
     }
   }
+  // Refresh only known demo names in existing localStorage records; keep IDs, bids and seller edits.
+  const demoNameUpgrades={
+    'artifact-quick-review-20261021':{'إناء فخاري تراثي — تجربة المزايدة':'إناء فخاري مزخرف'},
+    'artifact-four-minute-review-20261021':{'عملة تراثية — تجربة الفوز والتقييم':'عملة عربية فضية'},
+    'artifact-live-bidding-20261113':{'عملة تراثية للتجربة — مزاد مفتوح':'عملة تراثية منقوشة'},
+    'demo-seller-artifact-001':{'قطعة تراثية تجريبية':'إناء فخاري نجدي'}
+  };
+  let refreshedArtifactNames=false;
+  artifacts.forEach(item=>{
+    const replacement=demoNameUpgrades[item.id]?.[item.name];
+    if(replacement){item.name=replacement;refreshedArtifactNames=true;}
+  });
+  if(refreshedArtifactNames)put('artifacts',artifacts);
   // Fill only missing legacy demo metadata, preserving seller edits and auction state.
   const legacyDemoDetails = {
     ...demoArtifactDetails,
@@ -2459,7 +2472,7 @@ if (cinema) {
       const st=getStatus(a),link=card.querySelector('.auction-card-button');
       Object.assign(card.dataset,{name:item.name,status:st,price:String(a.bids?.length?Math.max(...a.bids.map(b=>Number(b.amount))):a.startingPrice)});
       const badge=card.querySelector('.auction-badge');if(badge){badge.textContent=nameState(st);badge.className='auction-badge '+(st==='active'?'live':st==='upcoming'?'upcoming':'closed')}
-      const code=card.querySelector('.auction-card-category');if(code)code.textContent='مزاد رقم '+a.id.toUpperCase().replace('AUCTION-','AUC-');
+      const code=card.querySelector('.auction-card-category');if(code)code.textContent=({coins:'عملات تراثية',pottery:'فخار تراثي',manuscripts:'مخطوطات تاريخية',jewelry:'حُلي تراثية',weapons:'مقتنيات تراثية'}[item.category]||'قطعة تراثية');
       const heading=card.querySelector('h3');if(heading)heading.textContent=item.name;
       const img=card.querySelector('img');if(img){img.src=item.image||'alfaw_coin_transparent.webp';img.alt=item.name}
       const summary=card.querySelector('.auction-card-content > p');if(summary)summary.textContent=item.description;
