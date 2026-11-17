@@ -1473,6 +1473,7 @@ if (cinema) {
   // Validate session role against the persisted demo user record on every page.
   if(session){const stored=users.find(x=>x.id===session.id);
     if(!stored||stored.role!==session.role||stored.sellerId!==session.sellerId){session=null;localStorage.removeItem('alfaw_phase3_session')}}
+  const auctionsLoginStrip=document.querySelector('.auctions-login-strip');if(auctionsLoginStrip)auctionsLoginStrip.hidden=!!session;
   const account=()=>users.find(x=>x.id===session?.id);
   const currentSeller=()=>session?.role==='seller'?seller(session.sellerId):null;
   const status=a=>{if(!a.start||!a.end)return 'upcoming';const now=Date.now();return now<Date.parse(a.start)?'upcoming':now>=Date.parse(a.end)?'ended':'active'};
